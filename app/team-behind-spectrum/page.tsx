@@ -548,7 +548,7 @@ export default function team_behind_spectrum() {
                                     <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                     <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                     <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                        <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300 z-20" src="https://i.imgur.com/GLBMW7l.jpg" alt="No Data"/>
+                                        <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300 z-20" src="https://i.postimg.cc/QdTvPgP3/cc3b2a30-ffab-40b5-b762-2144539f61e3.jpg" alt="No Data"/>
 
                                     </div>
                                 </div> 

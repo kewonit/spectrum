@@ -46,7 +46,7 @@ export default function Home() {
             <div className="relative h-40 mb-4">
               <Image
                 alt="A picture of the team"
-                src="https://i.imgur.com/cBNoOE9.jpg"
+                src="https://i.postimg.cc/d1cBfkzn/c28b1c81-0843-4095-9c54-c40340b96c16.jpg"
                 fill
                 sizes="(max-width: 768px) 213px, 33vw"
                 className="rounded-lg object-cover"
@@ -73,7 +73,7 @@ export default function Home() {
             <div className="relative h-40 mb-4 sm:mb-0">
               <Image
                 alt="A minature plane kept on display at spectrum 2023"
-                src="https://i.imgur.com/z1nMI5p.jpg"
+                src="https://i.postimg.cc/Njz2JKKV/6339615e-b3bb-4ba1-8f5c-91bbfc3eadfa.jpg"
                 fill
                 sizes="(max-width: 768px) 213px, 33vw"
                 className="rounded-lg object-cover"
@@ -82,7 +82,7 @@ export default function Home() {
             <div className="relative h-40 mb-4">
               <Image
                 alt="Robo Race cards kept in a pile at spectrum 2023"
-                src="https://i.imgur.com/ChxIC6v.jpg"
+                src="https://i.postimg.cc/Pf7Gqh8H/a94f7af9-164e-45d7-9a5e-8f9932261ae5.jpg"
                 fill
                 sizes="(max-width: 768px) 213px, 33vw"
                 className="rounded-lg object-cover"
@@ -91,7 +91,7 @@ export default function Home() {
             <div className="relative h-80">
               <Image
                 alt="My badge on top of a pile of badges from a Vercel meetup we held"
-                src="https://i.imgur.com/jM0tA67.jpg"
+                src="https://i.postimg.cc/JzkR80TS/IMG-9273.jpg"
                 fill
                 sizes="(min-width: 768px) 213px, 33vw"
                 className="rounded-lg object-cover"

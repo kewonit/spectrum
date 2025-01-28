@@ -9,10 +9,10 @@ export function Rules() {
   return (
     <div className="w-full text-gray-700 p-2 sm:p-4 lg:p-8">
       <h1 className="scroll-m-20 text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight lg:text-5xl px-2 sm:px-4 md:px-0">
-        Rules of E-Paradox
+        Rules of Shark Tank
       </h1>
       <p className="leading-7 mb-6 sm:mb-8 px-2 sm:px-4 md:px-0 text-sm sm:text-base">
-        Total 5 rounds
+        Total 3 rounds
       </p>
 
       <Accordion type="single" collapsible className="space-y-3 sm:space-y-4 md:space-y-6">
@@ -63,54 +63,39 @@ export function Rules() {
 
 const rounds = [
   {
-    title: "ROUND 1: Quick Code Quest",
-    description: "This round features three sections: Basic Programming Questions, Basic Coding Theory Questions, and Coding Questions. Participants will showcase their programming skills, tackling theoretical concepts and hands-on challenges. The round is conducted offline, with the link provided a day before the event.",
+    title: "ROUND 1: Idea Submission",
+    description: "Submit your innovative business idea that could potentially revolutionize the market. Your submission should include a comprehensive overview of your business concept, target audience, problem statement, and proposed solution.",
     rules: [
-      "This will be held on Google Form Platform.",
-      "Overall time limit for this round will be 10 minutes for each candidate",
-      "35% amongst all the candidates will be eliminated while others will appear for round 2"
+      "Submit a 300-word description of your business idea",
+      "Include technical and financial details in your submission",
+      "Clearly outline the problem your idea solves",
+      "Describe your target audience and market size",
+      "Explain your competitive advantage",
+      "Only the top 25 ideas will be selected for the next round"
     ]
   },
   {
-    title: "ROUND 2: Odd Function Out",
-    description: '"Odd Function Out!" Participants will receive a Hackerrank contest link the day before the event. Inside, there are four coding questions. Your task is to choose and solve any three questions that align with your coding strengths.',
+    title: "ROUND 2: Initial Pitch Presentation",
+    description: "Selected teams will present their business ideas to a preliminary panel. This is your chance to showcase your business model, market research, and growth potential through a well-structured presentation.",
     rules: [
-      "This will be held on Hacker rank Platform.",
-      "Overall time limit for this round will be 30 minutes for each candidate.",
-      "4 problem statements will be provided. Participants will have to solve any three amongst those four statements.",
-      "50% amongst all the candidates will be eliminated while others will appear for round 3"
+      "Presentation duration: 5-7 minutes",
+      "PowerPoint or similar visual presentation is mandatory",
+      "Cover all key aspects: problem, solution, market size, revenue model",
+      "Include competitive analysis and future vision",
+      "Be prepared for Q&A session",
+      "Top performers will advance to the final round"
     ]
   },
   {
-    title: "ROUND 3: Tech Sprint (Team)",
-    description: "In this round, coordinators will form groups, and each group will embark on a coding journey. Using your preferred programming language, solve a series of coding problems. Here's the twist: unlock folders on your PC by generating passwords based on the output of previous problems. Inside each folder lies a clue leading to the next challenge.",
+    title: "ROUND 3: Final Shark Tank",
+    description: "The finale where selected teams pitch to our panel of industry experts and entrepreneurs. This is where you'll have the opportunity to secure recognition, valuable feedback, and exciting prizes.",
     rules: [
-      "This will be held on an online compiler(online GDB).",
-      "Overall time limit for this round will be 60 minutes for each team.",
-      "Each team will get 10 minutes to set their action plan and order for relay.",
-      "During this round participants should take utmost care of not disturbing the college environment and causing any chaos in the campus.",
-      "Participant will be solely responsible for any damage/ harm caused due his/her recklessness.",
-      "There will be 1 coordinator assigned to each team."
-    ]
-  },
-  {
-    title: "ROUND 4: Into the Unknown (Team)",
-    description: "A single problem statement will be presented to each team, where Player 1 tackles the code for 90 seconds. Meanwhile, the remaining team members are blindfolded, ensuring they cannot observe Player 1's actions. When the time limit is reached, a buzzer signals the switch, with Player 2 taking the rein, followed by subsequent rotations for the remaining four team members. This unique challenge adds an element of suspense and coordination to the coding experience.",
-    rules: [
-      "This will be held on Compiler.",
-      "Overall time limit for this round will be 30 minutes for each team.",
-      "Two teams amongst all the teams will be eliminated while others will appear for round 5",
-      "Each team will get 5 minutes to set their action plan.",
-      "There will be 1 coordinator assigned to each team.",
-      "After every 90 seconds the assigned coordinator for the team will turn the monitor and timer off and will only be resumed after the player switch places."
-    ]
-  },
-  {
-    title: "ROUND 5: Programming Showdown",
-    description: "The top 8 finalists will engage in 1v1 battles, participants will face challenging coding questions, and the player who solves them accurately and quickly will advance to the semifinals. Tackling level 2 questions to determine the three ultimate winners.",
-    rules: [
-      "This will be held on Hacker rank.",
-      "Overall time limit for this round will be 15 minutes for each 1v1."
+      "Teams must arrive 30 minutes before their scheduled pitch time",
+      "Final presentation should incorporate feedback from previous round",
+      "Bring any prototypes or demos if available",
+      "Be prepared for detailed questions about financials and scalability",
+      "Judging criteria: Innovation (20), Feasibility (20), Presentation (20), Business Model (20), Social Impact (10), Q&A (10)",
+      "Top 3 teams will receive cash prizes and certificates"
     ]
   }
 ];

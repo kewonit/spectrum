@@ -1,16 +1,16 @@
-import { Rules } from "@/app/e-paradox/components/accordian"
-import { Eparadox_registarion } from "@/app/e-paradox/components/registration";
+import { Rules } from "@/app/sharktank/components/accordian"
+import { Sharktank_registarion } from "@/app/sharktank/components/registration";
 import { Krona_One } from 'next/font/google'
 import Image from "next/image";
 
 import { Metadata } from 'next'
  
 export const metadata: Metadata = {
-  title: 'Spectrum x E-Paradox',
-  description: "Tech event for first year students",  
+  title: 'Spectrum x Shark Tank',
+  description: "Business pitch competition for innovative minds",  
   openGraph: {
-    title: 'Spectrum x E-Paradox',
-    description: "Tech event for first year students",  
+    title: 'Spectrum x Shark Tank',
+    description: "Business pitch competition for innovative minds",  
     url: "https://pccoespectrum.tech",
     siteName: "pccoespectrum.tech",
     images: [
@@ -31,22 +31,22 @@ const korna = Krona_One({
 });
 
 const ruleList = [
-  "1. The competition will be conducted on online platforms such as HackerRank.",
-  "2. Personal computers are not allowed for use during the event.",
-  "3. Changing tabs during the competition is considered cheating and may lead to disqualification.",
-  "4. The use of A.I. chatbots like ChatGPT is strictly prohibited.",
-  "5. Participants are not allowed to use mobile phones, smart watches, or any other electronic devices.",
-  "6. Strict monitoring of participants will be implemented, with assistance from volunteers if necessary.",
-  "7. Each round will have a specified time limit that participants must adhere to.",
-  "8. The final decision will be based on computerized results and made by the event coordinators.",
-  "9. The decision of the event coordinators is final and binding, not subject to contestation.",
-  "10. The organizers reserve the right to change or update the contest rules, and participants are responsible for staying informed.",
-  "11. Violation of any rule may result in immediate disqualification.",
-  "12. Spot entries will not be accepted.",
-  "13. All the rounds will be held offline at the venue.",
-  "14. Participants should have their own HackerRank account.",
-  "15. For team rounds, coordinators will assign the team on the basis of computerized results.",
-  "16. Participants will be solely responsible for any damage/harm caused due to his/her recklessness.",
+  "1. The event is open to all students of PCCOE and other institutions.",
+  "2. Teams can have a maximum of 3 members.",
+  "3. Registration is mandatory through the official event portal.",
+  "4. Only top 25 business ideas will be shortlisted for the final round.",
+  "5. Teams must submit a 300-word business idea description during registration.",
+  "6. Pitch presentations should be 5-7 minutes long.",
+  "7. PowerPoint or similar visual presentations are required.",
+  "8. Presentations must cover business concept, target audience, problem statement, solution, and market analysis.",
+  "9. Teams will be judged on innovation, feasibility, presentation skills, business model, and social impact.",
+  "10. Q&A round performance will contribute to final scoring.",
+  "11. Industry experts and faculty members will form the judging panel.",
+  "12. Top 3 teams will receive prizes and recognition.",
+  "13. Plagiarism or fraudulent activities will result in immediate disqualification.",
+  "14. All presentations must be original work.",
+  "15. Registration and participation are free of cost.",
+  "16. Winners will receive cash prizes and certificates.",
 ];
 
 export default function Home() {
@@ -57,7 +57,7 @@ export default function Home() {
           <Image  
             width="400" 
             height="360" 
-            alt="E-Paradox Event Image" 
+            alt="Shark Tank Event Image" 
             src="https://i.imgur.com/GPIvn8s.png" 
             loading="lazy" 
             draggable="false"
@@ -80,7 +80,6 @@ export default function Home() {
       <div 
         className="relative my-12 aspect-[16/9] md:aspect-[21/9] lg:aspect-[24/9] w-full"
         style={{
-
           backgroundImage: "url('https://res.cloudinary.com/dfyrk32ua/image/upload/v1737645289/Spectrum/side-images/download_i1d7aq.webp')",
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat',
@@ -91,7 +90,7 @@ export default function Home() {
       >
         <div className="absolute inset-0 flex items-center justify-center px-4">
           <h3 className={`${korna.className} scroll-m-20 text-xl md:text-2xl lg:text-3xl font-extrabold text-black tracking-tight text-center max-w-4xl`}>
-            A fun activity-based game in which you must find the clues and lead forward to the ultimate prize by cracking codes
+            Present your innovative business ideas to our panel of expert judges and win exciting prizes while gaining valuable feedback and exposure
           </h3>
         </div>
       </div>
@@ -99,7 +98,7 @@ export default function Home() {
       <picture> 
         <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" draggable="false" />
       </picture> 
-      <Eparadox_registarion />
+      <Sharktank_registarion />
       <picture> 
         <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" draggable="false" />
       </picture> 
@@ -121,5 +120,4 @@ export default function Home() {
     </picture> 
     </main>
   );
-
 }

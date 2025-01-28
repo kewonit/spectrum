@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 
-export function Eparadox_registarion() {
+export function Sharktank_registarion() {
     return (
         <div className="p-2 sm:p-4 lg:p-8 mx-auto">
             <div className="p-3 sm:p-4 border-4 border-dashed border-gray-300 rounded-[2rem]">
@@ -32,7 +32,7 @@ export function Eparadox_registarion() {
                                         Limited Spots Available
                                     </span>
                                     <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1.5 sm:mb-2">
-                                        E-Paradox &apos;24
+                                        Shark Tank &apos;24
                                     </h1>
                                     <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
                                         Join us for an exciting technical event featuring challenging rounds of coding, problem-solving, and innovative thinking.

@@ -21,13 +21,13 @@ const calSans = LocalFont({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.spectrumpccoe.tech/'),
   title: {
-    default: "Pccoe Spectrum'25",
+    default: "PCCOE Spectrum'25",
     template: "%s | spectrumpccoe.tech",
   },
-  description: "Pccoe Spectrum'25 | PCET's PIMPRI CHINCHWAD COLLEGE OF ENGINEERING, Pune | Department of Applied Sciences and Humanities presents | Tech event for first year students | Annual State Level Technical Symposium for Extra Oridinary First Year Engineering Students!",
+  description: "PCCOE Spectrum'25 | PCET's PIMPRI CHINCHWAD COLLEGE OF ENGINEERING, Pune | Department of Applied Sciences and Humanities presents | Tech event for first year students | Annual State Level Technical Symposium for Extra Oridinary First Year Engineering Students!",
   openGraph: {
-    title: "Pccoe Spectrum'25",
-    description: "Pccoe Spectrum'25 | PCET's PIMPRI CHINCHWAD COLLEGE OF ENGINEERING, Pune | Department of Applied Sciences and Humanities presents | Tech event for first year students | Annual State Level Technical Symposium for Extra Oridinary First Year Engineering Students!",
+    title: "PCCOE Spectrum'25",
+    description: "PCCOE Spectrum'25 | PCET's PIMPRI CHINCHWAD COLLEGE OF ENGINEERING, Pune | Department of Applied Sciences and Humanities presents | Tech event for first year students | Annual State Level Technical Symposium for Extra Oridinary First Year Engineering Students!",
     url: "https://pccoespectrum.tech",
     siteName: "pccoespectrum.tech",
     images: [
