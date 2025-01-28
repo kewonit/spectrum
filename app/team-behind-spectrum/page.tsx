@@ -30,13 +30,13 @@ export default function team_behind_spectrum() {
                                         <div className="absolute flex h-full w-full justify-center rounded-xl bg-cover" style={{ background: 'linear-gradient(146deg, rgba(82,229,235,1) 11%, rgba(37,170,255,1) 39%, rgba(28,58,190,1) 65%, rgba(113,28,231,1) 89%)' }}></div>
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/lWbZmMV.jpg" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/yd3cXnvX/fedda0ac-dd2c-45ce-862f-edfc4a7a09bc.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Atharva Desai</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Harshil Biyani</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Core Team</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Convener</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://www.linkedin.com/in/atharvaez" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
@@ -61,13 +61,13 @@ export default function team_behind_spectrum() {
                                         <div className="absolute flex h-full w-full justify-center rounded-xl bg-cover" style={{ background: 'linear-gradient(146deg, rgba(82,229,235,1) 11%, rgba(37,170,255,1) 39%, rgba(28,58,190,1) 65%, rgba(113,28,231,1) 89%)' }}></div>
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/NxtQVkB.jpg" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/SKJMkDFF/02ec7733-0de8-4b19-9460-d3b5e324ec88.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Shreeyash Patil</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Aditya Rajput</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Core Team</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Organizing Secretary</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://www.linkedin.com/in/shreeyash-patil-57a71a242" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
@@ -92,13 +92,13 @@ export default function team_behind_spectrum() {
                                         <div className="absolute flex h-full w-full justify-center rounded-xl bg-cover" style={{ background: 'linear-gradient(146deg, rgba(82,229,235,1) 11%, rgba(37,170,255,1) 39%, rgba(28,58,190,1) 65%, rgba(113,28,231,1) 89%)' }}></div>
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/yh3D8HR.jpg" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/SK3zsCkX/3a7077e1-1232-4bd2-9d4e-8a1ea17523ea.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Kunal Shitole</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Eshal Sayed</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Core Team</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Organizing Secretary</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a href="https://www.linkedin.com/in/kunal-shitole-3a3778322" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
@@ -115,31 +115,61 @@ export default function team_behind_spectrum() {
                                         </a>
                                     </div>
                                 </div>  
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Core Team</p>
+                                    
+                                        <div className="absolute flex h-full w-full justify-center rounded-xl bg-cover" style={{ background: 'linear-gradient(146deg, rgba(82,229,235,1) 11%, rgba(37,170,255,1) 39%, rgba(28,58,190,1) 65%, rgba(113,28,231,1) 89%)' }}></div>
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/B6697728/02a86daa-519f-4944-ae43-856bb6d3900e.jpg" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Aarya More</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Treasurer</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://www.linkedin.com/in/atharvaez" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M9,17H6.477v-7H9 V17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2S8.551,8.717,7.694,8.717z M18,17h-2.442v-3.826c0-1.058-0.651-1.302-0.895-1.302s-1.058,0.163-1.058,1.302c0,0.163,0,3.826,0,3.826h-2.523v-7h2.523v0.977 C13.93,10.407,14.581,10,15.802,10C17.023,10,18,10.977,18,13.174V17z"></path>
+                                            </svg>
+                                        </a>
+                                        <a target="_blank" href="https://www.instagram.com/atharvez" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
         
                     <section >
                         <div className="container px-6 py-20 mx-auto">
-                            <h1 className="text-2xl font-semibold text-center  capitalize lg:text-3xl text-white mb-8">Web Dev Team</h1>
+                            <h1 className="text-2xl font-semibold text-center  capitalize lg:text-3xl text-white mb-8">FESA Core Team</h1>
                                      
                     
                             <div className="flex flex-wrap gap-8 justify-center items-center">
 
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Web Dev </p>
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Core Team</p>
                                     
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/mZOmf3d.png" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/LsSmDVyf/502d507c-f3ba-4a19-a2e3-a9ca2d422f2d.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Kartik Kulloli</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Kshitij Jadhav</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Team Lead</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">General Secretary</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://www.instagram.com/kewonit/" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
@@ -164,18 +194,163 @@ export default function team_behind_spectrum() {
 
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Web Dev</p>
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Core Team</p>
                                     
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' className="absolute flex h-full w-full justify-center rounded-xl bg-cover" alt="image"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/XRxfY31.jpg" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/nr2mVzCS/83d4c2c3-1097-4012-9f03-e860f8467e0a.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Mayank Kadam</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Yogya Suryawanshi</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Frontend Dev</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Co-General Secretary</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://www.instagram.com/mayank_kadam1039/" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                    
+                    
+                                        <a target="_blank" href="https://github.com/msk1039" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Github">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M12.026 2C7.13295 1.99937 2.96183 5.54799 2.17842 10.3779C1.395 15.2079 4.23061 19.893 8.87302 21.439C9.37302 21.529 9.55202 21.222 9.55202 20.958C9.55202 20.721 9.54402 20.093 9.54102 19.258C6.76602 19.858 6.18002 17.92 6.18002 17.92C5.99733 17.317 5.60459 16.7993 5.07302 16.461C4.17302 15.842 5.14202 15.856 5.14202 15.856C5.78269 15.9438 6.34657 16.3235 6.66902 16.884C6.94195 17.3803 7.40177 17.747 7.94632 17.9026C8.49087 18.0583 9.07503 17.99 9.56902 17.713C9.61544 17.207 9.84055 16.7341 10.204 16.379C7.99002 16.128 5.66202 15.272 5.66202 11.449C5.64973 10.4602 6.01691 9.5043 6.68802 8.778C6.38437 7.91731 6.42013 6.97325 6.78802 6.138C6.78802 6.138 7.62502 5.869 9.53002 7.159C11.1639 6.71101 12.8882 6.71101 14.522 7.159C16.428 5.868 17.264 6.138 17.264 6.138C17.6336 6.97286 17.6694 7.91757 17.364 8.778C18.0376 9.50423 18.4045 10.4626 18.388 11.453C18.388 15.286 16.058 16.128 13.836 16.375C14.3153 16.8651 14.5612 17.5373 14.511 18.221C14.511 19.555 14.499 20.631 14.499 20.958C14.499 21.225 14.677 21.535 15.186 21.437C19.8265 19.8884 22.6591 15.203 21.874 10.3743C21.089 5.54565 16.9181 1.99888 12.026 2Z">
+                                                </path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Core Team</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' className="absolute flex h-full w-full justify-center rounded-xl bg-cover" alt="image"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://media.licdn.com/dms/image/v2/D4E03AQFVhdEg63jOIA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1727884523460?e=1743638400&v=beta&t=JwogcYeAlaPf8bcvEsMaGllw7----NTaDkrG645SJ0E" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Ved Jadhav</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Technical Secretary</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://www.instagram.com/mayank_kadam1039/" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                    
+                    
+                                        <a target="_blank" href="https://github.com/msk1039" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Github">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M12.026 2C7.13295 1.99937 2.96183 5.54799 2.17842 10.3779C1.395 15.2079 4.23061 19.893 8.87302 21.439C9.37302 21.529 9.55202 21.222 9.55202 20.958C9.55202 20.721 9.54402 20.093 9.54102 19.258C6.76602 19.858 6.18002 17.92 6.18002 17.92C5.99733 17.317 5.60459 16.7993 5.07302 16.461C4.17302 15.842 5.14202 15.856 5.14202 15.856C5.78269 15.9438 6.34657 16.3235 6.66902 16.884C6.94195 17.3803 7.40177 17.747 7.94632 17.9026C8.49087 18.0583 9.07503 17.99 9.56902 17.713C9.61544 17.207 9.84055 16.7341 10.204 16.379C7.99002 16.128 5.66202 15.272 5.66202 11.449C5.64973 10.4602 6.01691 9.5043 6.68802 8.778C6.38437 7.91731 6.42013 6.97325 6.78802 6.138C6.78802 6.138 7.62502 5.869 9.53002 7.159C11.1639 6.71101 12.8882 6.71101 14.522 7.159C16.428 5.868 17.264 6.138 17.264 6.138C17.6336 6.97286 17.6694 7.91757 17.364 8.778C18.0376 9.50423 18.4045 10.4626 18.388 11.453C18.388 15.286 16.058 16.128 13.836 16.375C14.3153 16.8651 14.5612 17.5373 14.511 18.221C14.511 19.555 14.499 20.631 14.499 20.958C14.499 21.225 14.677 21.535 15.186 21.437C19.8265 19.8884 22.6591 15.203 21.874 10.3743C21.089 5.54565 16.9181 1.99888 12.026 2Z">
+                                                </path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Core Team</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' className="absolute flex h-full w-full justify-center rounded-xl bg-cover" alt="image"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/rwkpZcsK/32c95b36-a71c-47d9-94a7-746deebfffe4.jpg" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Sanskruti Soitkar</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Cultural Secretary</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://www.instagram.com/mayank_kadam1039/" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                    
+                    
+                                        <a target="_blank" href="https://github.com/msk1039" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Github">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M12.026 2C7.13295 1.99937 2.96183 5.54799 2.17842 10.3779C1.395 15.2079 4.23061 19.893 8.87302 21.439C9.37302 21.529 9.55202 21.222 9.55202 20.958C9.55202 20.721 9.54402 20.093 9.54102 19.258C6.76602 19.858 6.18002 17.92 6.18002 17.92C5.99733 17.317 5.60459 16.7993 5.07302 16.461C4.17302 15.842 5.14202 15.856 5.14202 15.856C5.78269 15.9438 6.34657 16.3235 6.66902 16.884C6.94195 17.3803 7.40177 17.747 7.94632 17.9026C8.49087 18.0583 9.07503 17.99 9.56902 17.713C9.61544 17.207 9.84055 16.7341 10.204 16.379C7.99002 16.128 5.66202 15.272 5.66202 11.449C5.64973 10.4602 6.01691 9.5043 6.68802 8.778C6.38437 7.91731 6.42013 6.97325 6.78802 6.138C6.78802 6.138 7.62502 5.869 9.53002 7.159C11.1639 6.71101 12.8882 6.71101 14.522 7.159C16.428 5.868 17.264 6.138 17.264 6.138C17.6336 6.97286 17.6694 7.91757 17.364 8.778C18.0376 9.50423 18.4045 10.4626 18.388 11.453C18.388 15.286 16.058 16.128 13.836 16.375C14.3153 16.8651 14.5612 17.5373 14.511 18.221C14.511 19.555 14.499 20.631 14.499 20.958C14.499 21.225 14.677 21.535 15.186 21.437C19.8265 19.8884 22.6591 15.203 21.874 10.3743C21.089 5.54565 16.9181 1.99888 12.026 2Z">
+                                                </path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Core Team</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' className="absolute flex h-full w-full justify-center rounded-xl bg-cover" alt="image"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/xTsmWXrc/396a1ee3-2020-4b37-9166-25cb74ee4509.jpg" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Omkar Pachore</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">ISR Cell Representative</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://www.instagram.com/mayank_kadam1039/" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                    
+                    
+                                        <a target="_blank" href="https://github.com/msk1039" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Github">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M12.026 2C7.13295 1.99937 2.96183 5.54799 2.17842 10.3779C1.395 15.2079 4.23061 19.893 8.87302 21.439C9.37302 21.529 9.55202 21.222 9.55202 20.958C9.55202 20.721 9.54402 20.093 9.54102 19.258C6.76602 19.858 6.18002 17.92 6.18002 17.92C5.99733 17.317 5.60459 16.7993 5.07302 16.461C4.17302 15.842 5.14202 15.856 5.14202 15.856C5.78269 15.9438 6.34657 16.3235 6.66902 16.884C6.94195 17.3803 7.40177 17.747 7.94632 17.9026C8.49087 18.0583 9.07503 17.99 9.56902 17.713C9.61544 17.207 9.84055 16.7341 10.204 16.379C7.99002 16.128 5.66202 15.272 5.66202 11.449C5.64973 10.4602 6.01691 9.5043 6.68802 8.778C6.38437 7.91731 6.42013 6.97325 6.78802 6.138C6.78802 6.138 7.62502 5.869 9.53002 7.159C11.1639 6.71101 12.8882 6.71101 14.522 7.159C16.428 5.868 17.264 6.138 17.264 6.138C17.6336 6.97286 17.6694 7.91757 17.364 8.778C18.0376 9.50423 18.4045 10.4626 18.388 11.453C18.388 15.286 16.058 16.128 13.836 16.375C14.3153 16.8651 14.5612 17.5373 14.511 18.221C14.511 19.555 14.499 20.631 14.499 20.958C14.499 21.225 14.677 21.535 15.186 21.437C19.8265 19.8884 22.6591 15.203 21.874 10.3743C21.089 5.54565 16.9181 1.99888 12.026 2Z">
+                                                </path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Core Team</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' className="absolute flex h-full w-full justify-center rounded-xl bg-cover" alt="image"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/KYTgkQ1M/7f0c4edc-f2b7-483e-b2f6-8d82324791b5.jpg" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Chinmayi Pethkar</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Ladies Representative</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://www.instagram.com/mayank_kadam1039/" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
@@ -205,25 +380,25 @@ export default function team_behind_spectrum() {
                     
                     <section >
                         <div className="container px-6 py-20 mx-auto">
-                            <h1 className="text-2xl font-semibold text-center  capitalize lg:text-3xl text-white mb-8">Design, Finance & Registration Team</h1>
+                            <h1 className="text-2xl font-semibold text-center  capitalize lg:text-3xl text-white mb-8">Technical & Design Team</h1>
                                      
                     
                             <div className="flex flex-wrap gap-8 justify-center items-center">
 
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Design Team</p>
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Web Dev Team</p>
                                     
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/Rr5cJ5h.png" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.pinimg.com/736x/68/9f/84/689f849844442d01fdc40eee7d1c5033.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Diya Kote</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Aadithyan Nair</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Design</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Web Dev</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://in.linkedin.com/in/diya-kote-412331289" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
@@ -242,7 +417,7 @@ export default function team_behind_spectrum() {
                                 </div>
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Finance</p>
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Design Team</p>
                                     
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
@@ -251,9 +426,9 @@ export default function team_behind_spectrum() {
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Varda Gachake</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Ankit Shah</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Finance</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Design</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://www.linkedin.com/in/varda-gachake-42041528a" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
@@ -282,7 +457,7 @@ export default function team_behind_spectrum() {
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Abhiraj Hiwale</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Adi Maitre</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Registration</p>
                     
@@ -307,25 +482,25 @@ export default function team_behind_spectrum() {
 
                     <section >
                         <div className="container px-6 py-20 mx-auto">
-                            <h1 className="text-2xl font-semibold text-center  capitalize lg:text-3xl text-white mb-8">Publicity, Sponsorship & E-media Team</h1>
+                            <h1 className="text-2xl font-semibold text-center  capitalize lg:text-3xl text-white mb-8">Publicity, E-media, Sponsorship and Support Team</h1>
                                      
                     
                             <div className="flex flex-wrap gap-8 justify-center items-center">
 
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Publicity, Sponsorship & E-media Team</p>
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Publicity and E-media Team</p>
                                     
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300 z-20" src="https://i.imgur.com/ESFYOof.jpg" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300 z-20" src="https://i.postimg.cc/T1T6q2C6/459412594-1011542340751115-7153984875844102525-n.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Ananya Rajankar</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Soham Zagare</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Publicity</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Publicity and E-media</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://www.linkedin.com/in/ananya-rajankar-10a938264" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
@@ -344,16 +519,16 @@ export default function team_behind_spectrum() {
                                 </div>
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
                                 <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                    <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Publicity, Sponsorship & E-media Team</p>
+                                    <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Sponsorship Team</p>
                                 
                                     <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                     <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                     <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                        <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300 z-20" src="https://i.imgur.com/1rQHUeO_d.webp" alt="No Data"/>
+                                        <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300 z-20" src="https://i.postimg.cc/Bv14JVXd/4bac7c10-78a7-4d2f-b788-671733b655fa.jpg" alt="No Data"/>
 
                                     </div>
                                 </div> 
-                                <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Parth Patil</h1>
+                                <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Tanvi Jadhav</h1>
 
                                 <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Sponsorship</p>
 
@@ -368,7 +543,7 @@ export default function team_behind_spectrum() {
                             </div>
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
                                 <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                    <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Publicity, Sponsorship & E-media Team</p>
+                                    <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Sponsorship Team</p>
                                 
                                     <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                     <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
@@ -377,9 +552,9 @@ export default function team_behind_spectrum() {
 
                                     </div>
                                 </div> 
-                                <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Preksha Gangwal </h1>
+                                <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Tejal Jadhav</h1>
 
-                                <p className="mt-2 capitalize text-gray-500 group-hover:text-white">E-media</p>
+                                <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Sponsorship</p>
 
                                 <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://www.instagram.com/gangwal_preksha007" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
@@ -390,174 +565,38 @@ export default function team_behind_spectrum() {
                                     </a>
                                 </div>
                             </div>
+
+                            <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
+                                <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                    <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Support Team</p>
+                                
+                                    <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
+                                    <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                    <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                        <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300 z-20" src="https://i.postimg.cc/CMrD2Zpd/9712d1ce-d80c-4b3e-97be-d7c0d02288b9.jpg" alt="No Data"/>
+
+                                    </div>
+                                </div> 
+                                <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Shivam Reshi</h1>
+
+                                <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Support</p>
+
+                                <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://www.instagram.com/x.____parth.____x" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                        <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+
+
                             </div>
                         </div>
                     </section>
 
-                    <section >
-                        <div className="container px-6 py-20 mx-auto">
-                            <h1 className="text-2xl font-semibold text-center  capitalize lg:text-3xl text-white mb-8">Photography and Videography, Printing, Inauguration & Support System</h1>
-                                     
                     
-                            <div className="flex flex-wrap gap-8 justify-center items-center">
-
-                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
-                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Photography and Videography</p>
-                                    
-                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
-                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
-                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 top rounded-full ring-4 ring-gray-300 z-20" src="https://i.imgur.com/8JrFF3o.png" alt="No Data"/>
-                    
-                                        </div>
-                                    </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Atharva Junghare</h1>
-                    
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Team Lead</p>
-                    
-                                    <div className="flex mt-3 -mx-2">
-                                        <a target="_blank" href="https://www.instagram.com/atharva_junghare07" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
-                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
-                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Printing</p>
-                                    
-                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
-                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
-                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/ApRORwZ.png" alt="No Data"/>
-                    
-                                        </div>
-                                    </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Ram Gokhale</h1>
-                    
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Printing</p>
-                    
-                                    <div className="flex mt-3 -mx-2">
-                                        <a target="_blank" href="https://www.instagram.com/ram_gokhale_/" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
-                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
-                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Inauguration</p>
-                                    
-                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
-                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
-                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/ctLYqIZ.png" alt="No Data"/>
-                    
-                                        </div>
-                                    </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Shravani Pajgade</h1>
-                    
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Inauguration</p>
-                    
-                                    <div className="flex mt-3 -mx-2">
-                                        <a target="_blank" href="https://www.instagram.com/shravanipajgade" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
-                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
-                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Commencement</p>
-                                    
-                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
-                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
-                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1727687619/Spectrum/5381dd94-d0ec-4899-98af-9741d9870035.png" alt="No Data"/>
-                    
-                                        </div>
-                                    </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Rugved Zambare</h1>
-                    
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Commencement</p>
-                    
-                                    <div className="flex mt-3 -mx-2">
-                                        <a target="_blank" href="https://www.instagram.com/spinythyme/" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
-                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
-                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Decoration</p>
-                                    
-                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
-                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
-                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/b5oXUuw.png" alt="No Data"/>
-                    
-                                        </div>
-                                    </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Advi Deshpande</h1>
-                    
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Decoration</p>
-                
-                                    <div className="flex mt-3 -mx-2">
-                                        <a target="_blank" href="https://www.instagram.com/a.k.a_adu" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
-                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
-                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Support System</p>
-                                    
-                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
-                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
-                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/ZQRnw8F.png" alt="No Data"/>
-                    
-                                        </div>
-                                    </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Rushikesh Patil</h1>
-                    
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Support System</p>
-                    
-                                    <div className="flex mt-3 -mx-2">
-                                    <a target="_blank" href="https://www.linkedin.com/in/rushikesh1503" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
-                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M9,17H6.477v-7H9 V17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2S8.551,8.717,7.694,8.717z M18,17h-2.442v-3.826c0-1.058-0.651-1.302-0.895-1.302s-1.058,0.163-1.058,1.302c0,0.163,0,3.826,0,3.826h-2.523v-7h2.523v0.977 C13.93,10.407,14.581,10,15.802,10C17.023,10,18,10.977,18,13.174V17z"></path>
-                                            </svg>
-                                        </a>
-                                        <a target="_blank" href="https://www.instagram.com/patil_rushikesh_" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
-                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
 
                     <section>
                         <div className="container px-6 py-20 mx-auto">
@@ -566,7 +605,7 @@ export default function team_behind_spectrum() {
                     
                             <div className="flex flex-wrap gap-8 justify-center items-center">
 
-                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
+                                {/* <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
                                         <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Tech Treasure Hunt</p>
                                     
@@ -577,7 +616,7 @@ export default function team_behind_spectrum() {
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Aadi Kanchankar</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Asmi Palekar</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Tech Treasure Hunt Co-ordinator</p>
                     
@@ -589,7 +628,36 @@ export default function team_behind_spectrum() {
                                             </svg>
                                         </a>
                                     </div>
+                                </div> */}
                                 </div>
+
+
+                                <div className="flex flex-wrap gap-8 justify-center items-center">
+
+                                {/* <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Tech Treasure Hunt</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/ox1TXGU.png" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Debottam Debnath</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Tech Treasure Hunt Co-ordinator</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://www.linkedin.com/in/aadi-kanchankar-b30069229" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M9,17H6.477v-7H9 V17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2S8.551,8.717,7.694,8.717z M18,17h-2.442v-3.826c0-1.058-0.651-1.302-0.895-1.302s-1.058,0.163-1.058,1.302c0,0.163,0,3.826,0,3.826h-2.523v-7h2.523v0.977 C13.93,10.407,14.581,10,15.802,10C17.023,10,18,10.977,18,13.174V17z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div> */}
 
 
 
@@ -600,11 +668,11 @@ export default function team_behind_spectrum() {
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/mjCqvUW.png" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/Wp8S1bLP/3956d5a0-2a04-4372-a9f4-1790f60142e0.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Saloni Khandelwal</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Khushie Mahod</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Brain Dasher Co-ordinator</p>
                     
@@ -631,11 +699,11 @@ export default function team_behind_spectrum() {
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/kSUyEuY.png" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/CLwHyyz6/078518c9-5c63-4b43-a7e4-5c48d4d7919c.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Mihik Shah</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Prachi Pawar</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">E-paradox Co-Ordinator</p>
                     
@@ -664,11 +732,11 @@ export default function team_behind_spectrum() {
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/XimvEvc.png" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/KvcqP3rz/86e464a3-f32e-44ac-927e-c4c630939aef.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Adway Aghor</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Ananya Kumarvar</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Chem-Prastuti Co-Ordinator</p>
                     
@@ -683,18 +751,18 @@ export default function team_behind_spectrum() {
                                 </div>
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Electrica</p>
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Blind Coding</p>
                                     
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/MR2HprL.png" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/CL63d4TY/yash.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Ketki Gaikwad</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Yash Sonalkar</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Electrica Co-ordinator</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Blind Coding Co-ordinator</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://www.linkedin.com/in/ketki-gaikwad-8a421827b" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
@@ -713,16 +781,16 @@ export default function team_behind_spectrum() {
                                 </div>
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
-                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Water Rocket </p>
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Water Rocket</p>
                                     
                                         <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.imgur.com/70QmA24.png" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/mrVWwW1f/ba0bf447-a875-493e-baf8-a4a485cb9217.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Jui Harisangam</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Shivtej Waghmode</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Water Rocket Co-ordinator</p>
                     
@@ -752,7 +820,7 @@ export default function team_behind_spectrum() {
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Aditi Jahagirdar</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Muskan Thakur</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">War of Words Co-Ordinator</p>
                     
@@ -772,6 +840,71 @@ export default function team_behind_spectrum() {
                                     </div>
                                 </div>
 
+
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Model Making</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/pLbvVZM7/3bc78c84-5b07-46e9-ade7-04ca48a58647.jpg" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Vivaan Sangpal</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Model Making Co-Ordinator</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://www.linkedin.com/in/aditi-jahagirdar-273649284" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M9,17H6.477v-7H9 V17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2S8.551,8.717,7.694,8.717z M18,17h-2.442v-3.826c0-1.058-0.651-1.302-0.895-1.302s-1.058,0.163-1.058,1.302c0,0.163,0,3.826,0,3.826h-2.523v-7h2.523v0.977 C13.93,10.407,14.581,10,15.802,10C17.023,10,18,10.977,18,13.174V17z"></path>
+                                            </svg>
+                                        </a>
+                                        <a target="_blank" href="https://www.instagram.com/aditijahagirdar_" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Shark Tank</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/XvB9K4zX/fddc2e8c-6c31-4a05-aeef-8b6060f0fbfe.jpg" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Atharva Huilgol</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Shark Tank Co-Ordinator</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://www.linkedin.com/in/aditi-jahagirdar-273649284" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M9,17H6.477v-7H9 V17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2S8.551,8.717,7.694,8.717z M18,17h-2.442v-3.826c0-1.058-0.651-1.302-0.895-1.302s-1.058,0.163-1.058,1.302c0,0.163,0,3.826,0,3.826h-2.523v-7h2.523v0.977 C13.93,10.407,14.581,10,15.802,10C17.023,10,18,10.977,18,13.174V17z"></path>
+                                            </svg>
+                                        </a>
+                                        <a target="_blank" href="https://www.instagram.com/aditijahagirdar_" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                                
+
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
                                         <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">High Ping</p>
@@ -783,9 +916,100 @@ export default function team_behind_spectrum() {
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Neelay Shah</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Saish Walavalkar</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">High Ping Co-Ordinator</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://in.linkedin.com/in/neelay-shah-a05779284" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M9,17H6.477v-7H9 V17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2S8.551,8.717,7.694,8.717z M18,17h-2.442v-3.826c0-1.058-0.651-1.302-0.895-1.302s-1.058,0.163-1.058,1.302c0,0.163,0,3.826,0,3.826h-2.523v-7h2.523v0.977 C13.93,10.407,14.581,10,15.802,10C17.023,10,18,10.977,18,13.174V17z"></path>
+                                            </svg>
+                                        </a>
+                                        <a target="_blank" href="https://www.instagram.com/neelays3003" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Tech Treasure Hunt</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/j2t8kLpM/63763386-35f4-4140-a262-4f84df76fa0d.jpg" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Asmi Palekar</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Tech Treasure Hunt Co-ordinator</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://in.linkedin.com/in/neelay-shah-a05779284" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M9,17H6.477v-7H9 V17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2S8.551,8.717,7.694,8.717z M18,17h-2.442v-3.826c0-1.058-0.651-1.302-0.895-1.302s-1.058,0.163-1.058,1.302c0,0.163,0,3.826,0,3.826h-2.523v-7h2.523v0.977 C13.93,10.407,14.581,10,15.802,10C17.023,10,18,10.977,18,13.174V17z"></path>
+                                            </svg>
+                                        </a>
+                                        <a target="_blank" href="https://www.instagram.com/neelays3003" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Tech Treasure Hunt</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/mrd2rHwH/b679415d-4ac1-4705-9f19-1c91466dd825.jpg" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Debottam Debnath</h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Tech Treasure Hunt Co-Ordinator</p>
+                    
+                                    <div className="flex mt-3 -mx-2">
+                                    <a target="_blank" href="https://in.linkedin.com/in/neelay-shah-a05779284" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M9,17H6.477v-7H9 V17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2S8.551,8.717,7.694,8.717z M18,17h-2.442v-3.826c0-1.058-0.651-1.302-0.895-1.302s-1.058,0.163-1.058,1.302c0,0.163,0,3.826,0,3.826h-2.523v-7h2.523v0.977 C13.93,10.407,14.581,10,15.802,10C17.023,10,18,10.977,18,13.174V17z"></path>
+                                            </svg>
+                                        </a>
+                                        <a target="_blank" href="https://www.instagram.com/neelays3003" className="mx-2 text-gray-500  group-hover:text-white" aria-label="Instagram">
+                                            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[350px] shadow-lg shadow-indigo-500/20 min-w-[300px] hover:scale-105">
+                                    <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
+                                        <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl">Tech Treasure Hunt</p>
+                                    
+                                        <Image width="100" height="100" src='https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png' alt="image" className="absolute flex h-full w-full justify-center rounded-xl bg-cover"/> 
+                                        <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
+                                        <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/mrd2rHwH/b679415d-4ac1-4705-9f19-1c91466dd825.jpg" alt="No Data"/>
+                    
+                                        </div>
+                                    </div> 
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Aarti chopade                                     </h1>
+                    
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Fun Activities Head</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://in.linkedin.com/in/neelay-shah-a05779284" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
@@ -845,7 +1069,7 @@ export default function team_behind_spectrum() {
                             <div className="text-2xl font-semibold text-center capitalize lg:text-3xl text-white mb-8">Spectrum Core Team [Faculty]</div>
                         
                             <div className="flex flex-wrap gap-8 justify-center items-center">
-                                <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[360px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
+                                {/* <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[360px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
                                         <p className="absolute top-[18px] w-full text-center z-10 font-bold text-xl ">Core Team</p>
                                     
@@ -860,7 +1084,7 @@ export default function team_behind_spectrum() {
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">HOD</p>
                     
-                                </div>
+                                </div> */}
 
                                 <div className="flex flex-col bg-gray-900 items-center p-8 transition border duration-300 transform  animation:1s ease-in-out cursor-pointer rounded-xl  group  border-gray-700 hover:border-transparent min-h-[360px] shadow-lg shadow-indigo-500/20 min-w-[300px]              hover:scale-105   ">
                                     <div className="relative flex h-36 w-full justify-center rounded-xl bg-cover" >
@@ -875,7 +1099,7 @@ export default function team_behind_spectrum() {
                                     </div> 
                                     <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Dr. Leena Sharma</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Faculty Mentor</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">HOD</p>
                     
                      
                                 </div>
@@ -886,11 +1110,11 @@ export default function team_behind_spectrum() {
                                         <div className="absolute flex h-full w-full justify-center rounded-xl bg-cover" style={{ background: 'linear-gradient(146deg, rgba(221,235,82,1) 8%, rgba(37,255,102,1) 39%, rgba(28,190,47,1) 65%, rgba(83,234,255,1) 89%)' }}></div>
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://fe.pccoepune.com/People/images/faculty/shajiya.png" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://fe.pccoepune.com/images/faculty/neha-sharma.JPG" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Dr. Shaziya Shaikh</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Dr. Neha Sharma</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Faculty Coordinator</p>
                                 </div>
@@ -902,11 +1126,11 @@ export default function team_behind_spectrum() {
                                         <div className="absolute flex h-full w-full justify-center rounded-xl bg-cover" style={{ background: "linear-gradient(146deg, rgba(221,235,82,1) 8%, rgba(37,255,102,1) 39%, rgba(28,190,47,1) 65%, rgba(83,234,255,1) 89%)" }}></div>
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://drsandeeppatil.weebly.com/uploads/3/1/2/9/31290621/published/untitled.jpg?1704449115" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://fe.pccoepune.com/images/faculty/prasad.webp" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Dr. Sandeep Patil</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Dr. Mohit Prasad</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Faculty Coordinator</p>
                     
@@ -918,11 +1142,11 @@ export default function team_behind_spectrum() {
                                         <div className="absolute flex h-full w-full justify-center rounded-xl bg-cover" style={{ background: 'linear-gradient(146deg, rgba(221,235,82,1) 8%, rgba(37,255,102,1) 39%, rgba(28,190,47,1) 65%, rgba(83,234,255,1) 89%)' }}></div>
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://fe.pccoepune.com/People/images/faculty/Kharche.jpg" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://fe.pccoepune.com/images/faculty/gz.webp" alt="No Data"/>
                     
                                         </div>
                                     </div> 
-                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Dr. Amol kharche</h1>
+                                    <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Mrs. Geetanjali Zambare</h1>
                     
                                     <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Faculty Coordinator</p>
                 
@@ -931,6 +1155,9 @@ export default function team_behind_spectrum() {
                         </div>
                     </section>
 
+
+
+                    
                 </div>
             </div>
         )

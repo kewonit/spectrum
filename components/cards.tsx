@@ -113,6 +113,30 @@ export default function Cards() {
       width: 350,
       height: 300,
     },
+    {
+      href: "/video-games",
+      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1705913637/Spectrum/Homepage/videogames_rs9ubb.jpg",
+      alt: "image",
+      title: "High Ping '24",
+      description: "High Ping PCCOE E-Sports Event 2024!",
+      borderColor: "border-blue-700",
+      buttonBgColor: "bg-blue-300",
+      buttonHoverBgColor: "hover:bg-blue-400",
+      width: 350,
+      height: 300,
+    },
+    {
+      href: "/video-games",
+      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1705913637/Spectrum/Homepage/videogames_rs9ubb.jpg",
+      alt: "image",
+      title: "High Ping '24",
+      description: "High Ping PCCOE E-Sports Event 2024!",
+      borderColor: "border-blue-700",
+      buttonBgColor: "bg-blue-300",
+      buttonHoverBgColor: "hover:bg-blue-400",
+      width: 350,
+      height: 300,
+    },
   ];
 
   return (

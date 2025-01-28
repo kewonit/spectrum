@@ -5,7 +5,7 @@ import "@/styles/cube-animation.css"
 import Link from "next/link";
 
 const spectrumText = `<p>PCET's <span>PIMPRI</span> CHINCHWAD COLLEGE OF ENGINEERING, Pune |&nbsp&nbsp&nbsp|
-Department of <span>Applied Science</span> and Humanities presents 
+Department of <span>Applied Sciences</span> and Humanities presents 
 |&nbsp&nbsp&nbsp|<span>Spectrum' 25</span> |&nbsp&nbsp&nbsp| Annual State Level Technical Symposium 
 for Extra <span>Ordinary</span>&nbsp| First Year Engineering Students!&nbsp|</p>`;
 
