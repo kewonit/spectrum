@@ -1,5 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+// Add the same constants from profile-form for consistency
+const BRANCH_OPTIONS = {
+  cs: "Computer Science",
+  cs_aiml: "CS (AI & ML)",
+  cs_regional: "CS (Regional)",
+  it: "Information Technology",
+  entc: "Electronics & Telecomm.",
+  mech: "Mechanical",
+  civil: "Civil"
+} as const;
+
+const COLLEGE_OPTIONS = {
+  pccoe: "Pimpri Chinchwad College of Engineering, Pune",
+  pccoer: "Pimpri Chinchwad College of Engineering & Research, Ravet",
+  // ...existing college options...
+} as const;
+
 interface ProfileViewProps {
   profile: {
     full_name?: string;
@@ -15,6 +32,18 @@ interface ProfileViewProps {
 }
 
 export function ProfileView({ profile }: ProfileViewProps) {
+  // Helper function to get full college name
+  const getFullCollegeName = (collegeName: string) => {
+    // Check if it's a key in COLLEGE_OPTIONS
+    const collegeEntry = Object.entries(COLLEGE_OPTIONS).find(([key]) => key === collegeName);
+    return collegeEntry ? collegeEntry[1] : collegeName;
+  };
+
+  // Helper function to get full branch name
+  const getFullBranchName = (branchKey: string) => {
+    return BRANCH_OPTIONS[branchKey as keyof typeof BRANCH_OPTIONS] || branchKey;
+  };
+
   const ProfileItem = ({ label, value, highlight }: { label: string; value?: string; highlight?: boolean }) => {
     if (!value) return null;
     return (
@@ -22,7 +51,7 @@ export function ProfileView({ profile }: ProfileViewProps) {
         <p className={`text-xs font-semibold uppercase tracking-wide ${highlight ? 'text-blue-600' : 'text-gray-500'}`}>
           {label}
         </p>
-        <p className={`text-lg ${highlight ? 'text-blue-900 font-bold' : 'text-gray-900 font-medium'} truncate`}>
+        <p className={`text-lg ${highlight ? 'text-blue-700 font-semibold' : 'text-gray-700 font-medium'} truncate`}>
           {value}
         </p>
       </div>
@@ -62,7 +91,10 @@ export function ProfileView({ profile }: ProfileViewProps) {
               <ProfileItem label="Full Name" value={profile?.full_name} />
               <ProfileItem label="Email Address" value={profile?.email} highlight />
               <ProfileItem label="Phone Number" value={profile?.phone} />
-              <ProfileItem label="Gender" value={profile?.gender} />
+              <ProfileItem 
+                label="Gender" 
+                value={profile?.gender ? profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1) : undefined} 
+              />
             </div>
           </section>
 
@@ -76,10 +108,19 @@ export function ProfileView({ profile }: ProfileViewProps) {
               </span>
             </div>
             <div className="grid gap-2.5 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              <ProfileItem label="Institution" value={profile?.college_name} />
+              <ProfileItem 
+                label="Institution" 
+                value={profile?.college_name ? getFullCollegeName(profile.college_name) : undefined} 
+              />
               <ProfileItem label="PRN Number" value={profile?.prn} highlight />
-              <ProfileItem label="Academic Branch" value={profile?.branch} />
-              <ProfileItem label="Class/Cohort" value={profile?.class} />
+              <ProfileItem 
+                label="Academic Branch" 
+                value={profile?.branch ? getFullBranchName(profile.branch) : undefined} 
+              />
+              <ProfileItem 
+                label="Class/Division" 
+                value={profile?.class ? (profile.class.match(/^[A-Z]$/) ? `Division ${profile.class}` : profile.class) : undefined} 
+              />
             </div>
           </section>
         </div>
