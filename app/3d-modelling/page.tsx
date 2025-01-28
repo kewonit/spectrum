@@ -73,7 +73,7 @@ export default function Home() {
           6. Base must be flat and stable<br/>
           7. Top must be flat to support load placement<br/>
           8. Use of unauthorized materials will result in disqualification<br/>
-          9. Judges' decisions are final and binding
+          9. Judges&apos; decisions are final and binding
           </p>
           <h1 className="pt-8">Judging Criteria:</h1>
           <p className="leading-7">
