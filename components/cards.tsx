@@ -23,10 +23,10 @@ export default function Cards() {
       height: 300,
     },
     {
-      href: "/electrica",
+      href: "/blindcoding",
       image: "https://i.postimg.cc/rFsSQNDM/solid-color-image-1.png",
       alt: "image",
-      title: "Electrica '25",
+      title: "Blind Coding '25",
       description: "A fun event which tests your knowledge on basic electronics.",
       borderColor: "border-orange-700",
       buttonBgColor: "bg-orange-500",
@@ -58,13 +58,13 @@ export default function Cards() {
       width: 350,
       height: 300,
     },
-    {
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1705913782/Spectrum/Homepage/HKZuMdo_w2bis3.png",
-      alt: "logo",
-      borderColor: "border-orange-700",
-      width: 400,
-      height: 200,
-    },
+    // {
+    //   image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1705913782/Spectrum/Homepage/HKZuMdo_w2bis3.png",
+    //   alt: "logo",
+    //   borderColor: "border-orange-700",
+    //   width: 400,
+    //   height: 200,
+    // },
     {
       href: "/chem-prastuti",
       image: "https://i.postimg.cc/rsKKCgQH/solid-color-image-4.png",

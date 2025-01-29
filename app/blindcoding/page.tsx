@@ -1,15 +1,15 @@
 import { Rules } from "@/app/blindcoding/components/accordian"
-import { Electrica_registarion } from "@/app/blindcoding/components/registration";
+import { BlindCoding_registarion } from "@/app/blindcoding/components/registration";
 import { Krona_One } from 'next/font/google'
 import Image from "next/image";
 
 import { Metadata } from 'next'
  
 export const metadata: Metadata = {
-  title: 'Spectrum x Electrica',
+  title: 'Spectrum x Blind Coding',
   description: "Tech event for first year students",  
   openGraph: {
-    title: 'Spectrum x Electrica',
+    title: 'Spectrum x Blind Coding',
     description: "Tech event for first year students",  
     url: "https://pccoespectrum.tech",
     siteName: "pccoespectrum.tech",
@@ -52,7 +52,7 @@ export default function Home() {
       <picture> 
         <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
       </picture> 
-      <Electrica_registarion />
+      <BlindCoding_registarion />
       <picture> 
       <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
       </picture> 
@@ -68,7 +68,7 @@ export default function Home() {
         •	Event will be divided into 3 rounds. <br/>
         •	Scientific Calculators are allowed for the first round of the event. <br/>
         •	Participants will have to carry their own stationary (Calculators, pens, etc). <br/>
-        •	Personal computers, electronic/electrical components are not allowed for use during the event. <br/>
+        •	Personal computers, electronic/Blind Codingl components are not allowed for use during the event. <br/>
         •	The use of A.I. chatbots like ChatGPT is strictly prohibited. <br/>
         •	Participants are not allowed to use mobile phones, smartwatches, or any other electronic devices. <br/>
         •	Participants will be strictly monitored, and volunteers will be available to provide assistance if necessary. <br/>
@@ -78,7 +78,7 @@ export default function Home() {
         •	The organizers reserve the right to change or update the contest rules, and participants are responsible for staying informed. <br/>
         •	Violation of any rule may result in immediate disqualification. <br/>
         •	All the participants must return the electronic components provided to them after the event <br/>
-        •	The team would be held responsible for any damage caused to electrical components due to mishandling or carelessness, and would be required to pay a fine. <br/>
+        •	The team would be held responsible for any damage caused to Blind Codingl components due to mishandling or carelessness, and would be required to pay a fine. <br/>
         •	Spot entries will be accepted until the team registration limit is reached. <br/>
         </p>
         </div>

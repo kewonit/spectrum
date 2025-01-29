@@ -398,7 +398,7 @@ export default function team_behind_spectrum() {
                                     </div> 
                                     <h1 className="mt-16 text-2xl font-semibold  capitalize text-gray-400 group-hover:text-white">Aadithyan Nair</h1>
                     
-                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Web Dev</p>
+                                    <p className="mt-2 capitalize text-gray-500 group-hover:text-white">Team Lead</p>
                     
                                     <div className="flex mt-3 -mx-2">
                                     <a target="_blank" href="https://in.linkedin.com/in/diya-kote-412331289" className="mx-2  text-gray-500  group-hover:text-white" aria-label="LinkedIn">
