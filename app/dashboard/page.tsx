@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 export default function DashboardPage() {
   const [userData, setUserData] = useState<any>(null);
@@ -39,8 +40,48 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="loading-spinner">Loading...</div>
+      <div className="min-h-screen bg-[#EBE9E0] p-4 sm:p-6 lg:p-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Breadcrumb skeleton */}
+          <div className="h-6 w-32 bg-gray-200 rounded mb-6 animate-pulse" />
+          
+          {/* Quick Action Cards skeleton */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-white/80 backdrop-blur p-6 rounded-2xl shadow-sm">
+                <div className="h-6 w-24 bg-gray-200 rounded mb-2 animate-pulse" />
+                <div className="h-4 w-full bg-gray-100 rounded mb-4 animate-pulse" />
+                <div className="h-9 w-full bg-gray-200 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+
+          {/* Main card skeleton */}
+          <div className="p-2 sm:p-4 border-4 border-dashed border-gray-300 rounded-3xl">
+            <div className="bg-white rounded-3xl shadow-lg overflow-hidden relative p-4 sm:p-6 lg:p-8">
+              <div className="mb-6">
+                <div className="h-8 w-64 bg-gray-200 rounded mb-2 animate-pulse" />
+                <div className="h-4 w-48 bg-gray-100 rounded animate-pulse" />
+              </div>
+              
+              {/* Tabs skeleton */}
+              <div className="border-b mb-4">
+                <div className="flex gap-4 mb-[-2px]">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="h-10 w-24 bg-gray-200 rounded animate-pulse" />
+                  ))}
+                </div>
+              </div>
+              
+              {/* Content skeleton */}
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-16 w-full bg-gray-100 rounded animate-pulse" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -87,8 +128,27 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-[#EBE9E0] p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Dashboard' },
+          ]}
+          className="mb-6"
+        />
+        
         {/* Quick Action Cards */}
-        <div className="grid gap-4 sm:grid-cols-3 mb-6">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+          <div className="bg-white/80 backdrop-blur p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <h2 className="font-semibold text-lg mb-2">Events</h2>
+            <p className="text-sm text-gray-600 mb-4">View and manage available events.</p>
+            <Button
+              variant="outline"
+              className="w-full bg-purple-50 hover:bg-purple-100 border-purple-200"
+              onClick={() => router.push('/dashboard/events')}
+            >
+              View Events
+            </Button>
+          </div>
           <div className="bg-white/80 backdrop-blur p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
             <h2 className="font-semibold text-lg mb-2">Check Registration</h2>
             <p className="text-sm text-gray-600 mb-4">View or verify active registrations.</p>
@@ -111,33 +171,15 @@ export default function DashboardPage() {
               Manage Invites
             </Button>
           </div>
-          <div className="bg-white/80 backdrop-blur p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <h2 className="font-semibold text-lg mb-2">Registration Certificate</h2>
-            <p className="text-sm text-gray-600 mb-4">Download certificates for verified events.</p>
-            <Button
-              variant="outline"
-              className="w-full bg-purple-50 hover:bg-purple-100 border-purple-200"
-              onClick={() => router.push('/dashboard/certificates')}
-            >
-              View Certificates
-            </Button>
-          </div>
         </div>
 
         <div className="p-2 sm:p-4 border-4 border-dashed border-gray-300 rounded-3xl">
           <div className="bg-white rounded-3xl shadow-lg overflow-hidden relative">
             {/* Dots for ticket effect */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-8 bg-[#EBE9E0] rounded-r-full"></div>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-8 bg-[#EBE9E0] rounded-l-full"></div>
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-r-full"></div>
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-l-full"></div>
 
-            <div className="p-6 sm:p-8">
-              <Breadcrumbs
-                items={[
-                  { label: 'Home', href: '/' },
-                  { label: 'Dashboard' },
-                ]}
-              />
-              
+            <div className="p-4 sm:p-6 lg:p-8">
               <div className="mb-6">
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
                   Welcome back, {profile?.full_name || 'User'}!
@@ -147,7 +189,10 @@ export default function DashboardPage() {
                 </p>
               </div>
 
-              <Tabs userData={userData} />
+              <div className="space-y-6">
+                {/* Tabs component will now handle content within the card */}
+                <Tabs userData={userData} />
+              </div>
 
               <div className="mt-6 border-t pt-6">
                 <form onSubmit={handleSignOut}>

@@ -1,96 +1,287 @@
 "use client"
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger
-} from "@/components/ui/navigation-menu"
-import { Avatar, AvatarImage  } from "@/components/ui/avatar"
 import Link from "next/link"
 import { Button } from "./ui/button"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { Menu } from "lucide-react"
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import { useEffect, useState } from "react"
+import { useRouter } from 'next/navigation'
 
 export function Navigation() {
-  return (
-    <NavigationMenu className="">
-      <Link className="mx-auto max-w-7xl flex flex-1 justify-items-start" href="/">
-        <Avatar>
-          <AvatarImage width="auto" height="100" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705914025/Spectrum/Homepage/logo_qb4lcm.png"  alt="main logo"/>
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [open, setOpen] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const response = await fetch('/api/user')
+        if (response.ok) {
+          const data = await response.json()
+          setUser(data)
+        }
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    getUser()
+  }, [])
+
+  const handleNavigation = (href: string) => {
+    setOpen(false)
+    setSheetOpen(false)
+    router.push(href)
+  }
+
+  const NavigationItems = () => (
+    <div className="flex items-center gap-4 md:gap-6">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant="outline" className="h-10">Events</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Spectrum Events 2025</DialogTitle>
+            <DialogDescription>
+              Explore our exciting events!
+            </DialogDescription>
+          </DialogHeader>
+          <ul className="p-10 space-y-2">
+            <EventsList onNavigate={handleNavigation} />
+          </ul>
+        </DialogContent>
+      </Dialog>
+
+      <Button variant="outline" asChild className="h-10" onClick={() => setSheetOpen(false)}>
+        <Link href="/team-behind-spectrum">Team</Link>
+      </Button>
+
+      {!loading && (
+        <>
+          {user ? (
+            <Button asChild onClick={() => setSheetOpen(false)}>
+              <Link href="/dashboard">Dashboard</Link>
+            </Button>
+          ) : (
+            <div className="flex space-x-2">
+              <Button asChild variant="outline" onClick={() => setSheetOpen(false)}>
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button asChild onClick={() => setSheetOpen(false)}>
+                <Link href="/signup">Sign Up</Link>
+              </Button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  )
+
+  const MobileNavigationItems = () => (
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center gap-4 border-b pb-6">
+        <Avatar className="w-12 h-12">
+          <AvatarImage 
+            src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705914025/Spectrum/Homepage/logo_qb4lcm.png" 
+            alt="Spectrum logo"
+            className="object-contain"
+          />
         </Avatar>
-      </Link>
-        <NavigationMenuList>
-        <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-white">Events</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="p-10 md:w-[350px] space-y-2">
-                <ListItem href="/e-paradox" title="E paradox' 25" className="bg-red-500 text-gray-900">
-                  <p className="text-gray-100"> A fun activity-based game in which you must find the clues and lead forward to the ultimate prize by cracking codes.  </p>
-                </ListItem>
-                <ListItem href="/blindcoding" title="Blind Coding' 25" className="bg-orange-500 text-gray-900">
-                  <p className="text-gray-100"> Blind Coding is based on knowledge of Basic Programming concepts </p>
-                </ListItem>
-                <ListItem href="/brain-dasher" title="Brain Dasher' 25" className="bg-yellow-400 text-gray-900">
-                  <p className="text-gray-100"> Its time to put your brain to the test! </p>
-                </ListItem>
-                <ListItem href="/treasure-hunt" title="Treasure Hunt' 25" className="bg-green-400 text-gray-900">
-                  <p className="text-gray-100"> Treasure Hunt </p>
-                </ListItem>
-                <ListItem href="/chem-prastuti" title="Chem Prastuti' 25" className="bg-blue-400 text-gray-900">
-                  <p className="text-gray-100"> A Chemistry presentation event! </p>
-                </ListItem>
-                <ListItem href="/bottle-rocket" title="Water Rocket' 25" className="bg-purple-400 text-gray-900">
-                  <p className="text-gray-100"> A rocket propelled by water and air pressure! </p>
-                </ListItem>
-                <ListItem href="/debate" title="War of Words' 25" className="bg-pink-300 text-gray-900">
-                  <p className="text-gray-100">  War of Words - Debate Competition 2025 </p>
-                </ListItem>
-                <ListItem href="/video-games" title="High Ping '25" className="bg-[#11b9a8] text-gray-900">
-                  <p className="text-gray-100"> A gaming event </p>
-                </ListItem>
-                <ListItem href="/video-games" title="Shark Tank '25" className="bg-blue-400 text-gray-900">
-                  <p className="text-gray-100"> An event to mock Shark Tank and Pitch Businesses </p>
-                </ListItem><ListItem href="/video-games" title="Model Making '25" className="bg-[#f4a141] text-gray-900">
-                  <p className="text-gray-100"> Build 3D Models from scratch and win prizes! </p>
-                </ListItem>
+        <div>
+          <h3 className="font-semibold">Spectrum 2025</h3>
+          <p className="text-sm text-muted-foreground">Technical Festival</p>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <h4 className="text-sm font-medium text-muted-foreground px-2">MENU</h4>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start text-base font-normal"
+            >
+              📅 Events
+            </Button>
+          </DialogTrigger>
+          <DialogContent 
+            className="sm:max-w-[425px]"
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
+            <DialogHeader>
+              <DialogTitle>Spectrum Events 2025</DialogTitle>
+              <DialogDescription>
+                Explore our exciting events!
+              </DialogDescription>
+            </DialogHeader>
+            <div className="relative">
+              <VisuallyHidden>List of events</VisuallyHidden>
+              <ul className="p-10 space-y-2" role="list" aria-label="Events list">
+                <EventsList onNavigate={handleNavigation} />
               </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Button><a href="/team-behind-spectrum">Team</a></Button>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-    </NavigationMenu>
+            </div>
+          </DialogContent>
+        </Dialog>
+        <Button 
+          variant="ghost" 
+          asChild 
+          className="w-full justify-start text-base font-normal"
+          onClick={() => setSheetOpen(false)}
+        >
+          <Link href="/team-behind-spectrum">👥 Team</Link>
+        </Button>
+      </div>
+
+      {!loading && (
+        <div className="mt-auto border-t pt-6 space-y-4">
+          <h4 className="text-sm font-medium text-muted-foreground px-2">ACCOUNT</h4>
+          {user ? (
+            <Button 
+              asChild 
+              className="w-full"
+              onClick={() => setSheetOpen(false)}
+            >
+              <Link href="/dashboard">Go to Dashboard</Link>
+            </Button>
+          ) : (
+            <div className="space-y-2">
+              <Button 
+                asChild 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setSheetOpen(false)}
+              >
+                <Link href="/login">Sign In</Link>
+              </Button>
+              <Button 
+                asChild 
+                variant="default" 
+                className="w-full"
+                onClick={() => setSheetOpen(false)}
+              >
+                <Link href="/signup">Create Account</Link>
+              </Button>
+              <p className="text-xs text-center text-muted-foreground pt-2">
+                Join us to participate in events!
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+
+  return (
+    <nav className="relative border-b">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-24 items-center justify-between">
+          <Link href="/" className="flex-shrink-0 flex items-center">
+            <Avatar className="w-32 h-32 md:w-36 md:h-36">
+              <AvatarImage 
+                width="256" 
+                height="256" 
+                src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705914025/Spectrum/Homepage/logo_qb4lcm.png" 
+                alt="Spectrum logo"
+                className="object-contain scale-150"
+              />
+            </Avatar>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex md:items-center">
+            <NavigationItems />
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="md:hidden">
+            <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-white hover:text-white/90">
+                  <Menu className="h-5 w-5" />
+                  <VisuallyHidden>Open menu</VisuallyHidden>
+                </Button>
+              </SheetTrigger>
+              <SheetContent 
+                side="right" 
+                className="w-[300px] sm:w-[350px] flex flex-col"
+              >
+                <MobileNavigationItems />
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+      </div>
+    </nav>
   )
 }
- 
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <Link
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          href="/" 
-          {...props}
-        >
-          <div className="z-20 font-medium text-md leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </Link>
-      </NavigationMenuLink>
-    </li>
-  )
-})
-export default Navigation;
 
-ListItem.displayName = "ListItem"
+const events = [
+  { href: "/e-paradox", title: "E paradox' 24", bgColor: "bg-red-500", description: "Find clues, crack codes, win prizes" },
+  { href: "/blindcoding", title: "Blind Coding' 24", bgColor: "bg-orange-500", description: "Based on knowledge of Basic Programming concepts" },
+  { href: "/brain-dasher", title: "Brain Dasher' 24", bgColor: "bg-yellow-400", description: "Quick thinking quiz" },
+  { href: "/treasure-hunt", title: "Treasure Hunt' 24", bgColor: "bg-green-400", description: "Hunt for treasures" },
+  { href: "/chem-prastuti", title: "Chem Prastuti' 24", bgColor: "bg-blue-400", description: "Chemical engineering presentations" },
+  { href: "/bottle-rocket", title: "Water Rocket' 24", bgColor: "bg-purple-400", description: "Build & launch water rockets" },
+  { href: "/debate", title: "War of Words' 24", bgColor: "bg-pink-300", description: "Debate competition" },
+  { href: "/video-games", title: "High Ping '24", bgColor: "bg-blue-400", description: "Gaming tournament" },
+  { href: "/modelmaking", title: "Model Making '25", bgColor: "bg-[#11b9a8]", description: "Build 3D Models from Scratch" },
+  { href: "/sharktank", title: "Shark Tank '25", bgColor: "bg-[#f4a141]", description: "Mock Shark Tank" },
+];
+
+const EventsList = ({ onNavigate }: { onNavigate: (href: string) => void }) => (
+  <>
+    {events.map((event) => (
+      <EventItem key={event.href} {...event} onNavigate={onNavigate} />
+    ))}
+  </>
+);
+
+const EventItem = ({ 
+  href, 
+  title, 
+  bgColor, 
+  description, 
+  onNavigate 
+}: { 
+  href: string; 
+  title: string; 
+  bgColor: string; 
+  description: string;
+  onNavigate: (href: string) => void;
+}) => (
+  <button
+    onClick={() => onNavigate(href)}
+    className={cn(
+      "block w-full text-left p-3 rounded-md hover:opacity-90",
+      bgColor
+    )}
+    role="listitem"
+    aria-label={`${title} - ${description}`}
+  >
+    <div className="font-medium text-gray-900">{title}</div>
+    <p className="text-sm text-gray-100">{description}</p>
+  </button>
+)
+
+export default Navigation

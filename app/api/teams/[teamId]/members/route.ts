@@ -15,6 +15,13 @@ interface TeamMemberData {
   } | null;
 }
 
+interface TeamQueryResult {
+  teams: {
+    event_id: string;
+    team_name: string;
+  }
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ teamId: string }> }
@@ -107,11 +114,49 @@ export async function PATCH(
       .eq('id', user.id)
       .single();
 
+    // Get the event ID for this team
+    const { data: team } = await supabase
+      .from('teams')
+      .select('event_id')
+      .eq('id', teamId)
+      .single();
+
+    if (!team) {
+      return NextResponse.json({ error: "Team not found" }, { status: 404 });
+    }
+
+    // Check if user already has a team for this event
+    if (action === 'accept') {
+      const { data: existingTeam, error: queryError } = await supabase
+        .from('team_members')
+        .select(`
+          teams!inner (
+            event_id,
+            team_name
+          )
+        `)
+        .eq('member_id', user.id)
+        .eq('invitation_status', 'accepted')
+        .eq('teams.event_id', team.event_id)
+        .single() as { data: TeamQueryResult | null, error: any };
+
+      if (queryError && queryError.code !== 'PGRST116') { // PGRST116 is "not found" error
+        throw new Error('existing_team_check_failed');
+      }
+
+      if (existingTeam) {
+        return NextResponse.json({
+          error: "existing_team",
+          message: `You are already a member of team "${existingTeam.teams.team_name}" for this event`
+        }, { status: 400 });
+      }
+    }
+
     // Convert action to proper enum value
     const newStatus = action === 'accept' ? 'accepted' : 'rejected';
 
     // Update the invitation status
-    const { error } = await supabase
+    const { error: updateError } = await supabase
       .from('team_members')
       .update({
         invitation_status: newStatus,
@@ -122,24 +167,34 @@ export async function PATCH(
       .eq('invitation_status', 'pending')
       .or(`member_email.eq.${profile?.email?.toLowerCase()},member_email.eq.${user.email?.toLowerCase()}`);
 
-    if (error) {
-      console.error("Update error:", error);
-      throw error;
+    if (updateError) {
+      if (updateError.code === '23505') {
+        return NextResponse.json({
+          error: "existing_team",
+          message: "You are already a member of a team for this event"
+        }, { status: 400 });
+      }
+      throw updateError;
     }
 
     return NextResponse.json({ 
       success: true,
       message: `Invitation ${action}ed successfully` 
-    }, {
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      }
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Member update error:", error);
+    if (error.message === 'existing_team_check_failed') {
+      return NextResponse.json({
+        error: "existing_team",
+        message: "Could not verify team membership. Please try again."
+      }, { status: 400 });
+    }
     return NextResponse.json(
-      { error: "Failed to update team membership" },
+      { 
+        error: "server_error",
+        message: "An unexpected error occurred. Please try again."
+      },
       { status: 500 }
     );
   }

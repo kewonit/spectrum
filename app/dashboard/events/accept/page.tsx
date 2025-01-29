@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, UserPlus, Users, Calendar } from "lucide-react";
 import { format } from "date-fns";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -37,6 +37,7 @@ export default function AcceptPage() {
   const [processing, setProcessing] = useState<string | null>(null);
   const [selectedInvite, setSelectedInvite] = useState<Invite | null>(null);
   const [rejectInvite, setRejectInvite] = useState<Invite | null>(null);
+  const [errorAlert, setErrorAlert] = useState<{ title: string; message: string } | null>(null);
 
   const pendingInvites = invites.filter(invite => invite.invitation_status === 'pending');
   const historyInvites = invites.filter(invite => invite.invitation_status !== 'pending');
@@ -64,8 +65,8 @@ export default function AcceptPage() {
 
   const handleInviteAction = async (invite: Invite, action: 'accept' | 'reject') => {
     setProcessing(invite.team_id);
+    
     try {
-      toast.loading(`${action === 'accept' ? 'Accepting' : 'Rejecting'} invitation...`);
       const res = await fetch(`/api/teams/${invite.team_id}/members`, {
         method: "PATCH",
         body: JSON.stringify({ action })
@@ -73,7 +74,20 @@ export default function AcceptPage() {
       const data = await res.json();
       
       if (!res.ok) {
-        throw new Error(data.error || `Failed to ${action} invite`);
+        if (data.error === 'existing_team') {
+          setErrorAlert({
+            title: "Team Membership Conflict",
+            message: data.message || "You are already part of a team for this event"
+          });
+        } else {
+          setErrorAlert({
+            title: `Failed to ${action} invitation`,
+            message: data.message || "Please try again later"
+          });
+        }
+        setSelectedInvite(null);
+        setRejectInvite(null);
+        return;
       }
       
       toast.success(`Successfully ${action}ed the invitation!`, {
@@ -85,8 +99,9 @@ export default function AcceptPage() {
       setSelectedInvite(null);
       setRejectInvite(null);
     } catch (err: any) {
-      toast.error(`Failed to ${action} invitation`, {
-        description: err.message || "Please try again later",
+      setErrorAlert({
+        title: `Error ${action}ing invitation`,
+        message: err.message || "An unexpected error occurred. Please try again."
       });
     } finally {
       setProcessing(null);
@@ -149,6 +164,7 @@ export default function AcceptPage() {
         <div className="container mx-auto max-w-7xl">
           <Breadcrumbs
             items={[
+              { label: 'Home', href: '/' },
               { label: 'Dashboard', href: '/dashboard' },
               { label: 'Events', href: '/dashboard/events' },
               { label: 'Invitations' },
@@ -172,14 +188,15 @@ export default function AcceptPage() {
 
   return (
     <main className="min-h-screen bg-[#EBE9E0] p-4 sm:p-6 lg:p-8">
-      <div className="container mx-auto max-w-7xl">
+      <div className="max-w-7xl mx-auto">
         <Breadcrumbs
           items={[
+            { label: 'Home', href: '/' },
             { label: 'Dashboard', href: '/dashboard' },
             { label: 'Events', href: '/dashboard/events' },
             { label: 'Invitations' },
           ]}
-          className="mb-4"
+          className="mb-6"
         />
         
         <div className="p-2 sm:p-4 border-4 border-dashed border-gray-300 rounded-[2rem]">
@@ -371,6 +388,25 @@ export default function AcceptPage() {
                 className="bg-red-600 hover:bg-red-700"
               >
                 {processing ? 'Processing...' : 'Reject Invite'}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={!!errorAlert} onOpenChange={() => setErrorAlert(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-red-600">{errorAlert?.title}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {errorAlert?.message}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction
+                onClick={() => setErrorAlert(null)}
+                className="bg-gray-600 hover:bg-gray-700"
+              >
+                Ok, got it
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

@@ -21,10 +21,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2 } from "lucide-react";
+import { Loader2, X, AlertTriangle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { EventDetails, RegistrationStatusResponse, TeamMember } from "@/app/types/events";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 // ...existing interfaces...
 
@@ -53,6 +62,8 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [teamData, setTeamData] = useState<TeamData | null>(null);
   const [isTeamStatusLoading, setIsTeamStatusLoading] = useState(true);
+  const [removingInvite, setRemovingInvite] = useState<string | null>(null);
+  const [isRemovingInvite, setIsRemovingInvite] = useState(false);
   
   const createTeamForm = useForm<z.infer<typeof createTeamSchema>>({
     resolver: zodResolver(createTeamSchema),
@@ -211,7 +222,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
       }
       
       toast.success("Successfully registered!", {
-        description: `You're now registered for ${eventDetails.name}`,
+        description: `You&apos;re now registered for ${eventDetails.name}`,
       });
       setShowConfirm(false);
       await checkRegistrationStatus();
@@ -253,6 +264,31 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     }
   };
 
+  const handleRemoveInvite = async (memberId: string) => {
+    setIsRemovingInvite(true);
+    try {
+      toast.loading("Removing invitation...");
+      const response = await fetch(`/api/teams/${currentTeamId}/invite/${memberId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to remove invitation");
+      }
+
+      await fetchTeamMembers();
+      toast.success("Invitation removed successfully");
+    } catch (error: any) {
+      toast.error("Failed to remove invitation", {
+        description: error.message || "Please try again",
+      });
+    } finally {
+      setIsRemovingInvite(false);
+      setRemovingInvite(null);
+    }
+  };
+
   // If registration status is null or team status is still loading, show loading
   if (registrationStatus === null || isTeamStatusLoading) {
     return <Button disabled className="w-full">Loading...</Button>;
@@ -263,8 +299,8 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
         <h3 className="text-green-800 font-medium">
           {registrationStatus.type === 'solo' 
-            ? "You're registered as an individual participant!" 
-            : "You're registered as part of a team!"}
+            ? "You&apos;re registered as an individual participant!" 
+            : "You&apos;re registered as part of a team!"}
         </h3>
         <p className="text-green-600 text-sm mt-1">
           Registration successful. Good luck!
@@ -277,6 +313,12 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   if (eventDetails.max_team_size === 1) {
     return (
       <div className="space-y-4">
+        <div className="bg-red-50 border border-red-100 rounded-lg p-4 mb-2">
+          <p className="text-red-600 text-sm">
+            ⚠️ Please note: Once you click register, you&apos;ll be immediately enrolled.
+            This action cannot be undone, so make sure you&apos;re ready to commit!
+          </p>
+        </div>
         <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
           <p className="text-blue-700 text-sm">
             This is an individual event. Register now to participate!
@@ -300,9 +342,13 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
           </Button>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Confirm Registration</DialogTitle>
-              <DialogDescription>
-                Are you sure you want to register for {eventDetails.name}?
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogDescription className="space-y-2">
+                <p>You&apos;re about to register for {eventDetails.name} as an individual participant.</p>
+                <p className="font-medium">This action cannot be undone. Once registered:</p>
+                <ul className="list-disc list-inside text-sm">
+                  <li>You cannot withdraw your registration</li>
+                </ul>
               </DialogDescription>
             </DialogHeader>
             <div className="flex justify-end gap-4">
@@ -310,7 +356,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                 Cancel
               </Button>
               <Button onClick={onSoloSubmit}>
-                Confirm Registration
+                Yes, Register Me
               </Button>
             </div>
           </DialogContent>
@@ -412,12 +458,57 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                               )}
                             </div>
                           </div>
-                          <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
-                            Awaiting Response
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
+                              Awaiting Response
+                            </span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-gray-500 hover:text-red-500"
+                              onClick={() => setRemovingInvite(member.id)}
+                              disabled={isRemovingInvite}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
                       ))}
                     </div>
+
+                    <AlertDialog open={!!removingInvite} onOpenChange={() => setRemovingInvite(null)}>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Remove Invitation</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to remove this invitation? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <div className="flex justify-end gap-4 mt-4">
+                          <AlertDialogCancel 
+                            disabled={isRemovingInvite}
+                            onClick={() => setRemovingInvite(null)}
+                          >
+                            Cancel
+                          </AlertDialogCancel>
+                          <AlertDialogAction
+                            disabled={isRemovingInvite}
+                            onClick={() => {
+                              if (removingInvite) {
+                                handleRemoveInvite(removingInvite);
+                              }
+                            }}
+                            className="bg-red-500 hover:bg-red-600"
+                          >
+                            {isRemovingInvite ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              "Remove"
+                            )}
+                          </AlertDialogAction>
+                        </div>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 )}
               </CardContent>
@@ -436,7 +527,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                       <p>You can add up to {maxAllowed - totalMembers} more members</p>
                       {pendingMembers.length > 0 && (
                         <p className="text-yellow-600 text-xs">
-                          {pendingMembers.length} invitation{pendingMembers.length !== 1 ? 's' : ''} pending
+                          {pendingMembers.length} invitation{pendingMembers.length !== 1 ? 's' : ''} have been sent out and are pending.
                         </p>
                       )}
                     </>
@@ -504,37 +595,49 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   // Only show team creation form if user isn't part of any team
   if (!currentTeamId && !registrationStatus.teamId) {
     return (
-      <Form {...createTeamForm}>
-        <form onSubmit={createTeamForm.handleSubmit(onCreateTeam)} className="space-y-4">
-          <FormField
-            control={createTeamForm.control}
-            name="teamName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Team Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter team name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating Team...
-              </>
-            ) : (
-              "Create Team"
-            )}
-          </Button>
-        </form>
-      </Form>
+      <>
+        <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-lg">
+          <p className="text-red-700 text-sm font-medium mb-1 flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4" />
+            Important Notice
+          </p>
+          <p className="text-red-600 text-sm">
+            Creating a team is a permanent decision. Once created, you won&apos;t be able to join any other teams for this event.
+            Please make sure you want to proceed before creating a team.
+          </p>
+        </div>
+        <Form {...createTeamForm}>
+          <form onSubmit={createTeamForm.handleSubmit(onCreateTeam)} className="space-y-4">
+            <FormField
+              control={createTeamForm.control}
+              name="teamName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Team Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter team name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button 
+              type="submit" 
+              className="w-full"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating Team...
+                </>
+              ) : (
+                "Create Team"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </>
     );
   }
 

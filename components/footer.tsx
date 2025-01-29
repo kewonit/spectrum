@@ -46,7 +46,7 @@ export default function Footer() {
                     <div className="text-center md:text-left">
                     <h3 className="text-2xl font-bold text-white">Open Source Project</h3>
                     <p className="mt-2 text-lg text-gray-200">
-                        This project is open source and available on GitHub. Feel free to contribute!
+                        We have made this project open source and available on GitHub. Feel free to contribute!
                     </p>
                     </div>
                     <a
