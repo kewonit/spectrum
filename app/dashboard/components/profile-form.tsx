@@ -21,6 +21,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import React from "react";
+
+const BRANCH_OPTIONS = {
+  cs: "Computer Science",
+  cs_aiml: "CS (AI & ML)",
+  cs_regional: "CS (Regional)",
+  it: "Information Technology",
+  entc: "Electronics & Telecomm.",
+  mech: "Mechanical",
+  civil: "Civil"
+} as const;
+
+const COLLEGE_OPTIONS = {
+  pccoe: "Pimpri Chinchwad College of Engineering, Pune",
+  pccoer: "Pimpri Chinchwad College of Engineering & Research, Ravet",
+  pcu: "Pimpri Chinchwad University",
+  nutan: "Nutan Maharashtra Institute of Engineering & Technology, Pune",
+  nmit: "Nutan College of Engineering & Research (NCER)",
+  ait: "Army Institute of Technology",
+  aissms: "All India Shri Shivaji Memorial Society's College of Engineering",
+  bvp: "Bharati Vidyapeeth College of Engineering",
+  coep: "College of Engineering Pune",
+  cummins: "Cummins College of Engineering",
+  dyp: "Dr. D.Y. Patil Institute of Technology, Akurdi",
+  iiit: "Indian Institute of Information Technology, Pune",
+  jspm: "JSPM's Rajarshi Shahu College of Engineering",
+  mit: "MIT World Peace University (MIT-WPU)",
+  mit_adt: "MIT Art, Design and Technology University",
+  pict: "SCTR'S Pune Institute of Computer Technology",
+  pvg: "PVG's College of Engineering and Technology",
+  scoe: "Sinhgad College of Engineering",
+  sit_lavle: "Symbiosis Institute of Technology, Lavle",
+  viit: "BRACT's, Vishwakarma Institute of Information Technology",
+  vit: "Vishwakarma Institute of Technology",
+} as const;
 
 const formSchema = z.object({
   full_name: z.string().min(2, "Name must be at least 2 characters"),
@@ -28,7 +63,7 @@ const formSchema = z.object({
   college_name: z.string().min(2, "College name is required"),
   prn: z.string().min(2, "PRN is required"),
   branch: z.string().min(2, "Branch is required"),
-  class: z.string().min(2, "Class is required"),
+  class: z.string().min(1, "Class is required"),
   gender: z.string(),
 });
 
@@ -45,6 +80,11 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
       gender: profile?.gender || "",
     },
   });
+
+  // Add state to track "other" selection
+  const [isOtherBranch, setIsOtherBranch] = React.useState(!Object.keys(BRANCH_OPTIONS).includes(profile?.branch || ''));
+  const [isOtherClass, setIsOtherClass] = React.useState(!(profile?.class || '').match(/^[A-Z]$/));
+  const [isOtherCollege, setIsOtherCollege] = React.useState(!Object.keys(COLLEGE_OPTIONS).includes(profile?.college_name || ''));
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     toast.promise(
@@ -90,12 +130,12 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
                 name="full_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-900">Full Name</FormLabel>
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-gray-900">Full Name</FormLabel>
+                      <p className="text-xs text-gray-500">eg. John Doe</p>
+                    </div>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        className="bg-white text-gray-900 border-gray-300 hover:border-blue-300 focus:border-blue-500 transition-colors"
-                      />
+                      <Input {...field} className="text-gray-900 border-gray-300" />
                     </FormControl>
                     <FormMessage className="text-red-500" />
                   </FormItem>
@@ -107,13 +147,12 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-900">Phone</FormLabel>
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-gray-900">Phone</FormLabel>
+                      <p className="text-xs text-gray-500">eg. 9876543210</p>
+                    </div>
                     <FormControl>
-                      <Input 
-                        placeholder="1234567890" 
-                        {...field} 
-                        className="bg-white text-gray-900 border-gray-300"
-                      />
+                      <Input {...field} className="text-gray-900 border-gray-300" />
                     </FormControl>
                     <FormMessage className="text-red-500" />
                   </FormItem>
@@ -128,7 +167,7 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
                     <FormLabel className="text-gray-900">Gender</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="bg-gray-100">
                           <SelectValue placeholder="Select gender" />
                         </SelectTrigger>
                       </FormControl>
@@ -147,15 +186,51 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
                 control={form.control}
                 name="college_name"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="space-y-3">
                     <FormLabel className="text-gray-900">College Name</FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="Enter college name" 
-                        {...field} 
-                        className="bg-white text-gray-900 border-gray-300"
-                      />
-                    </FormControl>
+                    <div className="space-y-3">
+                      <Select 
+                        onValueChange={(value) => {
+                          if (value === "other") {
+                            setIsOtherCollege(true);
+                            return;
+                          }
+                          setIsOtherCollege(false);
+                          field.onChange(COLLEGE_OPTIONS[value as keyof typeof COLLEGE_OPTIONS]);
+                        }}
+                        value={isOtherCollege ? "other" : Object.entries(COLLEGE_OPTIONS).find(([_, label]) => label === field.value)?.[0] || "other"}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="bg-gray-50">
+                            <SelectValue placeholder="Select college" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <div className="max-h-[300px] overflow-y-auto">
+                            {Object.entries(COLLEGE_OPTIONS).map(([key, label]) => (
+                              <SelectItem key={key} value={key}>
+                                {label}
+                              </SelectItem>
+                            ))}
+                            <SelectItem value="other">Other</SelectItem>
+                          </div>
+                        </SelectContent>
+                      </Select>
+
+                      {isOtherCollege && (
+                        <div className="space-y-2">
+                          <FormControl>
+                            <Input
+                              placeholder="Enter your college name"
+                              className="text-gray-900 border-gray-300"
+                              value={field.value}
+                              onChange={(e) => field.onChange(e.target.value)}
+                            />
+                          </FormControl>
+                          <p className="text-xs text-gray-500">Please enter your complete college name</p>
+                        </div>
+                      )}
+                    </div>
                     <FormMessage className="text-red-500" />
                   </FormItem>
                 )}
@@ -166,13 +241,12 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
                 name="prn"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-900">PRN</FormLabel>
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-gray-900">PRN</FormLabel>
+                      <p className="text-xs text-gray-500">eg. 123X1X00</p>
+                    </div>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter PRN" 
-                        {...field} 
-                        className="bg-white text-gray-900 border-gray-300"
-                      />
+                      <Input {...field} className="text-gray-900 border-gray-300" />
                     </FormControl>
                     <FormMessage className="text-red-500" />
                   </FormItem>
@@ -183,15 +257,50 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
                 control={form.control}
                 name="branch"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="space-y-3">
                     <FormLabel className="text-gray-900">Branch</FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="Enter branch" 
-                        {...field} 
-                        className="bg-white text-gray-900 border-gray-300"
-                      />
-                    </FormControl>
+                    <div className="space-y-3">
+                      <Select 
+                        onValueChange={(value) => {
+                          if (value === "other") {
+                            setIsOtherBranch(true);
+                            // Keep the existing custom value if there is one
+                            return;
+                          }
+                          setIsOtherBranch(false);
+                          field.onChange(value);
+                        }} 
+                        value={isOtherBranch ? "other" : field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="bg-gray-50">
+                            <SelectValue placeholder="Select branch" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {Object.entries(BRANCH_OPTIONS).map(([key, label]) => (
+                            <SelectItem key={key} value={key}>
+                              {label}
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      {isOtherBranch && (
+                        <div className="space-y-2">
+                          <FormControl>
+                            <Input
+                              placeholder="Enter your branch name"
+                              className="text-gray-900 border-gray-300"
+                              value={field.value}
+                              onChange={(e) => field.onChange(e.target.value)}
+                            />
+                          </FormControl>
+                          <p className="text-xs text-gray-500">Please enter your complete branch name</p>
+                        </div>
+                      )}
+                    </div>
                     <FormMessage className="text-red-500" />
                   </FormItem>
                 )}
@@ -201,15 +310,49 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
                 control={form.control}
                 name="class"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-900">Class</FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="Enter class" 
-                        {...field} 
-                        className="bg-white text-gray-900 border-gray-300"
-                      />
-                    </FormControl>
+                  <FormItem className="space-y-3">
+                    <FormLabel className="text-gray-900">Class/Division</FormLabel>
+                    <div className="space-y-3">
+                      <Select 
+                        onValueChange={(value) => {
+                          if (value === "other") {
+                            setIsOtherClass(true);
+                            return;
+                          }
+                          setIsOtherClass(false);
+                          field.onChange(value);
+                        }}
+                        value={isOtherClass ? "other" : field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="bg-gray-50">
+                            <SelectValue placeholder="Select division" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {Array.from('ABCDEFGHIJKLMNOP').map((letter) => (
+                            <SelectItem key={letter} value={letter}>
+                              Division {letter}
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+
+                      {isOtherClass && (
+                        <div className="space-y-2">
+                          <FormControl>
+                            <Input
+                              placeholder="Enter your division"
+                              className="text-gray-900 border-gray-300"
+                              value={field.value}
+                              onChange={(e) => field.onChange(e.target.value)}
+                            />
+                          </FormControl>
+                          <p className="text-xs text-gray-500">Please enter your complete division/class name</p>
+                        </div>
+                      )}
+                    </div>
                     <FormMessage className="text-red-500" />
                   </FormItem>
                 )}
