@@ -47,7 +47,7 @@ export default function Home() {
       </picture> 
       <div>
       <h3 className="font-jacques_francois_shadow text-center scroll-m-20 my-6 pl-2 text-xl font-extrabold text-gray-800 tracking-tight md:text-3xl lg:text-5xl">
-        Its time to put your brain to the test!
+       It&apos;s time to put your brain to the test!
       </h3>
       </div>
       <picture> 

@@ -35,7 +35,7 @@ export function Debate_registarion() {
                                     War of Words &apos;25
                                     </h1>
                                     <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
-                                    Gear up for an intense battle of ideas at "War of Words." Join us in a competitive and thought-provoking debate, where participants showcase their articulation, reasoning, and persuasion skills to emerge victorious.
+                                    Gear up for an intense battle of ideas at &quot;War of Words.&quot; Join us in a competitive and thought-provoking debate, where participants showcase their articulation, reasoning, and persuasion skills to emerge victorious.
                                     </p>
                                 </div>
 

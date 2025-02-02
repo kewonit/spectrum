@@ -35,7 +35,7 @@ export function Bottle_rocket_registarion() {
                                     Bottle Rocket &apos;25
                                     </h1>
                                     <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
-                                    Experience the thrill of scientific exploration with "Bottle Rocket." Dive into the realm of rocket science as you design, build, and launch innovative models, showcasing your creativity and engineering prowess in this dynamic competition.
+                                    Experience the thrill of scientific exploration with &quot;Bottle Rocket.&quot; Dive into the realm of rocket science as you design, build, and launch innovative models, showcasing your creativity and engineering prowess in this dynamic competition.
                                     </p>
                                 </div>
 

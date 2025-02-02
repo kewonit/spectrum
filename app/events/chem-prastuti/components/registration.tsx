@@ -35,7 +35,7 @@ export function Chem_prastuti_registarion() {
                                     Chem-Prastuti &apos;25
                                     </h1>
                                     <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
-                                    Join us for an engaging presentation event exploring the theme of "Green Chemistry for a Better Future." Showcase your innovative ideas and research in a competitive and collaborative environment.
+                                    Join us for an engaging presentation event exploring the theme of &quot;Green Chemistry for a Better Future.&quot; Showcase your innovative ideas and research in a competitive and collaborative environment.
                                     </p>
                                 </div>
 
