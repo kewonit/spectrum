@@ -14,92 +14,53 @@ interface TeamRegistration {
 export const revalidate = 0; // Disable cache
 
 export async function GET(request: Request) {
+  const supabase = await createClient();
+  const { searchParams } = new URL(request.url);
+  const eventId = searchParams.get('eventId');
+
+  if (!eventId) {
+    return NextResponse.json({ error: "Event ID is required" }, { status: 400 });
+  }
+
   try {
-    const { searchParams } = new URL(request.url);
-    const eventId = searchParams.get("eventId");
-
-    if (!eventId) {
-      return NextResponse.json({ error: "Event ID is required" }, { status: 400 });
-    }
-
-    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if user is a team leader first
-    const { data: leaderTeam } = await supabase
-      .from('teams')
-      .select(`
-        id,
-        registrations!inner (
-          id,
-          registration_status
-        )
-      `)
-      .eq('event_id', eventId)
-      .eq('leader_id', user.id)
+    // Get user profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
       .single();
 
-    if (leaderTeam?.id) {
-      return NextResponse.json({
-        isRegistered: true,
-        type: 'team',
-        teamId: leaderTeam.id,
-        isLeader: true
-      });
-    }
-
-    // Check for solo registration
-    const { data: soloReg } = await supabase
+    // Check registration status
+    const { data: registration } = await supabase
       .from('registrations')
-      .select('registration_status')
+      .select('*, teams(*)')
+      .or(`individual_id.eq.${user.id},teams.team_members.cs.{member_id: ${user.id}}`)
       .eq('event_id', eventId)
-      .eq('individual_id', user.id)
-      .eq('registration_status', 'confirmed')
       .single();
 
-    if (soloReg) {
+    if (!registration) {
       return NextResponse.json({
-        isRegistered: true,
-        type: 'solo'
-      });
-    }
-
-    // Check for team registration
-    const { data: teamMember } = await supabase
-      .from('team_members')
-      .select(`
-        teams!inner(
-          id,
-          registrations(
-            id,
-            registration_status
-          )
-        )
-      `)
-      .eq('member_id', user.id)
-      .eq('invitation_status', 'accepted')
-      .eq('teams.event_id', eventId)
-      .eq('teams.registrations.registration_status', 'confirmed')
-      .single() as { data: TeamRegistration | null };
-
-    if (teamMember?.teams?.registrations && teamMember.teams.registrations.length > 0) {
-      return NextResponse.json({
-        isRegistered: true,
-        type: 'team',
-        teamId: teamMember.teams.id
+        isRegistered: false,
+        type: null,
+        profile
       });
     }
 
     return NextResponse.json({
-      isRegistered: false,
-      type: null
+      isRegistered: true,
+      type: registration.individual_id ? 'solo' : 'team',
+      teamId: registration.team_id,
+      isLeader: registration.teams?.leader_id === user.id,
+      profile
     });
+
   } catch (error) {
-    console.error("Status check error:", error);
+    console.error("Error checking registration status:", error);
     return NextResponse.json(
       { error: "Failed to check registration status" },
       { status: 500 }

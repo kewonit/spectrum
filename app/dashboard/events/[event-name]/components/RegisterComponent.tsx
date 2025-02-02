@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -35,8 +35,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import Link from 'next/link';
-
-// ...existing interfaces...
+import PaymentButton from "@/app/components/PaymentButton";
 
 const createTeamSchema = z.object({
   teamName: z.string()
@@ -76,46 +75,19 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     defaultValues: { email: "" }
   });
 
-  const fetchTeamStatus = async () => {
+  const fetchTeamMembers = useCallback(async () => {
+    if (!currentTeamId) return;
     try {
-      const res = await fetch(`/api/teams/status?eventId=${eventDetails.id}`);
-      if (!res.ok) throw new Error("Failed to fetch team status");
-      const data = await res.json();
-      if (data.hasTeam) {
-        setCurrentTeamId(data.teamId);
-      }
+      const response = await fetch(`/api/teams/${currentTeamId}/members`);
+      const data = await response.json();
+      setTeamData(data);
+      setTeamMembers(data.members);
     } catch (error) {
-      console.error("Team status error:", error);
-    } finally {
-      setIsTeamStatusLoading(false);
+      toast.error("Failed to fetch team members");
     }
-  };
-
-  useEffect(() => {
-    const loadData = async () => {
-      await checkRegistrationStatus();
-      await fetchTeamStatus();
-    };
-    loadData();
-  }, [eventDetails.id]);
-
-  useEffect(() => {
-    // Set currentTeamId if user is already part of a team
-    if (registrationStatus?.type === 'team' && registrationStatus.teamId) {
-      setCurrentTeamId(registrationStatus.teamId);
-    }
-  }, [registrationStatus]);
-
-  useEffect(() => {
-    const fetchMembers = async () => {
-      if (currentTeamId) {
-        await fetchTeamMembers();
-      }
-    };
-    fetchMembers();
   }, [currentTeamId]);
 
-  const checkRegistrationStatus = async () => {
+  const checkRegistrationStatus = useCallback(async () => {
     try {
       const response = await fetch(`/api/registrations/status?eventId=${eventDetails.id}`);
       if (!response.ok) {
@@ -128,19 +100,43 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
         description: error.message || "Please try refreshing the page",
       });
     }
-  };
+  }, [eventDetails.id]);
 
-  const fetchTeamMembers = async () => {
-    if (!currentTeamId) return;
+  const fetchTeamStatus = useCallback(async () => {
     try {
-      const response = await fetch(`/api/teams/${currentTeamId}/members`);
-      const data = await response.json();
-      setTeamData(data);
-      setTeamMembers(data.members);
+      const res = await fetch(`/api/teams/status?eventId=${eventDetails.id}`);
+      if (!res.ok) throw new Error("Failed to fetch team status");
+      const data = await res.json();
+      if (data.hasTeam) {
+        setCurrentTeamId(data.teamId);
+      }
     } catch (error) {
-      toast.error("Failed to fetch team members");
+      console.error("Team status error:", error);
+    } finally {
+      setIsTeamStatusLoading(false);
     }
-  };
+  }, [eventDetails.id]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      await checkRegistrationStatus();
+      await fetchTeamStatus();
+    };
+    loadData();
+  }, [checkRegistrationStatus, fetchTeamStatus]);
+
+  useEffect(() => {
+    // Set currentTeamId if user is already part of a team
+    if (registrationStatus?.type === 'team' && registrationStatus.teamId) {
+      setCurrentTeamId(registrationStatus.teamId);
+    }
+  }, [registrationStatus]);
+
+  useEffect(() => {
+    if (currentTeamId) {
+      fetchTeamMembers();
+    }
+  }, [currentTeamId, fetchTeamMembers]);
 
   const onCreateTeam = async (data: z.infer<typeof createTeamSchema>) => {
     setIsLoading(true);
@@ -290,6 +286,11 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     }
   };
 
+  const handlePayment = async () => {
+    // This will be implemented later
+    toast.info("Payment functionality will be implemented soon");
+  };
+
   // If registration status is null or team status is still loading, show loading
   if (registrationStatus === null || isTeamStatusLoading) {
     return <Button disabled className="w-full">Loading...</Button>;
@@ -328,35 +329,39 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
 
   // Return early for individual events
   if (eventDetails.max_team_size === 1) {
+    if (!registrationStatus?.profile?.is_pccoe_student) {
+      return (
+        <div className="space-y-4">
+          <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4">
+            <p className="text-yellow-800 text-sm">
+              Non-PCCOE students need to complete payment before registration.
+            </p>
+            <p className="text-yellow-700 font-medium mt-2">
+              Registration Fee: ₹100.00
+            </p>
+          </div>
+          
+          <PaymentButton
+            eventId={eventDetails.id}
+            type="solo"
+            amount={100}
+            onSuccess={checkRegistrationStatus}
+          />
+        </div>
+      );
+    }
+
     return (
       <div className="space-y-4">
-        <div className="bg-red-50 border border-red-100 rounded-lg p-4 mb-2">
-          <p className="text-red-600 text-sm">
-            ⚠️ Please note: Once you click register, you&apos;ll be immediately enrolled.
-            This action cannot be undone, so make sure you&apos;re ready to commit!
-          </p>
-        </div>
-        <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-          <p className="text-blue-700 text-sm">
-            This is an individual event. Register now to participate!
-          </p>
-        </div>
+        {registrationStatus?.profile?.is_pccoe_student && (
+          <div className="bg-green-50 border border-green-100 rounded-lg p-4">
+            <p className="text-green-800 text-sm">
+              As a PCCOE student, you can register directly for this event.
+            </p>
+          </div>
+        )}
         
         <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
-          <Button 
-            onClick={() => setShowConfirm(true)} 
-            className="w-full"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Registering...
-              </>
-            ) : (
-              "Register Now"
-            )}
-          </Button>
           <DialogContent className="sm:max-w-md w-[95%] rounded-lg p-4 sm:p-6 max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 text-left">
             <DialogHeader className="space-y-3 pb-2 text-left">
               <DialogTitle className="text-xl font-semibold">
@@ -434,6 +439,21 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
             </div>
           </DialogContent>
         </Dialog>
+
+        <Button 
+          onClick={() => setShowConfirm(true)} 
+          className="w-full"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Registering...
+            </>
+          ) : (
+            "Register Now"
+          )}
+        </Button>
       </div>
     );
   }
@@ -447,6 +467,235 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     const canRegister = acceptedMembers.length >= totalRequired;
     const totalMembers = acceptedMembers.length + pendingMembers.length;
     const canInvite = totalMembers < maxAllowed;
+
+    // Show payment button for non-PCCOE team leader
+    if (registrationStatus?.isLeader && !registrationStatus?.profile?.is_pccoe_student) {
+      const nonPccoeCount = teamMembers.filter(m => !m.profile?.is_pccoe_student).length;
+      const totalAmount = nonPccoeCount * 100;
+
+      return (
+        <div className="space-y-4">
+          <Tabs defaultValue="members">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="members">
+                Team Members
+                {pendingMembers.length > 0 && (
+                  <span className="ml-2 px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                    {pendingMembers.length} pending
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="invite">
+                Invite Members
+                {pendingMembers.length > 0 && (
+                  <span className="ml-2 px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                    {totalMembers}/{maxAllowed}
+                  </span>
+                )}
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="members">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Team Members</CardTitle>
+                  <CardDescription>
+                    {acceptedMembers.length} of {totalRequired}-{maxAllowed} team members
+                    {acceptedMembers.length < totalRequired && 
+                      ` (need ${totalRequired - acceptedMembers.length} more)`}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Accepted Members Section */}
+                  <div>
+                    <h4 className="text-sm font-semibold mb-2">Current Team Members</h4>
+                    <div className="space-y-2">
+                      {acceptedMembers.map((member, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-2 border rounded bg-green-50">
+                          <div className="flex items-center gap-2">
+                            <span className="text-green-600">●</span>
+                            <div className="flex flex-col">
+                              <span className="font-medium">{member.email}</span>
+                              {member.name && (
+                                <span className="text-sm text-gray-600">
+                                  {member.name}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {member.isLeader && (
+                              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                                Team Leader
+                              </span>
+                            )}
+                            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                              Accepted
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Pending Invitations Section */}
+                  {pendingMembers.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-muted-foreground mb-2">Pending Invitations</h4>
+                      <div className="space-y-2">
+                        {pendingMembers.map((member, idx) => (
+                          <div key={idx} className="flex items-center justify-between p-2 border rounded bg-yellow-50">
+                            <div className="flex items-center gap-2">
+                              <span className="text-yellow-600">●</span>
+                              <div className="flex flex-col">
+                                <span className="font-medium">{member.email}</span>
+                                {member.name && (
+                                  <span className="text-sm text-gray-600">
+                                    {member.name}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
+                                Awaiting Response
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-gray-500 hover:text-red-500"
+                                onClick={() => setRemovingInvite(member.id)}
+                                disabled={isRemovingInvite}
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <AlertDialog open={!!removingInvite} onOpenChange={() => setRemovingInvite(null)}>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Remove Invitation</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to remove this invitation? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <div className="flex justify-end gap-4 mt-4">
+                            <AlertDialogCancel 
+                              disabled={isRemovingInvite}
+                              onClick={() => setRemovingInvite(null)}
+                            >
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              disabled={isRemovingInvite}
+                              onClick={() => {
+                                if (removingInvite) {
+                                  handleRemoveInvite(removingInvite);
+                                }
+                              }}
+                              className="bg-red-500 hover:bg-red-600"
+                            >
+                              {isRemovingInvite ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                "Remove"
+                              )}
+                            </AlertDialogAction>
+                          </div>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="invite">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Invite Members</CardTitle>
+                  <CardDescription className="space-y-1">
+                    {!canInvite ? (
+                      <p className="text-yellow-600">Maximum team size reached ({maxAllowed} members)</p>
+                    ) : (
+                      <>
+                        <p>You can add up to {maxAllowed - totalMembers} more members</p>
+                        {pendingMembers.length > 0 && (
+                          <p className="text-yellow-600 text-xs">
+                            {pendingMembers.length} invitation{pendingMembers.length !== 1 ? 's' : ''} have been sent out and are pending.
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Form {...inviteMemberForm}>
+                    <form onSubmit={inviteMemberForm.handleSubmit(onInviteMember)} className="space-y-4">
+                      <FormField
+                        control={inviteMemberForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="flex gap-2">
+                                <Input 
+                                  placeholder="member@email.com" 
+                                  {...field} 
+                                  disabled={!canInvite || isLoading}
+                                />
+                                <Button 
+                                  type="submit" 
+                                  disabled={!canInvite || isLoading}
+                                >
+                                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Invite"}
+                                </Button>
+                              </div>
+                            </FormControl>
+                            {!canInvite && (
+                              <p className="text-xs text-red-500 mt-1">
+                                Cannot send more invites: maximum team size would be exceeded
+                              </p>
+                            )}
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </form>
+                  </Form>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4">
+            <p className="text-yellow-800 text-sm">
+              As team leader, you need to complete payment before finalizing registration.
+            </p>
+            <div className="mt-2 space-y-1">
+              <p className="text-yellow-700 font-medium">
+                Payment Details:
+              </p>
+              <ul className="text-sm text-yellow-800">
+                <li>• {nonPccoeCount} non-PCCOE members × ₹100 = ₹{totalAmount}</li>
+              </ul>
+            </div>
+          </div>
+
+          <PaymentButton
+            eventId={eventDetails.id}
+            teamId={currentTeamId || undefined}
+            type="team"
+            amount={totalAmount}
+            disabled={!canRegister}
+            onSuccess={checkRegistrationStatus}
+          />
+        </div>
+      );
+    }
 
     return (
       <div className="space-y-6">

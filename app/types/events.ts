@@ -23,6 +23,10 @@ export interface RegistrationStatusResponse {
   type: 'solo' | 'team' | null;
   teamId?: string;
   isLeader?: boolean;
+  profile?: {
+    is_pccoe_student: boolean | null;
+    // ...other profile fields...
+  };
 }
 
 export interface TeamRegistration {
