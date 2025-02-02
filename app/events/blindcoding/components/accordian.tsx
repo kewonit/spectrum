@@ -1,57 +1,87 @@
+import React from 'react';
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-  } from "@/components/ui/accordion"
-  
-  export function Rules() {
-    return (
-      <Accordion type="single" collapsible className="w-full text-gray-700 lg:p-8">
-        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">Rules of Blind Coding: </h1>
-        <p className="leading-7 mb-4">
-        This event is going to be team-based. <br/>
-        A team should have a minimum of 2 and maximum of 5 members <br/>
-        Entry fee: Rs 100/- per person <br/>
-        Total 4 rounds <br/>
-        <hr className="pt-4"/>  
-        </p>
-        <AccordionItem value="item-1">
-          <AccordionTrigger>ROUND 1: RESISTANCE IS FUTILE</AccordionTrigger>
-          <AccordionContent>
-          1.	This round is going to be an Aptitude Test. <br/>
-          2.	You&apos;ve got a half-hour to tackle 30 multiple-choice questions. <br/>
-          3.	1 mark for correct question. There will not be any negative marking. <br/>
-          4.	Questions will be based on basic concepts of electronics and few logic-based questions. <br/>
-          5.	The use of a scientific calculator is allowed. <br/>
-          6.	Use of smart phones, laptops, smart watches, etc. is strictly prohibited. <br/>
-          7.	The examination will be conducted using pen and paper. <br/>
-          8.	Judging Criteria: <br/>
-          Teams would be selected on the basis of number of questions answered correctly.  <br/>v
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-2">
-          <AccordionTrigger>ROUND 2: FAST AND FURIOUS</AccordionTrigger>
-          <AccordionContent>
-          1.	In this round, teams will engage in a Buzzer Battle, aiming to respond swiftly and accurately to the questions. <br/>
-          2.	Teams earn points for quickly answering correctly by hitting the button first, but incorrect responses result in point deductions. <br/>
-          3.	Number of questions will be a surprise. <br/>
-          4.	Team with the most points in a group will advance into the next round. <br/>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger>ROUND 3: CIRCUIT SAFARI</AccordionTrigger>
-          <AccordionContent>
-          1.	This will be the Final Showdown of the event. <br/>
-          2.	Each team has to send one member to play in a game of real-life snakes and ladders with a twist of electronics. <br/>
-          3.	Players would act as pawns who must collect electronic components from the board. <br/>
-          4.	Teams can change their playing member during half-time. <br/>
-          5.	Each team will have to start building a physical circuit using the components collected from the board. <br/>
-          6.	The First three teams who successfully build a working circuit as per the requirements wins the game! <br/>
-          7.	This round comes with some unexpected surprises too! <br/>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    )
-  }
-    
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
+export function Rules() {
+  return (
+    <Accordion type="single" collapsible className="w-full text-gray-700 lg:p-8">
+      <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl mb-6">
+        Rules of Blind Coding Competition
+      </h1>
+      
+      <div className="mb-8 space-y-4">
+        <p className="leading-7">This competition is designed to test your programming skills without visual feedback.</p>
+        <div className="space-y-2">
+          <p className="leading-7">• Competition is open to first-year students only</p>
+          <p className="leading-7">• Event will be divided into 2 levels: Quiz Round and Blind Coding</p>
+          <p className="leading-7">• Programming languages allowed: C, C++, Java, and Python</p>
+        </div>
+      </div>
+
+      <div className="mb-8 space-y-2">
+        <h2 className="text-2xl font-bold mb-4">General Rules:</h2>
+        <div className="space-y-2">
+          <p className="leading-7">• Event will be team-based (Each team can have a minimum of 2 members and maximum of 3)</p>
+          <p className="leading-7">• Scientific Calculators are allowed for the first round of the event</p>
+          <p className="leading-7">• Participants will have to carry their own stationary (Calculators, pens, etc)</p>
+          <p className="leading-7">• Personal computers, electronic components are not allowed for use during the event</p>
+          <p className="leading-7">• The use of A.I. chatbots like ChatGPT is strictly prohibited</p>
+          <p className="leading-7">• Participants are not allowed to use mobile phones, smartwatches, or any other electronic devices</p>
+          <p className="leading-7">• Participants will be strictly monitored, and volunteers will be available to provide assistance if necessary</p>
+          <p className="leading-7">• Each round will have a specified time limit that participants must adhere to</p>
+          <p className="leading-7">• The final decision will be based on computerized results and made by the event coordinators</p>
+          <p className="leading-7">• The decision of the event coordinators is final and binding, not subject to contestation</p>
+          <p className="leading-7">• The organizers reserve the right to change or update the contest rules, and participants are responsible for staying informed</p>
+          <p className="leading-7">• Violation of any rule may result in immediate disqualification</p>
+          <p className="leading-7">• All the participants must return the electronic components provided to them after the event</p>
+          <p className="leading-7">• The team would be held responsible for any damage caused to electronic components due to mishandling or carelessness, and would be required to pay a fine</p>
+          <p className="leading-7">• Spot entries will be accepted until the team registration limit is reached</p>
+        </div>
+      </div>
+
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Level 1: Quiz Round</AccordionTrigger>
+        <AccordionContent className="space-y-2">
+          <p className="leading-7">• Duration: 30 minutes</p>
+          <p className="leading-7">• Format: Multiple Choice Questions (MCQs)</p>
+          <p className="leading-7">• Topics: Basic Programming Concepts and Data Structures</p>
+          <p className="leading-7">• Scoring: +1 for correct answers, 0 for incorrect</p>
+          <p className="leading-7">• Top performers qualify for Level 2</p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Level 2: Blind Coding Challenge</AccordionTrigger>
+        <AccordionContent className="space-y-2">
+          <p className="leading-7">• Duration: 60 minutes</p>
+          <p className="leading-7">• 1-3 coding problems to solve</p>
+          <p className="leading-7">• Monitor will be turned off during coding</p>
+          <p className="leading-7">• Basic text editor provided</p>
+          <p className="leading-7">• No internet access or external resources allowed</p>
+          <h3 className="font-semibold mt-4 mb-2">Evaluation Criteria:</h3>
+          <p className="leading-7">• Correctness (50%)</p>
+          <p className="leading-7">• Code Quality (20%)</p>
+          <p className="leading-7">• Efficiency (20%)</p>
+          <p className="leading-7">• Logical Approach (10%)</p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="item-3">
+        <AccordionTrigger>Tie-Breaking and Results</AccordionTrigger>
+        <AccordionContent className="space-y-2">
+          <p className="leading-7">Tie-breakers will be determined by:</p>
+          <p className="leading-7">1. Speed of submission</p>
+          <p className="leading-7">2. Code quality</p>
+          <p className="leading-7">3. Quiz performance</p>
+          <p className="leading-7">Winners will be announced at the end of the competition with prizes for top performers.</p>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+
+export default Rules;

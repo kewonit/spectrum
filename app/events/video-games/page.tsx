@@ -5,6 +5,9 @@ import { Krona_One } from 'next/font/google'
 import Image from "next/image";
 
 import { Metadata } from 'next'
+import { RulesBGMI } from "./components/bgmi";
+import { RulesValo } from "./components/valorant";
+import { Electrica_registarion2 } from "./components/registrationbg";
  
 export const metadata: Metadata = {
   title: 'Spectrum x High Ping',
@@ -55,13 +58,16 @@ export default function Home() {
         <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
       </picture>   
       <Electrica_registarion />
+      <Electrica_registarion2 />
       <picture> 
         <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" /> 
       </picture> 
     <hr/>
     <div className="text-gray-700 leading-7 mb-4 p-4 lg:p-8">
-        <h1>Note :</h1>
-        <p className="leading-7">
+      <RulesBGMI />
+      <RulesValo />
+        {/* <h1>Note :</h1> */}
+        {/* <p className="leading-7">
         1.	Each team should consist of 5 people for Valorant and 4 people for BGMI. <br/>
         2.	Leader of each team will be primary person of contact.<br/>
         3.	Usernames and Team names should not contain Vulgarities.<br/>
@@ -70,16 +76,16 @@ export default function Home() {
         6.  Any kind of malpractices will result in disqualification of team.<br/>
         7.	On-Spot Entries are not acceptable.<br/>
         8.	Qualifying rounds will take place in online mode, Semi-final and Final matches will be conducted offline in our college campus.
-        </p>
+        </p> */}
         </div>
-        <div className="text-gray-700 leading-7 mb-4 p-4 lg:p-8">
-        <h1>Registration Fee: </h1>
+        {/* <div className="text-gray-700 leading-7 mb-4 p-4 lg:p-8"> */}
+        {/* <h1>Registration Fee: </h1>
         <p className="leading-7">
           1. Valorant – Rs 500 per team <br/>
           2. BGMI – Rs 400 per team 
 
-        </p>
-        </div>
+        </p> */}
+        {/* </div> */}
     </main>
   );
 

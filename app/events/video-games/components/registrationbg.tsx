@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 
-export function BlindCoding_registarion() {
+export function Electrica_registarion2() {
     return (
         <div className="p-2 sm:p-4 lg:p-8 mx-auto">
             <div className="p-3 sm:p-4 border-4 border-dashed border-gray-300 rounded-[2rem]">
@@ -15,7 +15,7 @@ export function BlindCoding_registarion() {
                         <div className="md:w-[45%] relative h-[150px] sm:h-[200px] md:h-full bg-[#EBE9E0]">
                             <Image 
                                 className="object-contain object-center w-full h-full p-2 sm:p-4"
-                                src="https://i.postimg.cc/7YkBck5g/2.png" 
+                                src="https://i.postimg.cc/CxvmznmN/8.png" 
                                 alt="product image" 
                                 width={1200} 
                                 height={1000} 
@@ -32,11 +32,10 @@ export function BlindCoding_registarion() {
                                         Limited Spots Available
                                     </span>
                                     <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-black mb-1.5 sm:mb-2">
-                                        Blind Coding &apos;25
+                                    High Ping - Valorant &apos;25
                                     </h1>
                                     <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
-                                        Join us for an exciting technical event featuring challenging rounds of coding, problem-solving, and innovative thinking.
-                                    </p>
+                                    Step into the competitive arena at High Ping - Valorant! Exclusively for 1st-year students, this intense 5v5 tournament tests your strategy, teamwork, and precision to claim victory.</p>
                                 </div>
 
                                 <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:gap-6">
@@ -47,7 +46,8 @@ export function BlindCoding_registarion() {
                                             </svg>
                                             <div>
                                                 <p className="text-[11px] sm:text-sm font-semibold text-gray-900">Event Format</p>
-                                                <p className="text-[9px] sm:text-xs text-gray-500">5 Challenging Rounds</p>
+                                                <p className="text-[9px] sm:text-xs text-gray-500">5v5 Competitive Matches + Single Elimination Bracket
+</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-1.5 sm:gap-3">
@@ -56,7 +56,7 @@ export function BlindCoding_registarion() {
                                             </svg>
                                             <div>
                                                 <p className="text-[11px] sm:text-sm font-semibold text-gray-900">Prizes & Rewards</p>
-                                                <p className="text-[9px] sm:text-xs text-gray-500">Cash Prizes, Medals, and Certificates</p>
+                                                <p className="text-[9px] sm:text-xs text-gray-500">Winner & Runner-up Prizes, MVP Award</p>
                                             </div>
                                         </div>
                                     </div>

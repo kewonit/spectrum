@@ -65,10 +65,15 @@ export default function Home() {
     <div className="text-gray-700 leading-7 mb-4 p-2 lg:p-8">
         <h1>Rules and Regulations of the events: </h1>
           <p className="leading-7">
-          1. Individual Participation only. <br/>
-          2. Mobile phones, Calculators, Smart watches and  any form of electronic gadgets are not allowed in any round.  <br/>
-          3. Three winners will be declared after clearing all rounds.  <br/>
-          4. Incase of any changes will be communicated priorly.
+          1. Total 15 questions will be asked.. <br/>
+          2. If the question is related to an established word/ proverb/ or a saying, participant need to 
+answer perfectly. Or else no point would be awarded.<br/>
+          3. Negative marking is applicable for the participant pressing the buzzer and not answering even  
+   after 5 secs. 
+<br/>
+          4. If there's a tie, another set of 5 difficult question (with varying points) will be displayed and 
+  accordingly, the winner would be selected. 
+
           </p>
           <h1 className="pt-8">Judging Criteria:</h1>
           <p className="leading-7">

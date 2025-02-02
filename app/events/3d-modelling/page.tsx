@@ -47,7 +47,7 @@ export default function Home() {
       </picture> 
       <div>
       <h3 className="font-jacques_francois_shadow text-center scroll-m-20 my-6 pl-2 text-xl font-extrabold text-gray-800 tracking-tight md:text-3xl lg:text-5xl">
-        Test your engineering skills with popsicle sticks!
+        Test your engineering skills in real!
       </h3>
       </div>
       <picture> 
@@ -62,9 +62,9 @@ export default function Home() {
       <picture> 
         <img className="mx-auto my-8" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
       </picture> 
-    <div className="text-gray-700 leading-7 mb-4 p-2 lg:p-8">
-        <h1>Rules and Regulations:</h1>
-          <p className="leading-7">
+    {/* <div className="text-gray-700 leading-7 mb-4 p-2 lg:p-8"> */}
+        {/* <h1>Rules and Regulations:</h1> */}
+          {/* <p className="leading-7">
           1. Teams must consist of exactly 3 members<br/>
           2. Only provided materials (popsicle sticks and adhesive fevicol) can be used<br/>
           3. Cutters and clips are allowed for construction<br/>
@@ -81,8 +81,8 @@ export default function Home() {
           2. Structural stability<br/>
           3. Adherence to specifications<br/>
           4. Quality of construction
-          </p>
-        </div>
+          </p> */}
+        {/* </div> */}
     </main>
   );
 }

@@ -56,7 +56,8 @@ export default function Home() {
         <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
       </picture> 
       <div className="text-gray-700 leading-7 mb-4 p-4 lg:p-8">
-        <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight">Rules :</h1>
+        <Rules />
+        {/* <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight">Rules :</h1>
           <p className="leading-7 pt-4">
           Elimination Round: <br/>
           1. The debate will be held in English/Hindi/Marathi.<br/>
@@ -71,7 +72,7 @@ export default function Home() {
           3. There will be a rebuttal round. Each participant is allowed to ask only 1 question. Participants will be marked on the question and the answer.<br/>
           4. The time duration will be 3+1 minutes.<br/>
           5. Participants will be marked on content, presentation, counter arguments and questions, overall impact and clarity of thoughts.<br/>
-          </p>
+          </p> */}
         </div>
     <hr/>
     <picture> 

@@ -1,37 +1,104 @@
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-  } from "@/components/ui/accordion"
-  
-  export function Rules() {
-    return (
-      <Accordion type="single" collapsible className="w-full text-gray-700 p-4 lg:p-8">
-        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">Rules of Chem Prastuti : </h1>
-        <p className="leading-7 mb-4">
-            Themes
-        </p>
-        
-        <AccordionItem value="item-1">
-          <AccordionTrigger>First Theme</AccordionTrigger>
-          <AccordionContent>
-            Water conservation techniques in Ancient Bharat 
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-2">
-          <AccordionTrigger>Second Theme</AccordionTrigger>
-          <AccordionContent>
-          Chemistry in Ancient Bharat
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger>Third Theme</AccordionTrigger>
-          <AccordionContent>
-          Nanotechnology/Nanomaterials used in Ancient Bharat
-          </AccordionContent>
-        </AccordionItem>
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
+export function Rules() {
+  return (
+    <div className="w-full text-gray-700 p-2 sm:p-4 lg:p-8">
+      <h1 className="scroll-m-20 text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight lg:text-5xl px-2 sm:px-4 md:px-0">
+        Rules of Chem Prastuti
+      </h1>
+      <p className="leading-7 mb-6 sm:mb-8 px-2 sm:px-4 md:px-0 text-sm sm:text-base">
+        Theme: Ancient Indian Chemistry & Conservation
+      </p>
+
+      <Accordion type="single" collapsible className="space-y-3 sm:space-y-4 md:space-y-6">
+        {sections.map((section, index) => (
+          <AccordionItem 
+            key={index} 
+            value={`item-${index + 1}`} 
+            className="border-none rounded-lg sm:rounded-xl md:rounded-2xl bg-white shadow-sm hover:shadow-md transition-all duration-300 mx-1 sm:mx-2 md:mx-0"
+          >
+            <AccordionTrigger className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 hover:no-underline data-[state=open]:bg-[#EBE9E0] rounded-lg shadow-md sm:rounded-xl md:rounded-2xl group transition-all duration-300 w-full">
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-6 w-full">
+                <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 sm:w-8 sm:h-8 md:w-12 md:h-12 rounded-full bg-[#EBE9E0] group-data-[state=open]:bg-white text-gray-800 font-bold text-sm sm:text-base md:text-lg transition-all duration-300">
+                  {index + 1}
+                </span>
+                <h3 className="text-sm sm:text-base md:text-xl font-semibold group-hover:text-gray-900 text-left flex-1">
+                  {section.title}
+                </h3>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="px-4 md:px-6 pb-4 md:pb-6 pt-3 md:pt-4">
+              <div className="space-y-4 md:space-y-6">
+                <p className="text-gray-600 leading-relaxed text-sm md:text-lg">
+                  {section.description}
+                </p>
+                <div className="bg-[#EBE9E0] rounded-xl md:rounded-2xl p-4 md:p-6 space-y-3 md:space-y-4">
+                  <h4 className="font-semibold text-gray-900 text-base md:text-lg">Guidelines:</h4>
+                  <ul className="space-y-2 md:space-y-3">
+                    {section.rules.map((rule, idx) => (
+                      <li key={idx} className="flex items-start gap-2 md:gap-3 text-gray-700">
+                        <span className="font-medium min-w-[16px] md:min-w-[20px] text-sm md:text-base">
+                          {idx + 1}.
+                        </span>
+                        <span className="leading-relaxed text-sm md:text-base">
+                          {rule}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
       </Accordion>
-    )
+    </div>
+  )
+}
+
+const sections = [
+  {
+    title: "Research Themes",
+    description: "Choose one of the following themes for your presentation:",
+    rules: [
+      "Water conservation techniques in Ancient Bharat",
+      "Chemistry in Ancient Bharat",
+      "Nanotechnology/Nanomaterials used in Ancient Bharat"
+    ]
+  },
+  {
+    title: "Team Formation & Eligibility",
+    description: "Guidelines for participating teams:",
+    rules: [
+      "Maximum of 2 participants from FY B.Tech per team",
+      "Teams must register in advance - no spot entries allowed",
+      "All team members must be from the same academic year"
+    ]
+  },
+  {
+    title: "Presentation Guidelines",
+    description: "Rules and format for paper presentation:",
+    rules: [
+      "Presentation duration: 8 minutes + 2 minutes for judges' questions",
+      "Presentations must be in MS-PowerPoint (PPT) format only",
+      "Both hard and soft copies must be submitted to engg.chem2010@gmail.com before the presentation",
+      "Plagiarism limit: Maximum 20% similarity allowed",
+      "Direct copying from internet sources will lead to disqualification"
+    ]
+  },
+  {
+    title: "Judging & Awards",
+    description: "Evaluation criteria and prizes:",
+    rules: [
+      "Judging will be based on predefined presentation rubrics",
+      "Three winners will be selected (First, Second & Third positions)",
+      "Judges' and event heads' decisions will be final and binding",
+      "The organizers reserve the right to modify rules with due notice to participants"
+    ]
   }
-    
+];

@@ -15,7 +15,7 @@ export function Sharktank_registarion() {
                         <div className="md:w-[45%] relative h-[150px] sm:h-[200px] md:h-full bg-[#EBE9E0]">
                             <Image 
                                 className="object-contain object-center w-full h-full p-2 sm:p-4"
-                                src="https://i.imgur.com/FVfeMNp_d.webp?maxwidth=760&fidelity=grand" 
+                                src="https://i.postimg.cc/CxJ6kQLb/10.png" 
                                 alt="product image" 
                                 width={1200} 
                                 height={1000} 
@@ -32,11 +32,10 @@ export function Sharktank_registarion() {
                                         Limited Spots Available
                                     </span>
                                     <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1.5 sm:mb-2">
-                                        Shark Tank &apos;24
+                                        Shark Tank &apos;25
                                     </h1>
                                     <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
-                                        Join us for an exciting technical event featuring challenging rounds of coding, problem-solving, and innovative thinking.
-                                    </p>
+                                    Showcase your entrepreneurial vision at Shark Tank - Spectrum! Pitch your innovative business idea to a panel of experts, compete for top prizes, and turn your concept into reality.</p>
                                 </div>
 
                                 <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:gap-6">
@@ -47,7 +46,7 @@ export function Sharktank_registarion() {
                                             </svg>
                                             <div>
                                                 <p className="text-[11px] sm:text-sm font-semibold text-gray-900">Event Format</p>
-                                                <p className="text-[9px] sm:text-xs text-gray-500">5 Challenging Rounds</p>
+                                                <p className="text-[9px] sm:text-xs text-gray-500">3 Challenging Rounds</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-1.5 sm:gap-3">
@@ -73,7 +72,7 @@ export function Sharktank_registarion() {
 
                             <div className="mt-4 md:mt-0">
                                 <div className="border-t-2 border-dashed border-gray-300 my-3 sm:my-6 -mx-3 sm:-mx-8"></div>
-                                <a href="https://forms.gle/V7vpZtGdbjBnnU7m8" className="block w-full">
+                                <a href="/signup" className="block w-full">
                                     <Button className="w-full py-2.5 sm:py-4 text-xs sm:text-base font-medium bg-blue-50 hover:bg-blue-100 text-blue-600 transition-all duration-300 rounded-lg flex items-center justify-between px-3 sm:px-6 group">
                                         <span>Register Now</span>
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

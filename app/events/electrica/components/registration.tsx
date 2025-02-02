@@ -17,7 +17,7 @@ export function Electrica_registarion() {
                         </a>
                         <div className="flex items-center justify-between pt-4 ">
                             <span className="text-3xl font-bold text-gray-900">&#8377;100/-</span>
-                            <a href="https://forms.gle/QPnMqMDPsHfpUuBu7"><Button className="">Register</Button></a>
+                            <a href="/signup"><Button className="">Register</Button></a>
                         </div>
                     </div>
                 </div>

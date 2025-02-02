@@ -66,7 +66,6 @@ export default function Home() {
         <h1>Team Formation :</h1>
         <p className="leading-7">
         1. Team can have maximum of 2 participants from FY. B.Tech. <br/>
-        2. Registration fee for each group will be 200/- 
         </p>
         <h1 className="pt-12">Presentation Rules :</h1>
         <p className="leading-7">

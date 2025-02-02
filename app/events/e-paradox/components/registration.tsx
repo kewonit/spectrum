@@ -15,7 +15,7 @@ export function Eparadox_registarion() {
                         <div className="md:w-[45%] relative h-[150px] sm:h-[200px] md:h-full bg-[#EBE9E0]">
                             <Image 
                                 className="object-contain object-center w-full h-full p-2 sm:p-4"
-                                src="https://i.imgur.com/FVfeMNp_d.webp?maxwidth=760&fidelity=grand" 
+                                src="https://i.postimg.cc/dtjWcxCg/1.png" 
                                 alt="product image" 
                                 width={1200} 
                                 height={1000} 
@@ -73,7 +73,7 @@ export function Eparadox_registarion() {
 
                             <div className="mt-4 md:mt-0">
                                 <div className="border-t-2 border-dashed border-gray-300 my-3 sm:my-6 -mx-3 sm:-mx-8"></div>
-                                <a href="https://forms.gle/V7vpZtGdbjBnnU7m8" className="block w-full">
+                                <a href="/signup" className="block w-full">
                                     <Button className="w-full py-2.5 sm:py-4 text-xs sm:text-base font-medium bg-blue-50 hover:bg-blue-100 text-blue-600 transition-all duration-300 rounded-lg flex items-center justify-between px-3 sm:px-6 group">
                                         <span>Register Now</span>
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
