@@ -62,25 +62,24 @@ export default function Home() {
       <picture> 
         <img className="mx-auto my-8" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
       </picture> 
-    <div className="text-gray-700 leading-7 mb-4 p-2 lg:p-8">
-        <h1>Rules and Regulations of the events: </h1>
-          <p className="leading-7">
-          1. Total 15 questions will be asked.. <br/>
-          2. If the question is related to an established word/ proverb/ or a saying, participant need to 
+      <div className="text-gray-700 leading-7 mb-4 p-2 lg:p-8">
+    <h1>Rules and Regulations of the events: </h1>
+      <p className="leading-7">
+      1. Total 15 questions will be asked.. <br/>
+      2. If the question is related to an established word/ proverb/ or a saying, participant need to 
 answer perfectly. Or else no point would be awarded.<br/>
-          3. Negative marking is applicable for the participant pressing the buzzer and not answering even  
-   after 5 secs. 
+      3. Negative marking is applicable for the participant pressing the buzzer and not answering even  
+after 5 secs. 
 <br/>
-          4. If there's a tie, another set of 5 difficult question (with varying points) will be displayed and 
-  accordingly, the winner would be selected. 
-
-          </p>
-          <h1 className="pt-8">Judging Criteria:</h1>
-          <p className="leading-7">
-          1. Sumbission Time <br/>
-          2. Correct Answers
-          </p>
-        </div>
+      4. If there&apos;s a tie, another set of 5 difficult question (with varying points) will be displayed and 
+accordingly, the winner would be selected. 
+      </p>
+      <h1 className="pt-8">Judging Criteria:</h1>
+      <p className="leading-7">
+      1. Sumbission Time <br/>
+      2. Correct Answers
+      </p>
+    </div>
     </main>
   );
 
