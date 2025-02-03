@@ -256,6 +256,25 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* Info Box */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-6">
+          <p className="text-sm text-yellow-800">
+            We&apos;re constantly improving our platform. If you encounter any issues:
+            <br />
+            • For API endpoints, backend, or data-related bugs, contact{' '}
+            <a href="mailto:kartik.kulloli23@pccoepune.org" className="font-medium underline hover:text-yellow-900">
+              kartik.kulloli23@pccoepune.org
+            </a>
+            <br />
+            • For UI/UX issues, visual glitches, or frontend concerns, contact{' '}
+            <a href="mailto:mayank.kadam23@pccoepune.org" className="font-medium underline hover:text-yellow-900">
+              mayank.kadam23@pccoepune.org
+            </a>
+            <br />
+            For critical bugs or security vulnerabilities, please report them immediately with [COOKED] in the title.
+          </p>
+        </div>
       </div>
     </main>
   );

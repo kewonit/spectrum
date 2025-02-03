@@ -1,94 +1,74 @@
-import { createClient } from "@/app/utils/supabase/server";
 import { NextResponse } from "next/server";
-import { getUserProfile } from "@/app/lib/payment";
-
-interface TeamMemberResponse {
-  profiles: {
-    is_pccoe_student: boolean;
-  };
-}
+import { createClient } from "@/app/utils/supabase/server";
+import { generateOrderId } from "@/app/lib/payment";
+import { Cashfree } from '@/app/lib/cashfree';
 
 export async function POST(request: Request) {
-  const supabase = await createClient();
-  
   try {
-    const { eventId, teamId, type } = await request.json();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-
+    
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Fetch user profile
-    const profile = await getUserProfile(supabase, user.id);
-    if (!profile) {
-      return NextResponse.json({ error: "User profile not found" }, { status: 400 });
-    }
+    const { eventId, teamId, type, amount } = await request.json();
 
-    // Calculate amount
-    let amount = 0;
+    // Validate payment amount for team
     if (type === 'team' && teamId) {
-      const { data: members } = await supabase
-        .from('team_members')
+      // Get team details
+      const { data: team } = await supabase
+        .from('teams')
         .select(`
-          profiles (
-            is_pccoe_student
+          *,
+          leader:profiles!teams_leader_id_fkey(*),
+          team_members!inner(
+            id,
+            invitation_status
           )
         `)
-        .eq('team_id', teamId)
-        .eq('invitation_status', 'accepted')
-        .returns<TeamMemberResponse[]>();
+        .eq('id', teamId)
+        .eq('team_members.invitation_status', 'accepted')
+        .single();
 
-      if (!members) throw new Error("Failed to fetch team members");
-      
-      const nonPccoeCount = members.filter(
-        m => !m.profiles.is_pccoe_student
-      ).length;
-      
-      amount = nonPccoeCount * 100;
-    } else {
-      amount = 100; // For solo registration
+      if (!team) {
+        return NextResponse.json({ error: "Team not found" }, { status: 404 });
+      }
+
+      // Verify user is team leader
+      if (team.leader_id !== user.id) {
+        return NextResponse.json({ error: "Only team leader can make payment" }, { status: 403 });
+      }
+
+      // Calculate required amount
+      const memberCount = team.team_members.length;
+      const requiredAmount = memberCount * 100; // ₹100 per member
+
+      if (amount !== requiredAmount) {
+        return NextResponse.json({ 
+          error: "Invalid payment amount",
+          requiredAmount,
+          message: `Payment amount must be ₹${requiredAmount}`
+        }, { status: 400 });
+      }
     }
 
-    if (amount === 0) {
-      throw new Error("Invalid payment amount");
+    // Get user profile for payment details
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile) {
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
 
-    const orderId = `ORD_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    // Generate order ID
+    const orderId = await generateOrderId();
 
-    // Create Cashfree order with proper customer details
-    const response = await fetch("https://sandbox.cashfree.com/pg/orders", {
-      method: "POST",
-      headers: {
-        "x-client-id": process.env.CASHFREE_APP_ID!,
-        "x-client-secret": process.env.CASHFREE_SECRET_KEY!,
-        "x-api-version": "2023-08-01",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        order_id: orderId,
-        order_amount: amount,
-        order_currency: "INR",
-        customer_details: {
-          customer_id: user.id,
-          customer_name: profile.full_name || undefined,
-          customer_email: profile.email || user.email,
-          customer_phone: profile.phone || undefined
-        },
-        order_meta: {
-          return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/events/payment?order_id={order_id}`
-        }
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to create payment order");
-    }
-
-    const paymentData = await response.json();
-
-    // Store payment record
-    await supabase
+    // Create payment record
+    const { data: payment, error: paymentError } = await supabase
       .from('payments')
       .insert({
         order_id: orderId,
@@ -96,14 +76,33 @@ export async function POST(request: Request) {
         team_id: teamId,
         event_id: eventId,
         amount: amount,
-        cf_order_id: paymentData.cf_order_id,
         status: 'pending'
-      });
+      })
+      .select()
+      .single();
+
+    if (paymentError || !payment) {
+      throw paymentError || new Error('Failed to create payment record');
+    }
+
+    // Initialize Cashfree payment session
+    const cashfree = new Cashfree(process.env.CASHFREE_APP_ID!, process.env.CASHFREE_SECRET_KEY!);
+    const paymentSession = await cashfree.createPaymentSession({
+      orderId: orderId,
+      amount: amount,
+      currency: "INR",
+      customerDetails: {
+        customerId: user.id,
+        customerEmail: profile.email || user.email,
+        customerPhone: profile.phone,
+        customerName: profile.full_name
+      }
+    });
 
     return NextResponse.json({
-      paymentSessionId: paymentData.payment_session_id,
-      orderId,
-      amount
+      orderId: orderId,
+      paymentSessionId: paymentSession.payment_session_id,
+      amount: amount
     });
 
   } catch (error: any) {

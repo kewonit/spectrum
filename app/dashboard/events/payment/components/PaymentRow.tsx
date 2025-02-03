@@ -2,114 +2,44 @@
 
 import { useState } from 'react';
 import { TableRow, TableCell } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { formatDate } from "@/app/lib/utils";
+import { formatCurrency, formatDate } from "@/app/utils/format";
 import { PaymentRecord } from "@/app/types/payment";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { PaymentDetails } from "./PaymentDetails";
 
-// Move getStatusColor into the client component
-const getStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
-    case 'pending': return 'bg-yellow-100 text-yellow-800';
-    case 'paid':
-    case 'success': return 'bg-green-100 text-green-800';
-    case 'failed': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-  }
-};
-
-function PaymentDetails({ payment }: { payment: PaymentRecord }) {
-  return (
-    <div className="p-4 space-y-4 bg-gray-50 rounded-lg">
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div>
-          <h4 className="text-sm font-semibold text-gray-500">Payment Details</h4>
-          <div className="space-y-2 mt-2">
-            <p><span className="font-medium">CF Payment ID:</span> {payment.cf_payment_id}</p>
-            <p><span className="font-medium">Currency:</span> {payment.payment_currency}</p>
-            <p><span className="font-medium">Payment Group:</span> {payment.payment_group}</p>
-            <p><span className="font-medium">Bank Reference:</span> {payment.bank_reference}</p>
-          </div>
-        </div>
-
-        {payment.payment_gateway_details && (
-          <div>
-            <h4 className="text-sm font-semibold text-gray-500">Gateway Info</h4>
-            <div className="space-y-2 mt-2">
-              <p><span className="font-medium">Gateway:</span> {payment.payment_gateway_details?.gateway_name}</p>
-              <p><span className="font-medium">Gateway Order ID:</span> {payment.payment_gateway_details?.gateway_order_id}</p>
-              <p><span className="font-medium">Gateway Payment ID:</span> {payment.payment_gateway_details?.gateway_payment_id}</p>
-            </div>
-          </div>
-        )}
-
-        {payment.error_details && (
-          <div>
-            <h4 className="text-sm font-semibold text-red-500">Error Details</h4>
-            <div className="space-y-2 mt-2">
-              <p><span className="font-medium">Code:</span> {payment.error_details.error_code}</p>
-              <p><span className="font-medium">Reason:</span> {payment.error_details.error_reason}</p>
-              <p><span className="font-medium">Description:</span> {payment.error_details.error_description}</p>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+interface PaymentRowProps {
+  payment: PaymentRecord;
 }
 
-export function PaymentRow({ payment }: { payment: PaymentRecord }) {
+export function PaymentRow({ payment }: PaymentRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const metadata = payment.metadata as any;
+  const paymentInfo = metadata?.webhook_event?.data?.payment;
 
   return (
     <>
-      <TableRow className="group">
+      <TableRow className="cursor-pointer hover:bg-gray-50" onClick={() => setIsExpanded(!isExpanded)}>
         <TableCell>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-          </Button>
+          {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </TableCell>
-        <TableCell className="font-medium">
-          {payment.event?.name}
-        </TableCell>
+        <TableCell>{payment.event?.name}</TableCell>
+        <TableCell>{payment.team ? 'Team' : 'Individual'}</TableCell>
+        <TableCell>{formatCurrency(payment.amount)}</TableCell>
         <TableCell>
-          {payment.team ? (
-            <span title={payment.team.team_name}>Team Payment</span>
-          ) : (
-            "Individual"
-          )}
-        </TableCell>
-        <TableCell>
-          {payment.payment_currency} {payment.amount.toFixed(2)}
-        </TableCell>
-        <TableCell>
-          <Badge 
-            variant="secondary"
-            className={getStatusColor(payment.status)}
-          >
+          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+            payment.status.toUpperCase() === 'SUCCESS' ? 'bg-green-100 text-green-700 border border-green-300' :
+            payment.status.toUpperCase() === 'FAILED' ? 'bg-red-100 text-red-700 border border-red-300' :
+            'bg-yellow-100 text-yellow-700 border border-yellow-300'
+          }`}>
             {payment.status}
-          </Badge>
+          </span>
         </TableCell>
-        <TableCell>
-          {formatDate(payment.payment_time)}
-        </TableCell>
-        <TableCell>
-          {payment.payment_group}
-        </TableCell>
+        <TableCell>{payment.payment_time ? formatDate(payment.payment_time) : '-'}</TableCell>
+        <TableCell>{paymentInfo?.payment_group || payment.payment_method || '-'}</TableCell>
       </TableRow>
       {isExpanded && (
         <TableRow>
-          <TableCell colSpan={7}>
+          <TableCell colSpan={7} className="p-0">
             <PaymentDetails payment={payment} />
           </TableCell>
         </TableRow>

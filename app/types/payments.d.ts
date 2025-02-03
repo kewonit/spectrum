@@ -75,3 +75,21 @@ export interface CashfreeWebhookPayload {
 }
 
 export type PaymentGroup = 'upi' | 'net_banking' | 'credit_card' | 'debit_card' | 'wallet' | 'pay_later';
+
+declare module '@cashfreepayments/cashfree-js' {
+  export interface CashfreeCheckoutConfig {
+    paymentSessionId: string;
+    redirectTarget?: string;
+    returnUrl?: string;
+    onPaymentSuccess?: (data: any) => void;
+    onPaymentFailure?: (data: any) => void;
+    onError?: (error: any) => void;
+    onPaymentCancel?: () => void;
+  }
+
+  export interface Cashfree {
+    checkout: (options: CashfreeCheckoutConfig) => Promise<void>;
+  }
+
+  export function load(config: { mode: 'sandbox' | 'production' }): Promise<Cashfree>;
+}

@@ -20,12 +20,20 @@ export type RegistrationStatus = 'pending' | 'confirmed' | 'cancelled';
 
 export interface RegistrationStatusResponse {
   isRegistered: boolean;
-  type: 'solo' | 'team' | null;
-  teamId?: string;
-  isLeader?: boolean;
-  profile?: {
-    is_pccoe_student: boolean | null;
-    // ...other profile fields...
+  type: 'team' | 'solo' | null;
+  teamId: string | null;
+  teamName: string | null;
+  isLeader: boolean;
+  registrationStatus: string | null;
+  paymentStatus: string | null;
+  profile: {
+    is_pccoe_student: boolean;
+  };
+  payment: {
+    required: boolean;
+    status: string;
+    amount: number | null;
+    timestamp: string | null;
   };
 }
 
@@ -49,4 +57,10 @@ export interface TeamMember {
     class: string | null;
     is_pccoe_student: boolean | null;
   };
+}
+
+export interface PaymentDetails {
+  required: boolean;
+  amount: number;
+  nonPccoeCount: number;
 }

@@ -235,6 +235,21 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   const onTeamSubmit = async () => {
     setIsLoading(true);
     try {
+      // First check if payment is required
+      const checkResponse = await fetch(`/api/payments/check?teamId=${currentTeamId}`);
+      const checkResult = await checkResponse.json();
+
+      if (!checkResponse.ok) {
+        if (checkResult.error === "Payment required") {
+          toast.error("Payment Required", {
+            description: checkResult.message,
+          });
+          return;
+        }
+        throw new Error(checkResult.error || "Failed to verify payment");
+      }
+
+      // If we get here, either payment is not required or has been completed
       toast.loading("Completing team registration...");
       const response = await fetch("/api/registrations", {
         method: "POST",
@@ -245,6 +260,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
           teamId: currentTeamId
         })
       });
+      
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Registration failed");
 
@@ -458,6 +474,84 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     );
   }
 
+  // For team registrations, modify button text based on payment requirement
+  const renderTeamActionButton = (
+    canRegister: boolean,
+    totalRequired: number,
+    acceptedMembers: TeamMember[]
+  ) => {
+    const acceptedMembersCount = acceptedMembers.length;
+    
+    // Show message if not enough members
+    if (acceptedMembersCount < totalRequired) {
+      return (
+        <Button 
+          className="w-full" 
+          disabled={true}
+          variant="secondary"
+        >
+          Need {totalRequired - acceptedMembersCount} more members to register
+        </Button>
+      );
+    }
+
+    // Check if non-PCCOE leader
+    const isNonPccoeLeader = registrationStatus?.isLeader && 
+      !registrationStatus?.profile?.is_pccoe_student;
+
+    const totalAmount = acceptedMembersCount * 100; // ₹100 per member
+
+    // If non-PCCOE leader, show payment button
+    if (isNonPccoeLeader) {
+      return (
+        <>
+          <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4 mb-4">
+            <p className="text-yellow-800 text-sm">
+              As a non-PCCOE team leader, payment is required for all team members.
+            </p>
+            <div className="mt-2 space-y-1">
+              <p className="text-yellow-700 font-medium">Payment Details:</p>
+              <ul className="text-sm text-yellow-800">
+                <li>• Total team members: {acceptedMembersCount}</li>
+                <li>• Registration fee: ₹100 per member</li>
+                <li className="font-medium border-t border-yellow-200 mt-2 pt-2">
+                  • Total amount: ₹{totalAmount}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <PaymentButton
+            eventId={eventDetails.id}
+            teamId={currentTeamId || undefined}
+            type="team"
+            amount={totalAmount}
+            disabled={false}
+            onSuccess={checkRegistrationStatus}
+          />
+        </>
+      );
+    }
+
+    // For PCCOE students, show regular registration button
+    return (
+      <Button 
+        className="w-full" 
+        disabled={isLoading}
+        onClick={onTeamSubmit}
+        variant="secondary"
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Registering...
+          </>
+        ) : (
+          "Complete Registration"
+        )}
+      </Button>
+    );
+  };
+
   // Show team management if user has a team
   if (currentTeamId || (registrationStatus.type === 'team' && registrationStatus.teamId)) {
     const acceptedMembers = teamMembers?.filter(m => m.status === 'accepted') || [];
@@ -467,12 +561,13 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     const canRegister = acceptedMembers.length >= totalRequired;
     const totalMembers = acceptedMembers.length + pendingMembers.length;
     const canInvite = totalMembers < maxAllowed;
-
+  
     // Show payment button for non-PCCOE team leader
     if (registrationStatus?.isLeader && !registrationStatus?.profile?.is_pccoe_student) {
-      const nonPccoeCount = teamMembers.filter(m => !m.profile?.is_pccoe_student).length;
-      const totalAmount = nonPccoeCount * 100;
-
+      // Calculate amount based on total accepted members
+      const acceptedMembersCount = acceptedMembers.length;
+      const totalAmount = acceptedMembersCount * 100; // ₹100 per member
+    
       return (
         <div className="space-y-4">
           <Tabs defaultValue="members">
@@ -494,7 +589,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                 )}
               </TabsTrigger>
             </TabsList>
-
+    
             <TabsContent value="members">
               <Card>
                 <CardHeader>
@@ -537,7 +632,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                       ))}
                     </div>
                   </div>
-
+    
                   {/* Pending Invitations Section */}
                   {pendingMembers.length > 0 && (
                     <div>
@@ -573,7 +668,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                           </div>
                         ))}
                       </div>
-
+    
                       <AlertDialog open={!!removingInvite} onOpenChange={() => setRemovingInvite(null)}>
                         <AlertDialogContent>
                           <AlertDialogHeader>
@@ -612,7 +707,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                 </CardContent>
               </Card>
             </TabsContent>
-
+    
             <TabsContent value="invite">
               <Card>
                 <CardHeader>
@@ -670,21 +765,28 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
               </Card>
             </TabsContent>
           </Tabs>
-
+    
           <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4">
             <p className="text-yellow-800 text-sm">
-              As team leader, you need to complete payment before finalizing registration.
+              As a non-PCCOE team leader, you need to complete payment for all team members.
             </p>
             <div className="mt-2 space-y-1">
               <p className="text-yellow-700 font-medium">
                 Payment Details:
               </p>
               <ul className="text-sm text-yellow-800">
-                <li>• {nonPccoeCount} non-PCCOE members × ₹100 = ₹{totalAmount}</li>
+                <li>• Total team members: {acceptedMembersCount}</li>
+                <li>• Registration fee: ₹100 per member</li>
+                <li className="font-medium border-t border-yellow-200 mt-2 pt-2">
+                  • Total amount: ₹{totalAmount}
+                </li>
               </ul>
             </div>
+            <div className="mt-3 text-xs text-yellow-700">
+              <p>Note: As a non-PCCOE team leader, payment is required for all team members.</p>
+            </div>
           </div>
-
+    
           <PaymentButton
             eventId={eventDetails.id}
             teamId={currentTeamId || undefined}
@@ -696,7 +798,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
         </div>
       );
     }
-
+  
     return (
       <div className="space-y-6">
         <Tabs defaultValue="members">
@@ -718,7 +820,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
               )}
             </TabsTrigger>
           </TabsList>
-
+  
           <TabsContent value="members">
             <Card>
               <CardHeader>
@@ -761,7 +863,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                     ))}
                   </div>
                 </div>
-
+  
                 {/* Pending Invitations Section */}
                 {pendingMembers.length > 0 && (
                   <div>
@@ -797,7 +899,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                         </div>
                       ))}
                     </div>
-
+  
                     <AlertDialog open={!!removingInvite} onOpenChange={() => setRemovingInvite(null)}>
                       <AlertDialogContent>
                         <AlertDialogHeader>
@@ -836,7 +938,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
               </CardContent>
             </Card>
           </TabsContent>
-
+  
           <TabsContent value="invite">
             <Card>
               <CardHeader>
@@ -894,26 +996,12 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
             </Card>
           </TabsContent>
         </Tabs>
-
-        <Button 
-          className="w-full" 
-          disabled={!canRegister || isLoading}
-          onClick={onTeamSubmit}
-        >
-          {isLoading
-            ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Registering...
-              </>
-            )
-            : (canRegister ? "Complete Registration" : `Need ${totalRequired - acceptedMembers.length} more members to register`)
-          }
-        </Button>
+  
+        {renderTeamActionButton(canRegister, totalRequired, acceptedMembers)}
       </div>
     );
   }
-
+  
   // Only show team creation form if user isn't part of any team
   if (!currentTeamId && !registrationStatus.teamId) {
     return (
@@ -962,6 +1050,6 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
       </>
     );
   }
-
+  
   return null; // Fallback return
 }

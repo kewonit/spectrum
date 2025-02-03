@@ -56,6 +56,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Check if user is already registered for this event
+    const { data: existingRegistration } = await supabase
+      .from('registrations')
+      .select(`
+        *,
+        teams!inner(
+          id,
+          team_name
+        )
+      `)
+      .eq('event_id', eventId)
+      .or(`individual_id.eq.${user.id},teams.leader_id.eq.${user.id}`)
+      .single();
+
+    if (existingRegistration) {
+      return NextResponse.json({
+        error: "Already registered",
+        message: "You are already registered for this event"
+      }, { status: 400 });
+    }
+
     // Get user's profile ID
     const { data: profile } = await supabase
       .from('profiles')

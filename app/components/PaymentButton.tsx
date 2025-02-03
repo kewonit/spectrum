@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { load } from "@cashfreepayments/cashfree-js";
+import { useRouter } from 'next/navigation';
 
 interface PaymentButtonProps {
   eventId: string;
@@ -23,38 +24,76 @@ export default function PaymentButton({
   disabled
 }: PaymentButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handlePayment = async () => {
+    if (amount <= 0) {
+      toast.error("Invalid payment amount");
+      return;
+    }
+
     try {
       setIsLoading(true);
+      const toastId = toast.loading("Initializing payment...");
       
-      // 1. Initialize Cashfree
-      const cashfree = await load({
-        mode: "sandbox" // Change to production in prod
-      });
-
-      // 2. Create payment order
       const response = await fetch("/api/payments/initiate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId, teamId, type })
+        body: JSON.stringify({ 
+          eventId, 
+          teamId, 
+          type,
+          amount
+        })
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to initiate payment");
+        throw new Error(error.message || "Failed to initiate payment");
       }
 
       const { paymentSessionId } = await response.json();
+      toast.dismiss(toastId);
 
-      // 3. Open Cashfree checkout
-      await cashfree.checkout({
-        paymentSessionId,
-        returnUrl: `${window.location.origin}/dashboard/events/payment`,
-        redirectTarget: "_self",
+      const cashfree = await load({
+        mode: process.env.NODE_ENV === "production" ? "production" : "sandbox"
       });
 
+      // Use proper types for checkout options
+      await cashfree.checkout({
+        paymentSessionId,
+        redirectTarget: "_self",
+        onPaymentSuccess: (data) => {
+          console.log("Payment success", data);
+          if (onSuccess) onSuccess();
+        },
+        onPaymentFailure: (data) => {
+          console.error("Payment failed", data);
+          toast.error("Payment failed", {
+            description: "Please try again"
+          });
+        },
+        onError: (error) => {
+          console.error("Payment error", error);
+          toast.error("Payment failed", {
+            description: "An error occurred"
+          });
+        },
+        onPaymentCancel: () => {
+          toast.error("Payment cancelled");
+        }
+      });
+
+      // After successful payment
+      if (onSuccess) {
+        await onSuccess();
+      }
+      
+      // Redirect to registrations page
+      router.push('/dashboard/events/registrations');
+
     } catch (error: any) {
+      console.error("Payment error:", error);
       toast.error("Payment failed", {
         description: error.message || "Please try again"
       });
@@ -66,16 +105,17 @@ export default function PaymentButton({
   return (
     <Button
       onClick={handlePayment}
-      disabled={disabled || isLoading}
-      className="w-full bg-green-600 hover:bg-green-700"
+      disabled={disabled || isLoading || amount <= 0}
+      className="w-full"
+      variant="secondary"
     >
       {isLoading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Processing Payment...
+          Processing...
         </>
       ) : (
-        `Pay ₹${amount.toFixed(2)}`
+        `Pay ₹${amount.toFixed(2)} to Complete Registration`
       )}
     </Button>
   );

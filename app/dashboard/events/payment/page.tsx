@@ -47,9 +47,9 @@ export default async function PaymentsPage() {
       event:events(name),
       team:teams(team_name)
     `)
-    .eq('user_id', user.id) // Using user.id instead of session.user.id
-    .order('payment_time', { ascending: false })
-    .order('created_at', { ascending: false });
+    .eq('user_id', user.id)
+    .order('payment_time', { ascending: false, nullsFirst: false })
+    .order('created_at', { ascending: false, nullsFirst: false });
 
   return (
     <main className="min-h-screen bg-[#EBE9E0] p-4 sm:p-6 lg:p-8">

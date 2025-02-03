@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Star, StarsIcon } from 'lucide-react';
 
 export default function Footer() {
   return (<>
@@ -14,21 +15,35 @@ export default function Footer() {
                   We have made this project open source and available on GitHub.
                   Feel free to contribute!
                 </p>
-                <a
-                  href="https://github.com/kewonit/spectrum"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group flex justify-center items-center gap-4 rounded-full bg-white/20 px-8 py-4 text-lg text-white transition-all hover:bg-white/30 mt-4 md:mt-12 md:max-w-[250px] "
-                >
-                  <span>View on GitHub</span>
-                  <svg
-                    className="h-6 w-6 transition-transform group-hover:translate-x-2"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
+                <p className="mt-2 text-lg text-gray-200 flex items-center gap-2">
+                  Don&apos;t forget to star us on GitHub! <StarsIcon className="w-5 h-5 animate-pulse text-yellow-300 filter drop-shadow-[0_0_8px_rgba(253,224,71,0.5)]" />
+                </p>
+                <div className="flex flex-col md:flex-row gap-4 mt-4 md:mt-12">
+                  <a
+                    href="https://github.com/kewonit/spectrum"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group flex justify-center items-center gap-4 rounded-full bg-white/20 px-8 py-4 text-lg text-white transition-all hover:bg-white/30"
                   >
-                    <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.271.098-2.65 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.202 2.397.1 2.65.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.137 20.164 22 16.42 22 12c0-5.523-4.477-10-10-10z" />
-                  </svg>
-                </a>
+                    <span>View on GitHub</span>
+                    <svg
+                      className="h-6 w-6 transition-transform group-hover:translate-x-2"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.271.098-2.65 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.202 2.397.1 2.65.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.137 20.164 22 16.42 22 12c0-5.523-4.477-10-10-10z" />
+                    </svg>
+                  </a>
+                  <a
+                    href="https://github.com/kewonit/spectrum#:~:text=Stars-,0%20stars,-Watchers"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group flex justify-center items-center gap-4 rounded-full bg-white/20 px-8 py-4 text-lg text-white transition-all hover:bg-white/30"
+                  >
+                    <span>Star</span>
+                    <Star className="h-6 w-6 transition-transform group-hover:scale-110 text-yellow-300 filter drop-shadow-[0_0_8px_rgba(253,224,71,0.5)]" />
+                  </a>
+                </div>
               </div>
             </div>
             <img

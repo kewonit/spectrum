@@ -20,46 +20,48 @@ export interface PaymentVerificationResponse {
 export interface PaymentRecord {
   id: string;
   order_id: string;
-  cf_payment_id: string;
-  amount: number;
-  status: string;
-  payment_time: string;
-  payment_completion_time: string;
-  created_at: string;
   user_id: string;
-  payment_currency: string;
-  payment_message: string;
-  bank_reference: string;
-  auth_id: string;
-  payment_group: string;
-  is_captured: boolean;
-  error_details?: {
-    error_code: string;
-    error_description: string;
-    error_reason: string;
-    error_source: string;
-  };
-  payment_method: {
-    card?: {
-      channel: string;
-      card_number: string;
+  team_id?: string;
+  event_id?: string;
+  amount: number;
+  currency: string;
+  status: 'SUCCESS' | 'FAILED' | 'PENDING';
+  payment_method?: string;
+  transaction_id?: string;
+  bank_reference?: string;
+  created_at?: string;
+  updated_at?: string;
+  cf_order_id?: string;
+  cf_payment_id?: string;
+  payment_time?: string;
+  registration_id?: string;
+  metadata?: {
+    webhook_event?: {
+      data?: {
+        charges_details?: {
+          service_tax: number;
+          service_charge: number;
+          settlement_amount: number;
+          settlement_currency: string;
+        };
+        customer_details?: {
+          customer_id: string;
+          customer_name: string;
+          customer_email: string;
+          customer_phone: string;
+        };
+        payment?: {
+          payment_group: string;
+          payment_method: any;
+          payment_message: string;
+        };
+      };
     };
-    upi?: {
-      channel: string;
-      upi_id: string;
-    };
-  };
-  payment_gateway_details?: {
-    gateway_name: string;
-    gateway_order_id: string;
-    gateway_payment_id: string;
-    gateway_order_reference_id: string;
-    gateway_settlement: string;
   };
   event?: {
     name: string;
   };
   team?: {
     team_name: string;
-  } | null;
+  };
 }

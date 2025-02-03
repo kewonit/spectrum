@@ -76,7 +76,6 @@ async function updatePaymentRecord(supabase: SupabaseClient, payment: any, order
     updated_at: new Date().toISOString()
   };
 
-  // ...existing update logic...
 }
 
 export async function GET(request: Request) {
