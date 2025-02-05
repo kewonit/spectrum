@@ -109,7 +109,33 @@ export async function POST(request: Request) {
       throw paymentError || new Error('Failed to create payment record');
     }
 
-    // Initialize Cashfree payment session
+    // Format profile data for Cashfree
+    const sanitizedProfile = {
+      email: profile.email?.toLowerCase() || user.email?.toLowerCase(),
+      phone: (profile.phone || '')?.replace(/\D/g, ''),
+      name: (profile.full_name || 'User')
+        .trim()
+        .replace(/[^A-Za-z\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .slice(0, 50)
+    };
+
+    // Validate required fields
+    if (!sanitizedProfile.email || !sanitizedProfile.phone) {
+      return NextResponse.json({ 
+        error: "Incomplete profile", 
+        message: "Please update your profile with valid email and phone number"
+      }, { status: 400 });
+    }
+
+    if (sanitizedProfile.phone.length !== 10) {
+      return NextResponse.json({ 
+        error: "Invalid phone number", 
+        message: "Please provide a valid 10-digit phone number" 
+      }, { status: 400 });
+    }
+
+    // Initialize Cashfree payment session with sanitized data
     const cashfree = new Cashfree(process.env.CASHFREE_APP_ID!, process.env.CASHFREE_SECRET_KEY!);
     const paymentSession = await cashfree.createPaymentSession({
       orderId: orderId,
@@ -117,11 +143,11 @@ export async function POST(request: Request) {
       currency: "INR",
       customerDetails: {
         customerId: user.id,
-        customerEmail: profile.email || user.email,
-        customerPhone: profile.phone,
-        customerName: profile.full_name
+        customerEmail: sanitizedProfile.email,
+        customerPhone: sanitizedProfile.phone,
+        customerName: sanitizedProfile.name
       },
-      returnUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/events/registrations` // Add this line
+      returnUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/events/registrations`
     });
 
     return NextResponse.json({

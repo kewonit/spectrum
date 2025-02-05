@@ -10,7 +10,7 @@ interface PaymentSessionRequest {
   amount: number;
   currency: string;
   customerDetails: CustomerDetails;
-  returnUrl?: string; // Add this line
+  returnUrl: string;
 }
 
 interface CashfreeResponse {
@@ -91,9 +91,9 @@ export class Cashfree {
     }
     this.appId = appId;
     this.secretKey = secretKey;
-    this.baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://api.cashfree.com/pg'
-      : 'https://api.cashfree.com/pg';
+    this.baseUrl = process.env.NODE_ENV === "production"
+      ? "https://api.cashfree.com/pg"
+      : "https://sandbox.cashfree.com/pg";
   }
 
   private async wait(ms: number): Promise<void> {
@@ -110,8 +110,27 @@ export class Cashfree {
     if (!params.currency || typeof params.currency !== 'string') {
       throw new Error('Invalid currency');
     }
-    if (!params.customerDetails?.customerEmail?.includes('@')) {
-      throw new Error('Invalid customer email');
+    
+    // Enhanced customer details validation
+    const { customerDetails } = params;
+    if (!customerDetails) {
+      throw new Error('Customer details are required');
+    }
+
+    // Validate email
+    if (!customerDetails.customerEmail?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      throw new Error('Invalid customer email format');
+    }
+
+    // Validate phone (must be 10 digits)
+    const phone = customerDetails.customerPhone?.replace(/\D/g, '');
+    if (!phone?.match(/^[0-9]{10}$/)) {
+      throw new Error('Invalid phone number - must be 10 digits');
+    }
+
+    // Validate name (at least 3 characters, letters and spaces only)
+    if (!customerDetails.customerName?.match(/^[A-Za-z\s]{3,50}$/)) {
+      throw new Error('Invalid customer name - must be 3-50 letters');
     }
   }
 
@@ -190,6 +209,16 @@ export class Cashfree {
     try {
       this.validatePaymentInput(params);
 
+      // Format customer details
+      const formattedDetails = {
+        ...params.customerDetails,
+        customerPhone: params.customerDetails.customerPhone.replace(/\D/g, ''),
+        customerName: params.customerDetails.customerName
+          .trim()
+          .replace(/\s+/g, ' ') // normalize spaces
+          .slice(0, 50) // enforce max length
+      };
+
       // Check for duplicate/pending order
       if (!this.trackOrder(params.orderId)) {
         console.warn('Duplicate payment attempt detected:', {
@@ -232,17 +261,28 @@ export class Cashfree {
             order_amount: params.amount,
             order_currency: params.currency,
             customer_details: {
-              customer_id: params.customerDetails.customerId,
-              customer_email: params.customerDetails.customerEmail,
-              customer_phone: params.customerDetails.customerPhone,
-              customer_name: params.customerDetails.customerName,
+              customer_id: formattedDetails.customerId,
+              customer_email: formattedDetails.customerEmail.toLowerCase(),
+              customer_phone: formattedDetails.customerPhone,
+              customer_name: formattedDetails.customerName,
             },
             order_meta: {
-              return_url: params.returnUrl // Add this line
+              return_url: `${params.returnUrl}?order_id={order_id}&order_token={order_token}`
             }
           }),
         }
       );
+
+      // Add extra logging for production debugging
+      if (process.env.NODE_ENV === 'production') {
+        console.log('Cashfree API Response:', {
+          status: response.status,
+          statusText: response.statusText,
+          headers: Object.fromEntries(response.headers.entries()),
+          timestamp: new Date().toISOString(),
+          orderId: params.orderId
+        });
+      }
 
       const data = await response.json();
 
