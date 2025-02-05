@@ -10,7 +10,7 @@ export function ThreeModelling() {
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-r-full"></div>
                     <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-l-full"></div>
 
-                    <div className="flex flex-col md:flex-row h-auto md:h-[400px]">
+                    <div className="flex flex-col md:flex-row h-auto md:h-[450px]">
                         {/* Left side - Image */}
                         <div className="md:w-[45%] relative h-[150px] sm:h-[200px] md:h-full bg-[#EBE9E0]">
                             <Image 
