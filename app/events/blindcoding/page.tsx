@@ -61,7 +61,7 @@ export default function Home() {
     <picture> 
       <img className="mx-auto my-8" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
     </picture> 
-    <div className="text-gray-700 leading-7 mb-4 p-2 lg:p-8">
+    {/* <div className="text-gray-700 leading-7 mb-4 p-2 lg:p-8">
         <h1>Note :</h1>
         <p className="leading-7">
         •	Event will be team-based (Each team can have a minimum of 2 members and maximum of 3) <br/>
@@ -81,7 +81,7 @@ export default function Home() {
         •	The team would be held responsible for any damage caused to Blind Codingl components due to mishandling or carelessness, and would be required to pay a fine. <br/>
         •	Spot entries will be accepted until the team registration limit is reached. <br/>
         </p>
-        </div>
+        </div> */}
         {/* <TableInfo /> */}
     </main>
   );
