@@ -235,7 +235,7 @@ body {
   100% { filter: blur(3px); }
 }
 
-.hero-container .container {
+.hero-container .container-out {
   display: flex;
   align-items: center;
   justify-content: center;

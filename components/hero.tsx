@@ -39,7 +39,7 @@ export default function Hero() {
 
   return (
     <div className="hero-container grid-background-flip">  {/* Add this wrapper class */}
-      <div className="container">
+      <div className="container-out">
         <div className="content">
           <div className="container-full">
             <div className="animated hue"></div>
