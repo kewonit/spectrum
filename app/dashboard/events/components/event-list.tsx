@@ -145,7 +145,7 @@ function EventCard({ event }: { event: EventDetails }) {
           
           {/* Event Title */}
           <div className="absolute bottom-0 p-4">
-            <h3 className="text-lg font-bold text-white mb-2">{event.name}</h3>
+            <h3 className="text-lg font-bold text-black mb-2">{event.name}</h3>
             <Badge className={registrationStatus.color}>
               {registrationStatus.text}
             </Badge>
