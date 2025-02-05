@@ -32,6 +32,7 @@ const BRANCH_OPTIONS = {
 type BranchKey = keyof typeof BRANCH_OPTIONS;
 
 interface Registration {
+  payment_status?: 'pending' | 'success' | 'failed';
   id: string;
   event: EventDetails & {
     img_url: string | null;
@@ -84,7 +85,19 @@ export default function RegistrationsPage() {
       const response = await fetch('/api/registrations/active');
       if (!response.ok) throw new Error('Failed to fetch registrations');
       const data = await response.json();
-      setRegistrations(data.registrations);
+      
+      // Filter out cancelled and failed registrations
+      const activeRegistrations = data.registrations.filter((reg: Registration) => 
+        reg.status !== 'cancelled' && 
+        reg.payment_status !== 'failed'
+      );
+      
+      // Sort remaining registrations by created_at in descending order
+      const sortedRegistrations = activeRegistrations.sort((a: Registration, b: Registration) => {
+        return new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime();
+      });
+      
+      setRegistrations(sortedRegistrations);
     } catch (error: any) {
       toast.error("Failed to load registrations", {
         description: error.message || "Please try again later"
@@ -142,6 +155,31 @@ export default function RegistrationsPage() {
         </div>
 
         <div className="max-w-4xl mx-auto">
+          {activeRegistrationsCount > 0 && (
+            <div className="space-y-4 mb-6">
+              <div className="bg-yellow-50/60 border border-yellow-100 rounded-lg p-3 sm:p-4">
+                <p className="text-yellow-700 text-[13px] sm:text-sm flex items-start sm:items-center gap-2.5 sm:gap-3">
+                  <svg 
+                    className="h-5 w-5 shrink-0 mt-0.5 sm:mt-0" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth="2" 
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" 
+                    />
+                  </svg>
+                  <span className="leading-tight sm:leading-normal">
+                    Registrations are processed instantly. Few registrations may take up to 15 minutes to show up. Refresh to see updates.
+                  </span>
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="p-2 sm:p-4 border-2 sm:border-4 border-dashed border-gray-300 rounded-xl sm:rounded-2xl lg:rounded-[2rem]">
             <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden">
               <div className="p-3 sm:p-4 lg:p-6">
@@ -162,11 +200,13 @@ export default function RegistrationsPage() {
                 </div>
 
                 {activeRegistrationsCount > 0 && (
-                  <div className="mb-4 bg-yellow-50/80 border border-yellow-200 rounded-lg p-2.5 sm:p-3">
-                    <p className="text-yellow-800 flex items-center gap-2.5">
-                      <span className="text-base">⚠️</span>
-                      <span>Please note: You can register for up to 2 events only. This helps prevent timing conflicts and ensures you can participate fully.</span>
-                    </p>
+                  <div className="space-y-4">
+                    <div className="mb-4 bg-yellow-50/80 border border-yellow-200 rounded-lg p-2.5 sm:p-3">
+                      <p className="text-yellow-800 flex items-center gap-2.5">
+                        <span className="text-base">⚠️</span>
+                        <span>Please note: You can register for up to 2 events only. This helps prevent timing conflicts and ensures you can participate fully.</span>
+                      </p>
+                    </div>
                   </div>
                 )}
 

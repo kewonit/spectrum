@@ -22,6 +22,14 @@ interface TeamQueryResult {
   }
 }
 
+interface TeamData {
+  event_id: string;
+  leader_id: string;
+  profiles: {
+    is_pccoe_student: boolean;
+  } | null;
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ teamId: string }> }
@@ -107,74 +115,160 @@ export async function PATCH(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's email
-    const { data: profile } = await supabase
+    // Get user's complete profile
+    const { data: userProfile } = await supabase
       .from('profiles')
-      .select('email')
+      .select('*, email')
       .eq('id', user.id)
       .single();
 
-    // Get the event ID for this team
-    const { data: team } = await supabase
+    // Get team details including event info, leader profile, and current members
+    const { data: teamData, error: teamError } = await supabase
       .from('teams')
-      .select('event_id')
+      .select(`
+        *,
+        events!inner (*),
+        profiles!leader_id (
+          id,
+          email,
+          is_pccoe_student,
+          full_name
+        ),
+        team_members!inner (
+          invitation_status
+        ),
+        registrations!left (
+          registration_status,
+          payment_status
+        )
+      `)
       .eq('id', teamId)
       .single();
 
-    if (!team) {
-      return NextResponse.json({ error: "Team not found" }, { status: 404 });
+    if (teamError) {
+      console.error("Team fetch error:", teamError);
+      return NextResponse.json({ 
+        error: "team_not_found",
+        message: "The team you're trying to join doesn't exist or was deleted" 
+      }, { status: 404 });
     }
 
-    // Check for existing team only if accepting
+    // Validate team membership rules
     if (action === 'accept') {
-      const { data: existingTeam, error: queryError } = await supabase
-        .from('team_members')
-        .select(`
-          teams!inner (
-            event_id,
-            team_name
-          )
-        `)
-        .eq('member_id', user.id)
-        .eq('invitation_status', 'accepted')
-        .eq('teams.event_id', team.event_id)
-        .single() as { data: TeamQueryResult | null, error: any };
+      // Check if team has already registered
+      const hasConfirmedRegistration = teamData.registrations?.some(
+        (reg: { registration_status: string; payment_status: string }) => 
+          reg.registration_status === 'confirmed' || 
+          ['success', 'pccoe_coupon'].includes(reg.payment_status)
+      );
 
-      if (queryError && queryError.code !== 'PGRST116') {
-        throw new Error('existing_team_check_failed');
+      if (hasConfirmedRegistration) {
+        return NextResponse.json({
+          error: "team_registered",
+          message: "This team has already completed their registration and cannot accept new members"
+        }, { status: 400 });
       }
 
-      if (existingTeam) {
+      // Count only accepted members
+      const acceptedMemberCount = teamData.team_members.filter(
+        (member: { invitation_status: string }) => member.invitation_status === 'accepted'
+      ).length;
+
+      console.log('Debug team capacity:', {
+        acceptedMembers: acceptedMemberCount,
+        maxSize: teamData.events.max_team_size,
+        eventId: teamData.events.id,
+        teamId
+      });
+
+      // Check if adding one more member would exceed the limit
+      if (acceptedMemberCount >= teamData.events.max_team_size) {
+        return NextResponse.json({
+          error: "team_full",
+          message: "This team has reached its maximum capacity and cannot accept more members"
+        }, { status: 400 });
+      }
+
+      // Rest of your existing validation checks...
+      // Check if registration is still open
+      const now = new Date();
+      const regStart = new Date(teamData.events.registration_start);
+      const regEnd = new Date(teamData.events.registration_end);
+      
+      if (now < regStart || now > regEnd) {
+        return NextResponse.json({
+          error: "registration_closed",
+          message: "Registration period for this event has ended or not started yet"
+        }, { status: 400 });
+      }
+
+      // Check category compatibility both ways
+      if (userProfile?.is_pccoe_student && !teamData.profiles.is_pccoe_student) {
+        return NextResponse.json({
+          error: "category_mismatch",
+          message: "Due to competition rules, PCCOE students can only join teams created by other PCCOE students."
+        }, { status: 400 });
+      }
+
+      if (!userProfile?.is_pccoe_student && teamData.profiles.is_pccoe_student) {
+        return NextResponse.json({
+          error: "category_mismatch",
+          message: "Due to competition rules, you can only join teams created by other non-PCCOE participants."
+        }, { status: 400 });
+      }
+
+      // Check if user already has accepted invitation for this event
+      const { data: existingMembership } = await supabase
+        .from('team_members')
+        .select('teams!inner(event_id, team_name)')
+        .eq('member_id', user.id)
+        .eq('invitation_status', 'accepted')
+        .eq('teams.event_id', teamData.events.id)
+        .single();
+
+      if (existingMembership) {
         return NextResponse.json({
           error: "existing_team",
-          message: `You are already a member of team "${existingTeam.teams.team_name}" for this event`
+          message: `You are already a member of a team for this event`
         }, { status: 400 });
       }
     }
 
-    // Convert action to proper enum value
-    const newStatus = action === 'accept' ? 'accepted' : 'rejected';
-
-    // Update the invitation status - now storing member_id for both accept and reject
+    // Update member status
     const { error: updateError } = await supabase
       .from('team_members')
       .update({
-        invitation_status: newStatus,
-        member_id: user.id, // Store member_id regardless of action
+        invitation_status: action === 'accept' ? 'accepted' : 'rejected',
+        member_id: user.id,
         updated_at: new Date().toISOString()
       })
       .eq('team_id', teamId)
       .eq('invitation_status', 'pending')
-      .or(`member_email.eq.${profile?.email?.toLowerCase()},member_email.eq.${user.email?.toLowerCase()}`);
+      .or(`member_email.eq.${userProfile?.email?.toLowerCase()},member_email.eq.${user.email?.toLowerCase()}`);
 
     if (updateError) {
-      if (updateError.code === '23505') {
-        return NextResponse.json({
-          error: "existing_team",
-          message: "You are already a member of a team for this event"
-        }, { status: 400 });
-      }
+      console.error("Member update error:", updateError);
       throw updateError;
+    }
+
+    // If successfully accepted, update team completion status if needed
+    if (action === 'accept') {
+      // Recheck member count after successful addition
+      const { data: updatedMembers } = await supabase
+        .from('team_members')
+        .select('invitation_status')
+        .eq('team_id', teamId)
+        .eq('invitation_status', 'accepted');
+
+      const newMemberCount = updatedMembers?.length || 0;
+      
+      // Update team status if it's now full
+      if (newMemberCount === teamData.events.max_team_size) {
+        await supabase
+          .from('teams')
+          .update({ is_complete: true })
+          .eq('id', teamId);
+      }
     }
 
     return NextResponse.json({ 
@@ -184,12 +278,6 @@ export async function PATCH(
 
   } catch (error: any) {
     console.error("Member update error:", error);
-    if (error.message === 'existing_team_check_failed') {
-      return NextResponse.json({
-        error: "existing_team",
-        message: "Could not verify team membership. Please try again."
-      }, { status: 400 });
-    }
     return NextResponse.json(
       { 
         error: "server_error",

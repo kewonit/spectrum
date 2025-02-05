@@ -158,7 +158,6 @@ export function LoginForm() {
               id: data.session.user.id,
               email: data.session.user.email,
               updated_at: new Date().toISOString(),
-              last_login: new Date().toISOString(),
             }, {
               onConflict: 'id'
             });
@@ -244,9 +243,13 @@ export function LoginForm() {
               ) : (
                 <form onSubmit={handleVerifyToken} className="space-y-6">
                   {success && (
+                    
                     <div className="mb-6 p-4 bg-green-50 text-green-700 rounded-lg border border-green-100">
                       <p className="font-medium">Check your inbox!</p>
                       <p className="text-sm mt-1">We&apos;ve sent a code to {email}</p>
+                      <p className="text-xs sm:text-sm text-yellow-800 mt-3 sm:mt-2">
+                            It might take upto 15-30 seconds for the email to arrive!
+                      </p>
                     </div>
                   )}
                   <div>

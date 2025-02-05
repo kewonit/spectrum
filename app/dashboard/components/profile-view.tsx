@@ -35,6 +35,19 @@ interface ProfileViewProps {
 }
 
 export function ProfileView({ profile, onEditClick }: ProfileViewProps) {
+  // Add null check for profile
+  if (!profile) {
+    return (
+      <div className="text-center py-6 px-4 sm:px-6 md:px-8">
+        <h3 className="text-xl font-medium text-gray-900">Profile Not Found</h3>
+        <p className="mt-2 text-gray-600">Unable to load profile information.</p>
+        <Button onClick={onEditClick} className="mt-4">
+          Create Profile
+        </Button>
+      </div>
+    );
+  }
+
   // Helper function to get full college name
   const getFullCollegeName = (collegeName: string) => {
     // Check if it's a key in COLLEGE_OPTIONS
@@ -50,28 +63,32 @@ export function ProfileView({ profile, onEditClick }: ProfileViewProps) {
   const ProfileItem = ({ label, value, highlight }: { label: string; value?: string; highlight?: boolean }) => {
     if (!value) return null;
     return (
-      <div className={`space-y-1 p-4 rounded-xl ${highlight ? 'bg-blue-50 border-2 border-blue-100' : 'bg-gray-50'}`}>
-        <p className={`text-xs font-semibold uppercase tracking-wide ${highlight ? 'text-blue-600' : 'text-gray-500'}`}>
+      <div className={`space-y-0.5 sm:space-y-1 p-2 sm:p-4 rounded-xl ${highlight ? 'bg-blue-50 border-2 border-blue-100' : 'bg-gray-50'}`}>
+        <p className={`text-[10px] sm:text-xs font-semibold uppercase tracking-wide ${highlight ? 'text-blue-600' : 'text-gray-500'}`}>
           {label}
         </p>
-        <p className={`text-lg ${highlight ? 'text-blue-700 font-semibold' : 'text-gray-700 font-medium'} truncate`}>
+        <p className={`text-sm sm:text-lg ${highlight ? 'text-blue-700 font-semibold' : 'text-gray-700 font-medium'} truncate`}>
           {value}
         </p>
       </div>
     );
   };
 
-  if (!Object.values(profile).some(value => value)) {
+  // Update the empty profile check
+  if (!Object.values(profile).filter(Boolean).length) {
     return (
       <div className="text-center py-6 px-4 sm:px-6 md:px-8">
         <h3 className="text-xl font-medium text-gray-900">No Profile Details</h3>
         <p className="mt-2 text-gray-600">Please add your profile information to complete your profile.</p>
+        <Button onClick={onEditClick} className="mt-4">
+          Add Profile Details
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 px-4 sm:px-6 md:px-8">
+    <div className="space-y-6 px-1 sm:px-6 md:px-8">
       {/* Personal Information Section */}
       <section className="space-y-3">
         <div className="flex items-center mb-3">

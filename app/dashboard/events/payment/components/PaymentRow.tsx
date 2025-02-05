@@ -24,7 +24,7 @@ export function PaymentRow({ payment }: PaymentRowProps) {
         </TableCell>
         <TableCell>{payment.event?.name}</TableCell>
         <TableCell>{payment.team ? 'Team' : 'Individual'}</TableCell>
-        <TableCell>{formatCurrency(payment.amount)}</TableCell>
+        <TableCell>{(payment.amount)}</TableCell>
         <TableCell>
           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
             payment.status.toUpperCase() === 'SUCCESS' ? 'bg-green-100 text-green-700 border border-green-300' :

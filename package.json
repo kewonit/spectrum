@@ -1,5 +1,5 @@
 {
-  "name": "pccoespectrum.tech",
+  "name": "spectrumpccoe25.tech",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -24,6 +24,7 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-tabs": "^1.1.2",
+    "@radix-ui/react-tooltip": "^1.1.7",
     "@studio-freight/lenis": "^1.0.33",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.48.1",

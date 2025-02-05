@@ -1,4 +1,4 @@
-import { createClient } from "@/app/utils/supabase/server";
+import { createClient } from "@/app/utils/supabase/super-server";
 import { NextResponse } from "next/server";
 import { CashfreeWebhookPayload, PaymentGroup } from "@/app/types/payments";
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -35,13 +35,24 @@ async function processWebhook(supabase: SupabaseClient, payload: CashfreeWebhook
   const { order, payment, error_details, payment_gateway_details, customer_details } = payload.data;
   const { type: webhookType, event_time } = payload;
 
-  console.log('Processing webhook:', {
-    orderId: order.order_id,
-    status: payment.payment_status,
-    type: webhookType
-  });
+  // Map webhook status to payment status
+  const statusMap: Record<string, string> = {
+    'PAYMENT_SUCCESS_WEBHOOK': 'success',
+    'PAYMENT_FAILED_WEBHOOK': 'failed',
+    'PAYMENT_USER_DROPPED_WEBHOOK': 'failed',
+    'PAYMENT_CANCELLED_WEBHOOK': 'failed'
+  };
 
-  // Create comprehensive metadata object
+  const status = statusMap[webhookType] || 'failed';
+
+  // First check if payment record exists
+  const { data: existingPayment } = await supabase
+    .from('payments')
+    .select('id, registration_id, status')
+    .eq('order_id', order.order_id)
+    .maybeSingle();
+
+  // Create metadata
   const metadata = {
     payment_status: payment.payment_status,
     payment_message: payment.payment_message,
@@ -67,51 +78,37 @@ async function processWebhook(supabase: SupabaseClient, payload: CashfreeWebhook
       status: payment.payment_status,
       order_id: order.order_id
     },
-    raw_webhook: payload
+    raw_webhook: payload,
+    last_updated: new Date().toISOString()
   };
 
-  // Map payment status
-  const statusMap: Record<string, string> = {
-    'PAYMENT_SUCCESS_WEBHOOK': 'success',
-    'PAYMENT_FAILED_WEBHOOK': 'failed',
-    'PAYMENT_USER_DROPPED_WEBHOOK': 'failed',
-    'PAYMENT_CANCELLED_WEBHOOK': 'failed'
-  };
+  let updatedPayment;
 
-  const status = statusMap[webhookType] || 'failed';
+  if (existingPayment) {
+    // Update existing payment
+    const { data: payment, error: updateError } = await supabase
+      .from('payments')
+      .update({
+        status,
+        payment_method: payload.data.payment.payment_group,
+        transaction_id: payload.data.payment.cf_payment_id.toString(),
+        bank_reference: payload.data.payment.bank_reference || null,
+        cf_payment_id: payload.data.payment.cf_payment_id.toString(),
+        cf_order_id: payment_gateway_details?.gateway_order_id || null,
+        payment_time: new Date(payload.data.payment.payment_time).toISOString(),
+        metadata,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', existingPayment.id)
+      .select()
+      .single();
 
-  // Create payment update data matching our schema
-  const paymentUpdateData = {
-    status,
-    payment_method: payment.payment_group,
-    transaction_id: payment.cf_payment_id.toString(),
-    bank_reference: payment.bank_reference || null,
-    cf_payment_id: payment.cf_payment_id.toString(),
-    cf_order_id: payment_gateway_details?.gateway_order_id || null,
-    payment_time: new Date(payment.payment_time).toISOString(),
-    metadata,
-    updated_at: new Date().toISOString()
-  };
-
-  // Try to update existing payment
-  const { data: updatedPayment, error: updateError } = await supabase
-    .from('payments')
-    .update(paymentUpdateData)
-    .eq('order_id', order.order_id)
-    .select()
-    .single();
-
-  if (updateError) {
-    console.error('Payment update failed:', {
-      error: updateError,
-      orderId: order.order_id,
-      status
-    });
-    throw updateError;
+    if (updateError) throw updateError;
+    updatedPayment = payment;
   }
 
-  // Create payment log
-  const { error: logError } = await supabase
+  // Now log the webhook after payment record exists or has been updated
+  await supabase
     .from('payment_logs')
     .insert({
       payment_id: updatedPayment?.id,
@@ -119,19 +116,32 @@ async function processWebhook(supabase: SupabaseClient, payload: CashfreeWebhook
       event_type: webhookType,
       payload: {
         webhook: payload,
-        processed_at: new Date().toISOString()
+        processed_at: new Date().toISOString(),
+        status_change: existingPayment ? {
+          from: existingPayment.status,
+          to: status
+        } : undefined
       }
     });
 
-  if (logError) {
-    console.error('Failed to create payment log:', logError);
+  // Update registration if payment was successful
+  if (status === 'success' && updatedPayment?.registration_id) {
+    await supabase
+      .from('registrations')
+      .update({
+        registration_status: 'confirmed',
+        payment_status: 'success',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', updatedPayment.registration_id);
   }
 
   return {
     success: true,
     status,
     orderId: order.order_id,
-    paymentId: updatedPayment?.id
+    paymentId: updatedPayment?.id,
+    registrationId: updatedPayment?.registration_id
   };
 }
 
@@ -163,6 +173,18 @@ export async function POST(request: Request) {
       'Access-Control-Allow-Headers': 'Content-Type, x-cashfree-signature',
     };
 
+    // Log raw webhook immediately (without status)
+    await supabase
+      .from('payment_logs')
+      .insert({
+        order_id: payload.data.order.order_id,
+        event_type: 'WEBHOOK_RECEIVED',
+        payload: {
+          raw_webhook: payload,
+          received_at: new Date().toISOString()
+        }
+      });
+
     // Process with retries
     while (retries < MAX_RETRIES) {
       try {
@@ -188,7 +210,7 @@ export async function POST(request: Request) {
       name: error.name
     });
     
-    // Log error but don't expose internal details
+    // Log error (without status)
     await supabase
       .from('payment_logs')
       .insert({

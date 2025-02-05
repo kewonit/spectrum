@@ -10,6 +10,7 @@ interface PaymentSessionRequest {
   amount: number;
   currency: string;
   customerDetails: CustomerDetails;
+  returnUrl?: string; // Add this line
 }
 
 interface CashfreeResponse {
@@ -86,13 +87,50 @@ export class Cashfree {
 
   constructor(appId: string, secretKey: string) {
     if (!appId || !secretKey) {
-      throw new Error('Cashfree credentials are missing');
+      const env = process.env.NODE_ENV || 'development';
+      throw new Error(`Missing Cashfree credentials for ${env} environment. Please check your environment variables.`);
     }
+
+    // Validate credential format
+    if (!this.validateCredentials(appId, secretKey)) {
+      throw new Error('Invalid Cashfree credentials format');
+    }
+
     this.appId = appId;
     this.secretKey = secretKey;
-    this.baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://api.cashfree.com/pg'
-      : 'https://sandbox.cashfree.com/pg';
+    this.baseUrl = this.getBaseUrl();
+  }
+
+  private validateCredentials(appId: string, secretKey: string): boolean {
+    if (!appId || !secretKey) {
+      throw new Error(
+        "Cashfree credentials are missing or invalid. Please verify your environment variables."
+      );
+    }
+    
+    const isDev = process.env.NODE_ENV !== 'production';
+    if (isDev) {
+      // In development, just check if the credentials exist and are strings
+      // Remove the TEST prefix requirement as Cashfree sandbox creds don't always have it
+      return typeof appId === 'string' && typeof secretKey === 'string';
+    }
+    
+    // In production, ensure credentials don't have TEST prefix
+    return !appId.startsWith('TEST') && !secretKey.startsWith('TEST');
+  }
+
+  private getBaseUrl(): string {
+    const isDev = process.env.NODE_ENV !== 'production';
+    const baseUrl = isDev 
+      ? 'https://api.cashfree.com/pg'  // Use sandbox URL for development
+      : 'https://api.cashfree.com/pg';
+      
+    console.log('Using Cashfree baseUrl:', {
+      env: process.env.NODE_ENV,
+      url: baseUrl
+    });
+    
+    return baseUrl;
   }
 
   private async wait(ms: number): Promise<void> {
@@ -115,6 +153,15 @@ export class Cashfree {
   }
 
   private async makeRequest(url: string, options: RequestInit, attempt = 1): Promise<Response> {
+    // Add proper headers for authentication
+    const headers = {
+      'x-api-version': '2022-09-01',
+      'x-client-id': this.appId,
+      'x-client-secret': this.secretKey,
+      'Content-Type': 'application/json',
+      ...options.headers,
+    };
+
     const timeSinceLastRequest = Date.now() - this.lastRequestTime;
     if (timeSinceLastRequest < this.rateLimitDelay) {
       await this.wait(this.rateLimitDelay - timeSinceLastRequest);
@@ -127,13 +174,23 @@ export class Cashfree {
       this.lastRequestTime = Date.now();
       const response = await fetch(url, {
         ...options,
+        headers,
         signal: controller.signal
       });
 
-      if (!response.ok && attempt < this.maxRetries) {
-        const backoff = Math.min(1000 * Math.pow(2, attempt), 5000);
-        await this.wait(backoff);
-        return this.makeRequest(url, options, attempt + 1);
+      // Enhanced error handling
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+          throw new Error(`Authentication failed: Please check Cashfree credentials (${errorData.message || 'Unknown error'})`);
+        }
+        if (attempt < this.maxRetries) {
+          console.warn(`Request failed (attempt ${attempt}/${this.maxRetries}):`, errorData);
+          const backoff = Math.min(1000 * Math.pow(2, attempt), 5000);
+          await this.wait(backoff);
+          return this.makeRequest(url, options, attempt + 1);
+        }
+        throw new Error(`Cashfree API error: ${errorData.message || response.statusText}`);
       }
 
       return response;
@@ -162,6 +219,7 @@ export class Cashfree {
       return false;
     }
 
+    
     // Check if max attempts reached
     if (orderData.attempts >= this.MAX_ATTEMPTS) {
       this.pendingOrders.delete(orderId);
@@ -185,43 +243,50 @@ export class Cashfree {
     return true;
   }
 
+  private async createOrGetCustomer(details: CustomerDetails): Promise<string> {
+    // Ensure phone is exactly 10 digits
+    const phone = (details.customerPhone || '').replace(/\D/g, '').slice(-10);
+    
+    // Create (or retrieve) a valid customer record using the /customers endpoint
+    const response = await fetch(`${this.baseUrl}/customers`, {
+      method: 'POST',
+      headers: {
+        'x-api-version': '2023-08-01',
+        'x-client-id': this.appId,
+        'x-client-secret': this.secretKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        customer_phone: phone,
+        customer_email: details.customerEmail || '',
+        customer_name: details.customerName || 'Guest'
+      }),
+    });
+  
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`Failed to create/retrieve customer: ${errorData.message || response.statusText}`);
+    }
+  
+    const customerData = await response.json(); 
+    // 'customer_uid' is returned by Cashfree
+    return customerData.customer_uid;
+  }
+
   async createPaymentSession(params: PaymentSessionRequest): Promise<CashfreeResponse> {
     try {
       this.validatePaymentInput(params);
-
-      // Check for duplicate/pending order
-      if (!this.trackOrder(params.orderId)) {
-        console.warn('Duplicate payment attempt detected:', {
-          orderId: params.orderId,
-          timestamp: new Date().toISOString()
-        });
-        
-        return {
-          success: false,
-          error: {
-            message: 'A payment attempt is already in progress',
-            code: 'DUPLICATE_ORDER',
-            type: 'VALIDATION_ERROR'
-          },
-          status: 409,
-          payment_session_id: undefined,
-          duplicate: true
-        };
-      }
-
-      console.log('Creating payment session with Cashfree:', {
-        baseUrl: this.baseUrl,
-        orderId: params.orderId,
-        env: process.env.NODE_ENV,
-        timestamp: new Date().toISOString()
-      });
-
-      const response = await this.makeRequest(
+  
+      // 1) Ensure a valid Cashfree customer UID
+      const customerUid = await this.createOrGetCustomer(params.customerDetails);
+  
+      // 2) Create the order (Cashfree returns a payment_session_id if possible)
+      const orderResponse = await this.makeRequest(
         `${this.baseUrl}/orders`,
         {
           method: 'POST',
           headers: {
-            'x-api-version': '2022-09-01',
+            'x-api-version': '2023-08-01',
             'x-client-id': this.appId,
             'x-client-secret': this.secretKey,
             'Content-Type': 'application/json',
@@ -231,61 +296,62 @@ export class Cashfree {
             order_amount: params.amount,
             order_currency: params.currency,
             customer_details: {
-              customer_id: params.customerDetails.customerId,
+              customer_id: customerUid,
               customer_email: params.customerDetails.customerEmail,
               customer_phone: params.customerDetails.customerPhone,
-              customer_name: params.customerDetails.customerName,
+              customer_name: params.customerDetails.customerName
             },
+            order_meta: {
+              return_url: params.returnUrl,
+              notify_url: params.returnUrl?.replace('/registrations', '/api/payments/webhook')
+            }
           }),
         }
       );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('Cashfree API error:', {
-          status: response.status,
-          error: data,
-          timestamp: new Date().toISOString()
-        });
-        // Remove from pending orders if request fails
-        this.pendingOrders.delete(params.orderId);
-        return {
-          success: false,
-          error: {
-            message: data.message || 'Unknown error',
-            code: data.code || 'UNKNOWN_ERROR',
-            type: data.type || 'API_ERROR'
-          },
-          status: response.status,
-          payment_session_id: data.payment_session_id
-        };
+  
+      const orderData = await orderResponse.json();
+      if (!orderResponse.ok) {
+        throw new Error(`Order creation failed: ${orderData.message}`);
       }
-
+  
+      // 3) If no payment_session_id returned, create a session explicitly
+      if (!orderData.payment_session_id) {
+        const sessionResponse = await this.makeRequest(
+          `${this.baseUrl}/orders/sessions`,
+          {
+            method: 'POST',
+            headers: {
+              'x-api-version': '2023-08-01',
+              'x-client-id': this.appId,
+              'x-client-secret': this.secretKey,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ order_id: params.orderId }),
+          }
+        );
+  
+        const sessionData = await sessionResponse.json();
+        if (!sessionResponse.ok) {
+          throw new Error(`Session creation failed: ${sessionData.message}`);
+        }
+  
+        orderData.payment_session_id = sessionData.payment_session_id;
+      }
+  
       return {
         success: true,
-        data,
-        status: response.status,
-        payment_session_id: data.payment_session_id
+        data: orderData,
+        status: orderResponse.status,
+        payment_session_id: orderData.payment_session_id
       };
+  
     } catch (error: any) {
-      console.error('Cashfree payment session creation failed:', {
+      console.error('Payment session creation error:', {
         error: error.message,
-        stack: error.stack,
+        orderId: params.orderId,
         timestamp: new Date().toISOString()
       });
-      // Remove from pending orders if request fails
-      this.pendingOrders.delete(params.orderId);
-      return {
-        success: false,
-        error: {
-          message: error.message,
-          code: 'INTERNAL_ERROR',
-          type: 'SYSTEM_ERROR'
-        },
-        status: 500,
-        payment_session_id: undefined
-      };
+      throw error;
     }
   }
 

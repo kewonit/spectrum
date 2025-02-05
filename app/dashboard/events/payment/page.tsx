@@ -53,51 +53,63 @@ export default async function PaymentsPage() {
 
   return (
     <main className="min-h-screen bg-[#EBE9E0] p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto space-y-6">
         <Breadcrumbs
           items={[
             { label: 'Home', href: '/' },
             { label: 'Dashboard', href: '/dashboard' },
             { label: 'Payments' },
           ]}
-          className="mb-4"
         />
 
-        <div className="bg-white rounded-xl shadow p-4 sm:p-6 lg:p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Payment History</h1>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
+          Note: While payments are generally processed instantly, it may take up to 30 minutes for your payment to be reflected in your history.
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+          <div className="bg-gray-100 p-6 lg:p-8 border-b border-gray-200">
+            <h1 className="text-3xl font-semibold text-gray-600 tracking-tight">
+              Payment History
+            </h1>
+            <p className="mt-2 text-sm text-gray-500">
+              View and manage your payment transactions
+            </p>
+          </div>
           
           <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead></TableHead>
-                  <TableHead>Event</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Payment Time</TableHead>
-                  <TableHead>Method</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {payments?.map((payment: PaymentRecord) => (
-                  <PaymentRow 
-                    key={payment.id}
-                    payment={payment}
-                  />
-                ))}
-                {!payments?.length && (
-                  <TableRow>
-                    <TableCell 
-                      colSpan={7} 
-                      className="text-center text-muted-foreground py-8"
-                    >
-                      No payments found
-                    </TableCell>
+            <div className="p-4 sm:p-6 lg:p-8 pt-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-gray-50/50">
+                    <TableHead></TableHead>
+                    <TableHead className="font-semibold">Event</TableHead>
+                    <TableHead className="font-semibold">Type</TableHead>
+                    <TableHead className="font-semibold">Amount</TableHead>
+                    <TableHead className="font-semibold">Status</TableHead>
+                    <TableHead className="font-semibold">Payment Time</TableHead>
+                    <TableHead className="font-semibold">Method</TableHead>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {payments?.map((payment: PaymentRecord) => (
+                    <PaymentRow 
+                      key={payment.id}
+                      payment={payment}
+                    />
+                  ))}
+                  {!payments?.length && (
+                    <TableRow>
+                      <TableCell 
+                        colSpan={7} 
+                        className="text-center text-gray-500 py-12"
+                      >
+                        No payment records found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </div>

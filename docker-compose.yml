@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+        - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        - CASHFREE_BASE_URL=${CASHFREE_BASE_URL}
+        - CASHFREE_SECRET_KEY=${CASHFREE_SECRET_KEY}
+        - CASHFREE_APP_ID=${CASHFREE_APP_ID}
+        - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+        - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      - CASHFREE_BASE_URL=${CASHFREE_BASE_URL}
+      - CASHFREE_SECRET_KEY=${CASHFREE_SECRET_KEY}
+      - CASHFREE_APP_ID=${CASHFREE_APP_ID}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+          memory: 400M

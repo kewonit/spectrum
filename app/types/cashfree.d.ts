@@ -1,6 +1,6 @@
 declare module '@cashfreepayments/cashfree-js' {
   interface CashfreeConfig {
-    mode: 'sandbox' | 'production';
+    mode: 'production';
   }
 
   interface CheckoutOptions {

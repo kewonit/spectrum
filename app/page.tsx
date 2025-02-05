@@ -3,15 +3,9 @@ import React from "react";
 import Hero from "@/components/hero";
 import Cards from "@/components/cards";
 import Link from 'next/link';
-{
-  /* import EmblaCarousel from '@/components/parallax/EmblaCarousel' */
-}
 import { EmblaOptionsType } from "embla-carousel";
 import "@/components/parallax/embla.css";
 import EmblaCarousels from "@/components/thumbs/EmblaCarousels";
-const OPTIONS: EmblaOptionsType = { dragFree: true };
-const SLIDE_COUNT = 5;
-const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
 
 export default function Home() {
   return (

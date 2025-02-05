@@ -93,8 +93,9 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
   const hasExistingCollege = Boolean(profile?.college_name);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const toastId = 'profileUpdate';
     try {
-      toast.loading('Updating profile...', { id: 'profileUpdate' });
+      toast.loading('Updating profile...', { id: toastId });
       
       const response = await fetch('/api/user', {
         method: 'PUT',
@@ -102,14 +103,19 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
         body: JSON.stringify(values),
       });
       
-      if (!response.ok) throw new Error('Failed to update profile');
+      const data = await response.json();
       
-      toast.success('Profile updated successfully', { id: 'profileUpdate' });
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update profile');
+      }
+      
+      toast.success('Profile updated successfully', { id: toastId });
       onUpdate();
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Profile update error:', error);
       toast.error('Failed to update profile', {
-        id: 'profileUpdate',
-        description: 'Please try again',
+        id: toastId,
+        description: error?.message || 'Please try again later',
       });
     }
   }

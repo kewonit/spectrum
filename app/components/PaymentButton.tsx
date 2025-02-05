@@ -56,12 +56,12 @@ export default function PaymentButton({
       toast.dismiss(toastId);
 
       const cashfree = await load({
-        mode: process.env.NODE_ENV === "production" ? "production" : "sandbox"
+        mode: process.env.NODE_ENV === "production" ? "production" : "production"
       });
 
-      // Use proper types for checkout options
       await cashfree.checkout({
         paymentSessionId,
+        returnUrl: window.location.origin + "/dashboard/events/registrations",
         redirectTarget: "_self",
         onPaymentSuccess: (data) => {
           console.log("Payment success", data);

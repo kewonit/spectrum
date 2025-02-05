@@ -80,15 +80,16 @@ export default async function EventPage({
                 <div className="md:w-[45%] relative h-[200px] md:h-full bg-[#EBE9E0]">
                   {eventDetails.img_url ? (
                     <div className="relative w-full h-full">
-                      <Image 
-                        className="object-cover w-full h-full"
-                        src={eventDetails.img_url} 
-                        alt={eventDetails.name}
-                        width={800}
-                        height={600}
-                        priority
-                        draggable="false"
-                      />
+                      <picture>
+                        <img 
+                          className="object-cover w-full h-full"
+                          src={eventDetails.img_url} 
+                          alt={eventDetails.name}
+                          width={800}
+                          height={600}
+                          draggable="false"
+                        />
+                      </picture>
                     </div>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
