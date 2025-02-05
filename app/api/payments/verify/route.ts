@@ -19,7 +19,7 @@ interface VerificationResult {
 
 async function verifyPaymentStatus(orderId: string): Promise<VerificationResult> {
   const response = await fetch(
-    `https://sandbox.cashfree.com/pg/orders/${orderId}`,
+    `https://api.cashfree.com/pg/orders/${orderId}`,
     {
       headers: {
         "x-client-id": process.env.CASHFREE_APP_ID!,
@@ -38,7 +38,7 @@ async function verifyPaymentStatus(orderId: string): Promise<VerificationResult>
   // Get payment details if order is paid
   if (orderData.order_status === 'PAID') {
     const paymentsResponse = await fetch(
-      `https://sandbox.cashfree.com/pg/orders/${orderId}/payments`,
+      `https://api.cashfree.com/pg/orders/${orderId}/payments`,
       {
         headers: {
           "x-client-id": process.env.CASHFREE_APP_ID!,
