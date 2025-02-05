@@ -133,7 +133,8 @@ export function Navigation() {
             </div>
           </DialogContent>
         </Dialog> */}
-        <EventsMenu />
+        
+        <EventsMenu onClose={() => setSheetOpen(false)}/>
 
 
         <Button 

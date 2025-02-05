@@ -16,7 +16,9 @@ interface Event {
 
   color: string;
 }
-
+interface EventsMenuProps {
+  onClose?: () => void;
+}
 interface EventCardProps extends Event {
   onNavigate: (href: string) => void;
 }
@@ -86,12 +88,13 @@ const EventCard: React.FC<EventCardProps> = ({ id,href, title, description, colo
 );
 
 // Main EventsMenu component
-export default function EventsMenu() {
+export default function EventsMenu({ onClose }: EventsMenuProps) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
 
   const handleNavigation = (href: string) => {
     setOpen(false);
+    onClose?.();
     router.push(`${href}`);
   };
 
