@@ -93,7 +93,7 @@ export class Cashfree {
     this.secretKey = secretKey;
     this.baseUrl = process.env.NODE_ENV === 'production' 
       ? 'https://api.cashfree.com/pg'
-      : 'https://sandbox.cashfree.com/pg';
+      : 'https://api.cashfree.com/pg';
   }
 
   private async wait(ms: number): Promise<void> {
