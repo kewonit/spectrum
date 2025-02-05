@@ -47,6 +47,7 @@ const ruleList = [
   "14. Participants should have their own HackerRank account.",
   "15. For team rounds, coordinators will assign the team on the basis of computerized results.",
   "16. Participants will be solely responsible for any damage/harm caused due to his/her recklessness.",
+  "17. All the questions from Round 2 to Round 4 will be based only on C programming language."
 ];
 
 export default function Home() {

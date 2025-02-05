@@ -31,22 +31,22 @@ const korna = Krona_One({
 });
 
 const ruleList = [
-  "1. The event is open to all students of PCCOE and other institutions.",
+  "1. The event is open to all First-year students of PCCOE and all First-year students of other institutions.",
   "2. Teams can have a maximum of 3 members.",
   "3. Registration is mandatory through the official event portal.",
-  "4. Only top 25 business ideas will be shortlisted for the final round.",
-  "5. Teams must submit a 300-word business idea description during registration.",
-  "6. Pitch presentations should be 5-7 minutes long.",
-  "7. PowerPoint or similar visual presentations are required.",
-  "8. Presentations must cover business concept, target audience, problem statement, solution, and market analysis.",
-  "9. Teams will be judged on innovation, feasibility, presentation skills, business model, and social impact.",
-  "10. Q&A round performance will contribute to final scoring.",
-  "11. Industry experts and faculty members will form the judging panel.",
+  "4. Two rounds will be conducted.",
+  "5. Round 1 will involve submission of a brief 300-word description in PDF format and a 2-minute video clip stating the business idea in short.",
+  "6. Only the foremost business ideas will be shortlisted for the final round, based on the submissions.",
+  "7. Pitch presentations should adhere to the time barriers of 5-7 minutes.",
+  "8. PowerPoint or similar visual presentations are advised.",
+  "9. Presentations must cover business concept, target audience, problem statement, solution, and market analysis.",
+  "10. Teams will be judged on innovation, feasibility, profitability, presentation skills, business model, and social impact.",
+  "11. Industry experts will form the judging panel.",
   "12. Top 3 teams will receive prizes and recognition.",
   "13. Plagiarism or fraudulent activities will result in immediate disqualification.",
   "14. All presentations must be original work.",
   "15. Registration and participation are free of cost.",
-  "16. Winners will receive cash prizes and certificates.",
+  "16. Winners will receive cash prizes and certificates."
 ];
 
 export default function Home() {

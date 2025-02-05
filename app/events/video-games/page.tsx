@@ -8,6 +8,8 @@ import { Metadata } from 'next'
 import { RulesBGMI } from "./components/bgmi";
 import { RulesValo } from "./components/valorant";
 import { Electrica_registarion2 } from "./components/registrationbg";
+import RulesFreefire from "./components/freefire";
+import { Electrica_registarion3 } from "./components/registrationff";
  
 export const metadata: Metadata = {
   title: 'Spectrum x High Ping',
@@ -39,7 +41,7 @@ export default function Home() {
     <main className="overflow-hidden max-w-7xl mx-auto px-8 bg-[#EBE9E0]">
       <div className={korna.className}>
         <h1 className="font-jacques_francois_shadow scroll-m-20 pt-8 text-4xl md:text-7xl font-extrabold text-gray-800 tracking-tight lg:text-9xl">
-        High Ping
+        High Ping&apos;25
         </h1>
         <br/>
         <h2 className="font-jacques_francois_shadow scroll-m-20 pl-2 text-2xl font-extrabold text-gray-800 tracking-tight lg:text-5xl">
@@ -59,6 +61,7 @@ export default function Home() {
       </picture>   
       <Electrica_registarion />
       <Electrica_registarion2 />
+      <Electrica_registarion3 />
       <picture> 
         <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" /> 
       </picture> 
@@ -66,6 +69,7 @@ export default function Home() {
     <div className="text-gray-700 leading-7 mb-4 p-4 lg:p-8">
       <RulesBGMI />
       <RulesValo />
+      <RulesFreefire />
         {/* <h1>Note :</h1> */}
         {/* <p className="leading-7">
         1.	Each team should consist of 5 people for Valorant and 4 people for BGMI. <br/>

@@ -1,9 +1,9 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 
-export function Electrica_registarion() {
+export function Electrica_registarion3() {
     return (
-        <div className="p-2 sm:p-4 lg:p-8 my-auto mx-auto">
+        <div className="p-2 sm:p-4 lg:p-8 mx-auto">
             <div className="p-3 sm:p-4 border-4 border-dashed border-gray-300 rounded-[2rem]">
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 relative">
                     {/* Dots for ticket effect */}
@@ -32,10 +32,11 @@ export function Electrica_registarion() {
                                         Limited Spots Available
                                     </span>
                                     <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-black mb-1.5 sm:mb-2">
-                                    High Ping - BGMI &apos;25
+                                    Free Fire Battle - 2025
                                     </h1>
                                     <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
-                                    Gear up for an intense battle at BGMI Showdown! Join us in a high-stakes tournament where teams showcase their strategic gameplay, coordination, and combat skills to emerge victorious.</p>
+                                    Join the ultimate Free Fire battle! Compete in an intense battle royale format using only smartphones. Are you ready to claim victory?
+                                    .</p>
                                 </div>
 
                                 <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:gap-6">
@@ -46,7 +47,8 @@ export function Electrica_registarion() {
                                             </svg>
                                             <div>
                                                 <p className="text-[11px] sm:text-sm font-semibold text-gray-900">Event Format</p>
-                                                <p className="text-[9px] sm:text-xs text-gray-500">Squad Battle (4+2 Substitutes) + Standard TPP Match Format</p>
+                                                <p className="text-[9px] sm:text-xs text-gray-500">5v5 Competitive Matches + Single Elimination Bracket
+</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-1.5 sm:gap-3">
@@ -55,7 +57,7 @@ export function Electrica_registarion() {
                                             </svg>
                                             <div>
                                                 <p className="text-[11px] sm:text-sm font-semibold text-gray-900">Prizes & Rewards</p>
-                                                <p className="text-[9px] sm:text-xs text-gray-500">Cash Prizes, Medals, and Certificates</p>
+                                                <p className="text-[9px] sm:text-xs text-gray-500">Winner & Runner-up Prizes, MVP Award</p>
                                             </div>
                                         </div>
                                     </div>
@@ -70,7 +72,7 @@ export function Electrica_registarion() {
                                 </div>
                             </div>
 
-                            <div className="mt-4 md:mt-0">
+                            <div className="mt-6 md:mt-0">
                                 <div className="border-t-2 border-dashed border-gray-300 my-3 sm:my-6 -mx-3 sm:-mx-8"></div>
                                 <a href="/signup" className="block w-full">
                                     <Button className="w-full py-2.5 sm:py-4 text-xs sm:text-base font-medium bg-blue-50 hover:bg-blue-100 text-blue-600 transition-all duration-300 rounded-lg flex items-center justify-between px-3 sm:px-6 group">
@@ -88,4 +90,3 @@ export function Electrica_registarion() {
         </div>
     )
 }
-
