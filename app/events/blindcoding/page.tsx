@@ -65,7 +65,7 @@ export default function Home() {
         <h1>Note :</h1>
         <p className="leading-7">
         •	Event will be team-based (Each team can have a minimum of 2 members and maximum of 3) <br/>
-        •	Event will be divided into 3 rounds. <br/>
+        •	Event will be divided into 5 rounds. <br/>
         •	Scientific Calculators are allowed for the first round of the event. <br/>
         •	Participants will have to carry their own stationary (Calculators, pens, etc). <br/>
         •	Personal computers, electronic/Blind Codingl components are not allowed for use during the event. <br/>
