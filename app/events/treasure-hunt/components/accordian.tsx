@@ -88,7 +88,6 @@ const rounds = [
     description: "Whispers of fortune guide your path in this ultimate challenge. Navigate through a series of puzzles and physical challenges, including an exciting laser maze obstacle course, to claim the final prize.",
     rules: [
       "Teams must solve interconnected puzzles to progress",
-      "Special feature: Laser maze obstacle course challenge",
       "Time limits apply for each section of the hunt",
       "Physical activity will be required - wear appropriate clothing",
       "Follow all safety instructions for the laser maze",
