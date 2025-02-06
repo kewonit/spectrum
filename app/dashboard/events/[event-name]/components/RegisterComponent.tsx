@@ -321,39 +321,209 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     toast.info("Payment functionality will be implemented soon");
   };
 
-  // If registration status is null or team status is still loading, show loading
+  // Modify the condition that checks registration status
   if (registrationStatus === null || isTeamStatusLoading) {
-    return <Button disabled className="w-full">Loading...</Button>;
+    return (
+      <div className="space-y-4">
+        <div className="bg-blue-50/80 border border-blue-200 rounded-lg p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex-shrink-0">
+              <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 animate-spin" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-blue-800 font-medium text-sm sm:text-base">
+                Checking Registration Status
+              </h3>
+              <p className="text-blue-700 text-xs sm:text-sm">
+                This may take a few moments. Please wait while we verify your registration details.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (registrationStatus.isRegistered) {
-    return (
-      <div className="space-y-3">
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <h3 className="text-green-800 font-medium">
-            {registrationStatus.type === 'solo' 
-              ? "You're registered as an individual participant!" 
-              : "You're registered as part of a team!"}
-          </h3>
-          <p className="text-green-600 text-sm mt-1">
-            Registration successful. Good luck!
-          </p>
+    // For PCCOE students with confirmed registration
+    if (!registrationStatus.payment?.required && 
+        registrationStatus.registrationStatus === "confirmed" && 
+        registrationStatus.paymentStatus === "pccoe_coupon") {
+      return (
+        <div className="space-y-3">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <h3 className="text-green-800 font-medium">
+              {registrationStatus.type === 'solo' 
+                ? "You're registered as an individual participant!" 
+                : "You're registered as part of a team!"}
+            </h3>
+            <p className="text-green-600 text-sm mt-1">
+              Registration successful. Good luck!
+            </p>
+          </div>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2.5 sm:p-4">
+            <p className="text-yellow-800 text-[13px] sm:text-sm flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="inline-flex gap-1.5 sm:gap-2 items-center flex-wrap">
+                View your registrations at
+                <Link 
+                  href="/dashboard/events/registrations" 
+                  className="font-medium text-yellow-900 hover:text-yellow-700 underline decoration-dashed underline-offset-4 break-words"
+                >
+                  /dashboard/events/registrations
+                </Link>
+              </span>
+            </p>
+          </div>
         </div>
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2.5 sm:p-4">
-          <p className="text-yellow-800 text-[13px] sm:text-sm flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <svg className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="inline-flex gap-1.5 sm:gap-2 items-center flex-wrap">
-              View your registrations at
-              <Link 
-                href="/dashboard/events/registrations" 
-                className="font-medium text-yellow-900 hover:text-yellow-700 underline decoration-dashed underline-offset-4 break-words"
-              >
-                /dashboard/events/registrations
-              </Link>
-            </span>
-          </p>
+      );
+    }
+
+    // For non-PCCOE students with pending payment
+    if (registrationStatus.payment?.required && 
+        registrationStatus.registrationStatus === "pending" && 
+        registrationStatus.paymentStatus === "pending") {
+      return (
+        <div className="space-y-4">
+          <div className="bg-blue-50/80 border border-blue-200 rounded-lg p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+              <div className="flex-shrink-0">
+                <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 animate-spin" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-blue-800 font-medium text-sm sm:text-base">
+                  Checking Registration Status
+                </h3>
+                <p className="text-blue-700 text-xs sm:text-sm">
+                  This may take a few moments. Please wait while we verify your registration details.
+                </p>
+                <ul className="text-xs sm:text-sm text-blue-700 space-y-1.5 list-disc pl-4">
+                  <li>If you&apos;re registration went through without payment, it will be auto cancelled after 30 mintues!</li>
+                  <li>Network connectivity issues, please try again in a bit, with better internet connection.</li>
+                  <li>Refresh the page and check again!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // For non-null status, show default registration success
+    if (registrationStatus.registrationStatus !== null && 
+        registrationStatus.paymentStatus !== null) {
+      return (
+        <div className="space-y-3">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <h3 className="text-green-800 font-medium">
+              {registrationStatus.type === 'solo' 
+                ? "You're registered as an individual participant!" 
+                : "You're registered as part of a team!"}
+            </h3>
+            <p className="text-green-600 text-sm mt-1">
+              Registration successful. Good luck!
+            </p>
+          </div>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2.5 sm:p-4">
+            <p className="text-yellow-800 text-[13px] sm:text-sm flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="inline-flex gap-1.5 sm:gap-2 items-center flex-wrap">
+                View your registrations at
+                <Link 
+                  href="/dashboard/events/registrations" 
+                  className="font-medium text-yellow-900 hover:text-yellow-700 underline decoration-dashed underline-offset-4 break-words"
+                >
+                  /dashboard/events/registrations
+                </Link>
+              </span>
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // For PCCOE team registrations - no payment required
+    if (registrationStatus.profile?.is_pccoe_student && 
+        !registrationStatus.payment?.required &&
+        registrationStatus.teamId) {
+      return (
+        <div className="space-y-3">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <h3 className="text-green-800 font-medium">
+              {registrationStatus.teamName 
+                ? `You're part of team "${registrationStatus.teamName}"!`
+                : "You're registered as part of a team!"}
+            </h3>
+            <p className="text-green-600 text-sm mt-1">
+              Registration successful. Good luck!
+            </p>
+          </div>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2.5 sm:p-4">
+            <p className="text-yellow-800 text-[13px] sm:text-sm flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="inline-flex gap-1.5 sm:gap-2 items-center flex-wrap">
+                View your registrations at
+                <Link 
+                  href="/dashboard/events/registrations" 
+                  className="font-medium text-yellow-900 hover:text-yellow-700 underline decoration-dashed underline-offset-4 break-words"
+                >
+                  /dashboard/events/registrations
+                </Link>
+              </span>
+            </p>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  if (registrationStatus.status === 'pending') {
+    return (
+      <div className="space-y-4">
+        <div className="bg-yellow-50/80 border border-yellow-200 rounded-lg p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex-shrink-0">
+              <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-600 animate-spin" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-yellow-800 font-medium text-sm sm:text-base">
+                Payment Verification in Progress
+              </h3>
+              <p className="text-yellow-700 text-xs sm:text-sm">
+                The bank will verify and update your payment status within 15 minutes. Please check back later.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 sm:mt-6 space-y-2">
+            <p className="text-sm font-medium text-yellow-800">Common reasons for delay:</p>
+            <ul className="text-xs sm:text-sm text-yellow-700 space-y-1.5 list-disc pl-4">
+              <li>Network connectivity issues during payment processing</li>
+              <li>High transaction volume at the payment gateway</li>
+              <li>Bank server maintenance or temporary downtime</li>
+              <li>Internet connection interruption during payment confirmation</li>
+            </ul>
+          </div>
+
+          <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm">
+            <p className="text-yellow-600">
+              Transaction ID: <span className="font-mono">{registrationStatus.transactionId}</span>
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={checkRegistrationStatus}
+              className="w-full sm:w-auto bg-yellow-100/50 border-yellow-200 text-yellow-700 hover:bg-yellow-100"
+            >
+              Check Status Again
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -376,7 +546,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
           <PaymentButton
             eventId={eventDetails.id}
             type="solo"
-            amount={5}
+            amount={100}
             onSuccess={checkRegistrationStatus}
           />
         </div>
@@ -517,7 +687,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     const paymentRequired = registrationStatus?.payment?.required;
     
     if (isNonPccoeLeader && paymentRequired) {
-      const amount = registrationStatus.payment.amount || (acceptedMembersCount * 5);
+      const amount = registrationStatus.payment.amount || (acceptedMembersCount * 100);
       return (
         <PaymentButton
           eventId={eventDetails.id}
@@ -566,7 +736,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     if (registrationStatus?.isLeader && !registrationStatus?.profile?.is_pccoe_student) {
       // Calculate amount based on total accepted members
       const acceptedMembersCount = acceptedMembers.length;
-      const totalAmount = acceptedMembersCount * 5; // ₹100 per member
+      const totalAmount = acceptedMembersCount * 100; // ₹100 per member
     
       return (
         <div className="space-y-4">
@@ -721,13 +891,38 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                       <li>• Non-PCCOE students can only team up with other non-PCCOE students</li>
                     </ul>
                   </div>
-                  <div className="mb-4 p-3 sm:p-4 bg-yellow-50/50 border border-yellow-100 rounded-md">
-                        <p className="text-yellow-700 text-xs sm:text-sm">
-                          <strong>How to accept invite:</strong>
+                  <div className="mb-4 p-3 sm:p-4 bg-blue-50/50 border border-blue-100 rounded-lg">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                      <div className="shrink-0">
+                        <svg 
+                          className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth="2" 
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-blue-800 font-medium text-sm sm:text-base mb-1">
+                          Team Invitation Instructions
                         </p>
-                      <ul className="mt-1 text-[11px] sm:text-sm text-yellow-600 space-y-1">
-                        <li>• Ask your friend to visit <Link href="/dashboard/events/accept" className="font-medium underline hover:text-yellow-800">/dashboard/events/accept</Link> from their account to accept the invitation</li>
-                      </ul>
+                        <p className="text-blue-600 text-xs sm:text-sm">
+                          Share this link with your team members:
+                          <Link 
+                            href="/dashboard/events/accept" 
+                            className="ml-1.5 font-medium underline decoration-dashed underline-offset-4 hover:text-blue-700"
+                          >
+                            /dashboard/events/accept
+                          </Link>
+                        </p>
+                      </div>
+                    </div>
                   </div>
                   <CardDescription className="space-y-1 text-xs sm:text-sm">
                     {!canInvite ? (
@@ -968,14 +1163,39 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                     <li>• Non-PCCOE students can only team up with other non-PCCOE students</li>
                   </ul>
                 </div>
-                <div className="mb-4 p-3 sm:p-4 bg-yellow-50/50 border border-yellow-100 rounded-md">
-                        <p className="text-yellow-700 text-xs sm:text-sm">
-                          <strong>How to accept invite:</strong>
-                        </p>
-                      <ul className="mt-1 text-[11px] sm:text-sm text-yellow-600 space-y-1">
-                        <li>• Ask your friend to visit <Link href="/dashboard/events/accept" className="font-medium underline hover:text-yellow-800">/dashboard/events/accept</Link> from their account to accept the invitation</li>
-                      </ul>
+                <div className="mb-4 p-3 sm:p-4 bg-blue-50/50 border border-blue-100 rounded-lg">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                    <div className="shrink-0">
+                      <svg 
+                        className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth="2" 
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-blue-800 font-medium text-sm sm:text-base mb-1">
+                        Team Invitation Instructions
+                      </p>
+                      <p className="text-blue-600 text-xs sm:text-sm">
+                        Share this link with your team members:
+                        <Link 
+                          href="/dashboard/events/accept" 
+                          className="ml-1.5 font-medium underline decoration-dashed underline-offset-4 hover:text-blue-700"
+                        >
+                          /dashboard/events/accept
+                        </Link>
+                      </p>
+                    </div>
                   </div>
+                </div>
             <Card>
               <CardHeader className="p-4 sm:p-6">
                 <CardTitle className="text-lg sm:text-xl">Invite Members</CardTitle>

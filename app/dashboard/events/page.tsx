@@ -26,6 +26,7 @@ export default async function EventsPage() {
         max_registrations,
         is_active,
         img_url,
+        whatsapp_url,
         created_at,
         updated_at
       `)

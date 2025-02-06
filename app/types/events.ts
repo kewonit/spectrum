@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface EventDetails {
   id: string;
   name: string;
@@ -12,6 +14,7 @@ export interface EventDetails {
   max_registrations: number | null;
   is_active: boolean;
   img_url: string | null;
+  whatsapp_url: string | null;
 }
 
 export type InvitationStatus = 'pending' | 'accepted' | 'rejected';
@@ -19,6 +22,8 @@ export type EventType = 'solo' | 'fixed_team' | 'variable_team';
 export type RegistrationStatus = 'pending' | 'confirmed' | 'cancelled';
 
 export interface RegistrationStatusResponse {
+  transactionId: ReactNode;
+  status: string;
   isRegistered: boolean;
   type: 'solo' | 'team' | null;
   teamId: string | null;

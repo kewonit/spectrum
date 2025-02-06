@@ -1051,7 +1051,7 @@ export default function team_behind_spectrum() {
                                         <div className="absolute flex h-full w-full justify-center rounded-xl bg-cover" style={{ background: "linear-gradient(146deg, rgba(221,235,82,1) 8%, rgba(37,255,102,1) 39%, rgba(28,190,47,1) 65%, rgba(83,234,255,1) 89%)" }}></div>
                                         <div className=" absolute flex h-full w-full justify-center rounded-xl bg-cover transition-colors duration-300 transform bg-gray-950/30  group-hover:bg-transparent"></div>
                                         <div className="absolute -bottom-12 flex h-32 w-32 items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://fe.pccoepune.com/images/faculty/prasad.webp" alt="No Data"/>
+                                            <Image width="100" height="100" className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300" src="https://i.postimg.cc/wBKt92fc/IMG-9467-1.jpg" alt="No Data"/>
                     
                                         </div>
                                     </div> 

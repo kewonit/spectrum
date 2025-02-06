@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     ],
   }, 
 }
-
+ 
 const korna = Krona_One({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -32,53 +32,62 @@ const korna = Krona_One({
 
 export default function Home() {
   return (
-    <main className="overflow-hidden max-w-7xl mx-auto px-8 bg-[#EBE9E0]">
-      <div className={korna.className}>
-      <h1 className="font-jacques_francois_shadow scroll-m-20 pt-8 text-4xl md:text-7xl font-extrabold text-gray-800 tracking-tight lg:text-9xl">
-      War of Words&apos;25
-      </h1>
-        <br/>
-        <h2 className="font-jacques_francois_shadow scroll-m-20 pl-2 text-2xl font-extrabold text-gray-800 tracking-tight lg:text-5xl">
-          brought to you by AS&H, PCCOE
-        </h2>
+    <main className="overflow-hidden max-w-7xl mx-auto px-6 bg-[#EBE9E0]">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-4 md:gap-8 py-6 md:py-12 px-4 md:px-8">
+        <div className="w-full md:w-1/3 flex justify-center md:justify-start">
+          <Image  
+            width="400" 
+            height="360" 
+            alt="War of Words Event Image" 
+            src="https://i.imgur.com/Z4jurYP.png" 
+            loading="lazy" 
+            draggable="false"
+            className="w-[280px] sm:w-[320px] md:w-[400px] h-auto object-contain"
+          />
+        </div>
+        
+        <div className={`${korna.className} w-full md:w-2/3 text-left`}>
+          <div className="space-y-2 md:space-y-4">
+            <h1 className="font-jacques_francois_shadow scroll-m-20 text-3xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-black tracking-tight">
+              War of Words &apos;25
+            </h1>
+            <h2 className="font-jacques_francois_shadow scroll-m-20 text-md sm:text-3xl md:text-3xl lg:text-4xl font-extrabold text-black tracking-tight">
+              brought to you by AS&H, PCCOE
+            </h2>
+          </div>
+        </div>
       </div>
-      <Image className="mx-auto mt-4" width="500" height="450" alt="image" src="https://i.imgur.com/Z4jurYP.png" />
-      <div>
-      <h3 className="font-jacques_francois_shadow text-center scroll-m-20 my-4 pl-2 text-xl font-extrabold text-gray-800 tracking-tight md:text-3xl lg:text-5xl">
-      War of Words - &apos;25: Battle of Ideas
-      </h3>
+
+      <div 
+        className="relative my-12 aspect-[16/9] md:aspect-[21/9] lg:aspect-[24/9] w-full"
+        style={{
+          backgroundImage: "url('https://res.cloudinary.com/dfyrk32ua/image/upload/v1737645289/Spectrum/side-images/download_i1d7aq.webp')",
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundColor: '#EBE9E0',
+          opacity: 0.9,
+        }}
+      >
+        <div className="absolute inset-0 flex items-center justify-center px-4">
+          <h3 className={`${korna.className} scroll-m-20 text-xl md:text-2xl lg:text-3xl font-extrabold text-black tracking-tight text-center max-w-4xl`}>
+            War of Words - &apos;25: Battle of Ideas
+          </h3>
+        </div>
       </div>
+
       <picture> 
-        <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
+        <img className="mx-auto my-4 sm:my-8" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" draggable="false" />
       </picture> 
       <Debate_registarion />
       <picture> 
-        <img className="mx-auto my-16" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
+        <img className="mx-auto my-4 sm:my-8" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" draggable="false" />
       </picture> 
-      <div className="text-gray-700 leading-7 mb-4 p-4 lg:p-8">
-        <Rules />
-        {/* <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight">Rules :</h1>
-          <p className="leading-7 pt-4">
-          Elimination Round: <br/>
-          1. The debate will be held in English/Hindi/Marathi.<br/>
-          2. Participants should be from 1st year only.<br/>
-          3. Topics of the elimination round will be given on the spot.<br/>
-          </p>
-          <hr/>
-          <p className="leading-7 pt-6">
-          Final Round: <br/>
-          1. Final Topic for formal debate will be shared on the WhatsApp group.<br/>
-          2. Students should come prepared with both &quot;for&quot; and &quot;against&quot; the topic.<br/>
-          3. There will be a rebuttal round. Each participant is allowed to ask only 1 question. Participants will be marked on the question and the answer.<br/>
-          4. The time duration will be 3+1 minutes.<br/>
-          5. Participants will be marked on content, presentation, counter arguments and questions, overall impact and clarity of thoughts.<br/>
-          </p> */}
-        </div>
-    <hr/>
-    <picture> 
-      <img className="mx-auto my-8" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" />
-    </picture> 
+      <Rules />
+      <hr/>
+      <picture> 
+        <img className="mx-auto my-8" width="800" height="50" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" draggable="false" />
+      </picture> 
     </main>
   );
-
 }

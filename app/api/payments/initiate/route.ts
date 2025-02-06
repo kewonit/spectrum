@@ -59,7 +59,7 @@ export async function POST(request: Request) {
 
       // Calculate required amount
       const memberCount = team.team_members.length;
-      const requiredAmount = memberCount * 5; // ₹100 per member
+      const requiredAmount = memberCount * 100; // ₹100 per member
 
       if (amount !== requiredAmount) {
         return NextResponse.json({ 

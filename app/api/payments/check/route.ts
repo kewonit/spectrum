@@ -40,7 +40,7 @@ export async function GET(request: Request) {
 
     // Calculate required amount
     const memberCount = team.team_members.length;
-    const requiredAmount = memberCount * 5;
+    const requiredAmount = memberCount * 100;
 
     // Check for successful payment
     const { data: payment } = await supabase

@@ -111,11 +111,11 @@ export async function calculatePaymentAmount(
       return !profile.is_pccoe_student;
     }).length;
     
-    return nonPccoeCount * 5; // ₹100 per non-PCCOE student
+    return nonPccoeCount * 100; // ₹100 per non-PCCOE student
   }
   
   // For solo events, return ₹100 if non-PCCOE
-  return 5;
+  return 100;
 }
 
 export async function generateOrderId(): Promise<string> {

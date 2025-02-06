@@ -2,6 +2,47 @@ import { createClient } from "@/app/utils/supabase/server";
 import { NextResponse } from "next/server";
 import { slugify } from "@/app/utils/slugify";
 
+// Add this utility function after the imports
+async function removePendingInvites(supabase: any, teamId: string) {
+  try {
+    // Get all pending invites for the team
+    const { data: pendingInvites } = await supabase
+      .from('team_members')
+      .select('id')
+      .eq('team_id', teamId)
+      .eq('invitation_status', 'pending');
+
+    if (pendingInvites && pendingInvites.length > 0) {
+      // Delete all pending invites
+      const { error } = await supabase
+        .from('team_members')
+        .delete()
+        .eq('team_id', teamId)
+        .eq('invitation_status', 'pending');
+
+      if (error) throw error;
+    }
+  } catch (error) {
+    console.error("Error removing pending invites:", error);
+    // Don't throw error, just log it to prevent blocking registration
+  }
+}
+
+// Add this utility function alongside removePendingInvites
+async function preventNewRegistrations(supabase: any, teamId: string) {
+  try {
+    // Update team status to prevent new registrations
+    const { error } = await supabase
+      .from('teams')
+      .update({ registration_locked: true })
+      .eq('id', teamId);
+
+    if (error) throw error;
+  } catch (error) {
+    console.error("Error locking team registrations:", error);
+  }
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -103,7 +144,7 @@ export async function POST(request: Request) {
 
       // If leader is non-PCCOE, verify payment
       if (!team.leader.is_pccoe_student) {
-        const requiredAmount = teamMembers.length * 5; // ₹100 per member
+        const requiredAmount = teamMembers.length * 100; // ₹100 per member
 
         // Get latest successful payment
         const { data: payment } = await supabase
@@ -267,13 +308,22 @@ export async function POST(request: Request) {
           team_members!inner(
             member_id,
             invitation_status
-          )
+          ),
+          registration_locked
         `)
         .eq('id', teamId)
         .single();
 
       if (!team) {
         return NextResponse.json({ error: "Team not found" }, { status: 404 });
+      }
+
+      // Check if team is locked for registration
+      if (team.registration_locked) {
+        return NextResponse.json({ 
+          error: "Team registration locked",
+          message: "This team is no longer accepting new members as payment has been initiated"
+        }, { status: 400 });
       }
 
       // Get only accepted members count with proper type checking
@@ -290,7 +340,7 @@ export async function POST(request: Request) {
 
       // If leader is non-PCCOE, verify payment
       if (!team.leader.is_pccoe_student) {
-        const requiredAmount = memberCount * 5; // ₹100 per member
+        const requiredAmount = memberCount * 100; // ₹100 per member
 
         // Check for successful payment
         const { data: payment } = await supabase
@@ -303,14 +353,22 @@ export async function POST(request: Request) {
           .limit(1)
           .single();
 
-        if (!payment || payment.amount < requiredAmount) {
+        // If payment is successful, remove pending invites and prevent new registrations
+        if (payment && payment.amount >= requiredAmount) {
+          await removePendingInvites(supabase, teamId);
+          await preventNewRegistrations(supabase, teamId);
+        } else {
+          await preventNewRegistrations(supabase, teamId); // Lock team when payment is initiated
           return NextResponse.json({ 
             error: "Payment required",
             required: true,
             requiredAmount,
             message: `Payment of ₹${requiredAmount} required for team registration`
-          }, { status: 402 }); // Using 402 Payment Required status
+          }, { status: 402 });
         }
+      } else {
+        // For PCCOE teams, also remove pending invites before registration
+        await removePendingInvites(supabase, teamId);
       }
 
       // If we get here, either payment is verified or not required (PCCOE)

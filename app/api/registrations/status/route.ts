@@ -20,6 +20,7 @@ interface TeamInvite {
   };
 }
 
+// Update TeamStatus interface
 interface TeamStatus {
   teams: {
     id: string;
@@ -27,10 +28,18 @@ interface TeamStatus {
     event_id: string;
     leader_id: string;
     registrations: Array<{
-      id: string;
       registration_status: string;
+      payment_status: string;
+      created_at: string;
     }>;
   };
+}
+
+// Add TeamRegistrationResponse interface
+interface TeamRegistrationResponse {
+  registration_status: string;
+  payment_status: string;
+  created_at: string;
 }
 
 export const revalidate = 0; // Disable cache
@@ -94,7 +103,7 @@ export async function GET(request: Request) {
       });
     }
 
-    // Comprehensive status check for both solo and team
+    // Get the registration with comprehensive status check for teams
     const { data: registration } = await supabase
       .from('registrations')
       .select(`
@@ -114,15 +123,17 @@ export async function GET(request: Request) {
           payment_time
         )
       `)
-      .or(
-        `individual_id.eq.${user.id},` +
-        `team_id.neq.null,teams.team_members.member_id.eq.${user.id}`
-      )
       .eq('event_id', eventId)
       .not('registration_status', 'eq', 'cancelled')
+      .or(
+        `and(team_id.neq.null,teams.team_members.member_id.eq.${user.id}),` +
+        `individual_id.eq.${user.id}`
+      )
+      .order('created_at', { ascending: false })
+      .limit(1)
       .single();
 
-    // Check for active team membership or pending invites
+    // Get team membership status separately to ensure we catch all cases
     const { data: teamStatus } = await supabase
       .from('team_members')
       .select(`
@@ -131,13 +142,18 @@ export async function GET(request: Request) {
           team_name,
           event_id,
           leader_id,
-          registrations(*)
+          registrations(
+            registration_status,
+            payment_status,
+            created_at
+          )
         )
       `)
       .eq('member_id', user.id)
       .eq('teams.event_id', eventId)
-      .not('invitation_status', 'eq', 'rejected')
-      .single() as { data: TeamStatus | null };
+      .eq('invitation_status', 'accepted')
+      .order('created_at', { ascending: false })
+      .maybeSingle() as { data: TeamStatus | null };
 
     // Get user profile
     const { data: profile } = await supabase
@@ -146,21 +162,20 @@ export async function GET(request: Request) {
       .eq('id', user.id)
       .single();
 
-    // Determine registration status
-    const isRegistered = !!(
-      registration || 
-      (teamStatus?.teams?.registrations && teamStatus.teams.registrations.length > 0)
+    // Find the most recent valid registration with proper typing
+    const teamRegistration = teamStatus?.teams?.registrations?.find(
+      (r: TeamRegistrationResponse) => r.registration_status !== 'cancelled'
     );
 
-    // Prepare response
+    // Determine registration status with proper fallbacks
     const response = {
-      isRegistered,
+      isRegistered: !!(registration || teamRegistration),
       type: registration?.team_id ? 'team' : (registration?.individual_id ? 'solo' : null),
-      teamId: registration?.teams?.id || teamStatus?.teams?.id || null,
-      teamName: registration?.teams?.team_name || teamStatus?.teams?.team_name || null,
-      isLeader: registration?.teams?.leader_id === user.id || teamStatus?.teams?.leader_id === user.id,
-      registrationStatus: registration?.registration_status || null,
-      paymentStatus: registration?.payment_status || null,
+      teamId: registration?.teams?.id || (teamStatus?.teams && teamStatus.teams.id) || null,
+      teamName: registration?.teams?.team_name || (teamStatus?.teams && teamStatus.teams.team_name) || null,
+      isLeader: (registration?.teams?.leader_id === user.id) || (teamStatus?.teams && teamStatus.teams.leader_id === user.id),
+      registrationStatus: registration?.registration_status || teamRegistration?.registration_status || null,
+      paymentStatus: registration?.payment_status || teamRegistration?.payment_status || null,
       profile: {
         is_pccoe_student: profile?.is_pccoe_student || false,
       },
