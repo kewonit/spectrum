@@ -117,8 +117,4 @@ const sections = [
       "Winners announced at end with prizes for top performers"
     ]
   }
-<<<<<<< HEAD
 ];
-=======
-];
->>>>>>> 7a82c451d2b6cc2f9b0146e1a02c5fc2b48a2b8b
