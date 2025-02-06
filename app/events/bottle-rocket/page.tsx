@@ -51,7 +51,7 @@ export default function Home() {
               Water Rocket &apos;25
             </h1>
             <h2 className="font-jacques_francois_shadow scroll-m-20 text-md sm:text-3xl md:text-3xl lg:text-4xl font-extrabold text-black tracking-tight">
-              brought to you by AS&H, PCCOE
+              brought to you by AS&amp;H, PCCOE
             </h2>
           </div>
         </div>
@@ -97,10 +97,10 @@ export default function Home() {
           9. All energy given to the rocket must only come from the water and air pressure combination. No other source of energy is allowed. You can only compress air manually, with a foot or bicycle pump. <br/>
           10. No external metal parts are allowed on the rocket, but are allowed on the launch mechanism. <br/>
           11. You are only allowed to use plastic bottles specifically designed for holding pressure, or that have been pressure tested (for example carbonated drink bottles). <br/>
-          12. Your launch apparatus must be secure and must be able to robustly control the rocket's flight direction. <br/>
+          12. Your launch apparatus must be secure and must be able to robustly control the rocket&apos;s flight direction. <br/>
           13. No glass or sharp objects to be used in/on the rocket. <br/>
           14. **Do not use glass bottles or plastic bottles designed for still water. <br/>
-          15. For safety's sake any fast falling rockets must land in the landing zone or you will get no points for that round. If soft-landing rockets (e.g. rockets with parachutes) land outside the landing zone their time will be counted for the longest time in the air award. <br/>
+          15. For safety&apos;s sake any fast falling rockets must land in the landing zone or you will get no points for that round. If soft-landing rockets (e.g. rockets with parachutes) land outside the landing zone their time will be counted for the longest time in the air award. <br/>
           16. The competitor who achieves the highest Total score out of 100, will be declared the winner of the Launch Competition. <br/>
         </p>
       </div>
