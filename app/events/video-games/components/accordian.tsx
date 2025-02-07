@@ -7,13 +7,13 @@ import {
   
   export function Rules() {
     return (
-      <Accordion type="single" collapsible className="w-full text-gray-700 p-6">
-        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">Rules of Electrica : </h1>
-        <p className="leading-7 mb-4">
+      <Accordion type="single" collapsible className="space-y-4">
+        <h1 className="scroll-m-20 text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">Rules of Electrica : </h1>
+        <p className="leading-7 mb-8 text-white/80 text-sm sm:text-base">
             Total 4 rounds
         </p>
         
-        <AccordionItem value="item-1">
+        <AccordionItem value="item-1" className="border-none rounded-xl bg-white/10 backdrop-blur-lg transition-all duration-300"        >
           <AccordionTrigger>ROUND 1: Resistance is Futile</AccordionTrigger>
           <AccordionContent>
           1. Aptitude Test <br/>

@@ -15,7 +15,7 @@ export function Treasurehunt_registarion() {
                         <div className="md:w-[45%] relative h-[150px] sm:h-[200px] md:h-full bg-[#EBE9E0]">
                             <Image 
                                 className="object-contain object-center w-full h-full p-2 sm:p-4"
-                                src="https://i.postimg.cc/brX6qX3f/4.png" 
+                                src="https://i.postimg.cc/9QJXxJJd/16.png" 
                                 alt="product image" 
                                 width={1200} 
                                 height={1000} 
@@ -30,6 +30,9 @@ export function Treasurehunt_registarion() {
                                 <div>
                                     <span className="inline-block px-2 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
                                         Limited Spots Available
+                                    </span>
+                                    <span className="inline-block px-2 py-1 rounded-full bg-green-50 text-green-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
+                                    ₹100 - Non PCCOEians
                                     </span>
                                     <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-black mb-1.5 sm:mb-2">
                                         Treasure Hunt &apos;25

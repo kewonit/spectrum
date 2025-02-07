@@ -15,7 +15,7 @@ export function Sharktank_registarion() {
                         <div className="md:w-[45%] relative h-[150px] sm:h-[200px] md:h-full bg-[#EBE9E0]">
                             <Image 
                                 className="object-contain object-center w-full h-full p-2 sm:p-4"
-                                src="https://i.postimg.cc/CxJ6kQLb/10.png" 
+                                src="https://i.postimg.cc/yNDKLBJK/14.png" 
                                 alt="product image" 
                                 width={1200} 
                                 height={1000} 
@@ -28,8 +28,11 @@ export function Sharktank_registarion() {
                         <div className="md:w-[55%] p-4 sm:p-6 lg:p-8 flex flex-col justify-between bg-gradient-to-br from-white to-gray-50">
                             <div className="space-y-4 sm:space-y-8">
                                 <div>
-                                    <span className="inline-block px-2 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
+                                    <span className="inline-block px-2 mx-2 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
                                         Limited Spots Available
+                                    </span>
+                                    <span className="inline-block px-2 py-1 rounded-full bg-green-50 text-green-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
+                                    ₹100 - Non PCCOEians
                                     </span>
                                     <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1.5 sm:mb-2">
                                         Shark Tank &apos;25

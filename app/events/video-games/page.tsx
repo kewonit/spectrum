@@ -1,110 +1,124 @@
+"use client"
+
 import { Rules } from "@/app/events/video-games/components/accordian"
 import { Electrica_registarion } from "@/app/events/video-games/components/registration";
-import { Krona_One } from 'next/font/google'
-import Image from "next/image";
-import { Metadata } from 'next'
+import { Electrica_registarion2 } from "./components/registrationbg";
+import { Electrica_registarion3 } from "./components/registrationff";
 import { RulesBGMI } from "./components/bgmi";
 import { RulesValo } from "./components/valorant";
-import { Electrica_registarion2 } from "./components/registrationbg";
 import RulesFreefire from "./components/freefire";
-import { Electrica_registarion3 } from "./components/registrationff";
+import { Krona_One } from 'next/font/google'
+import Image from "next/image";
 
-export const metadata: Metadata = {
-  title: 'Spectrum x High Ping',
-  description: "Tech event for first year students",  
-  openGraph: {
-    title: 'Spectrum x High Ping',
-    description: "Tech event for first year students",  
-    url: "https://pccoespectrum.tech",
-    siteName: "pccoespectrum.tech",
-    images: [
-      {
-        url: "https://i.imgur.com/rmVmQ7C.png",
-        width: 548,
-        height: 253,
-        alt: 'Image',
-      },
-    ],
-  }, 
-}
-
-const korna = Krona_One({
+const krona = Krona_One({
   subsets: ['latin'],
   variable: '--font-sans',
-  weight: '400', 
+  weight: '400',
 });
 
 export default function Home() {
   return (
-    <main className="overflow-hidden max-w-7xl mx-auto px-6 bg-[#EBE9E0]">
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-4 md:gap-8 py-6 md:py-12 px-4 md:px-8">
-        <div className="w-full md:w-1/3 flex justify-center md:justify-start">
-          <Image  
-            width="500" 
-            height="450" 
-            alt="High Ping Event Image" 
-            src="https://i.imgur.com/U42KHTH.png" 
-            loading="lazy" 
-            draggable="false"
-            className="w-[280px] sm:w-[320px] md:w-[400px] h-auto object-contain"
-          />
-        </div>
-        
-        <div className={`${korna.className} w-full md:w-2/3 text-left`}>
-          <div className="space-y-2 md:space-y-4">
-            <h1 className="font-jacques_francois_shadow scroll-m-20 text-3xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-black tracking-tight">
-              High Ping &apos;25
-            </h1>
-            <h2 className="font-jacques_francois_shadow scroll-m-20 text-md sm:text-3xl md:text-3xl lg:text-4xl font-extrabold text-black tracking-tight">
-              brought to you by AS&H, PCCOE
-            </h2>
+    <main className="min-h-screen" style={{
+      background: "radial-gradient(at left top, rgb(91, 192, 222), rgb(51, 142, 218))",
+    }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Hero Section */}
+        <div className="relative rounded-2xl bg-white/10 backdrop-blur-lg p-8 mb-12">
+          <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8">
+            <div className="w-full md:w-1/2">
+              <div className={`${krona.className} space-y-4`}>
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#ece9e0]">
+                  High Ping &apos;25
+                </h1>
+                <h2 className="text-xl md:text-2xl text-white/90">
+                  brought to you by AS&H, PCCOE
+                </h2>
+                <p className="text-lg text-white/80 font-light max-w-xl mt-6">
+                  PCCOE E-Sports Event featuring Valorant, BGMI, and Free Fire tournaments
+                </p>
+              </div>
+            </div>
+            <div className="w-full md:w-1/2 flex justify-center">
+              <div className="relative w-64 h-64 md:w-80 md:h-80">
+                <div className="absolute inset-0 bg-white/20 rounded-lg transform rotate-45"></div>
+                <div className="absolute inset-2 bg-white/30 rounded-lg transform rotate-12"></div>
+                <div className="absolute inset-4 bg-white/40 rounded-lg transform -rotate-6"></div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div 
-        className="relative my-12 aspect-[16/9] md:aspect-[21/9] lg:aspect-[24/9] w-full"
-        style={{
-          backgroundImage: "url('https://res.cloudinary.com/dfyrk32ua/image/upload/v1737645289/Spectrum/side-images/download_i1d7aq.webp')",
-          backgroundSize: 'contain',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundColor: '#EBE9E0',
-          opacity: 0.9,
-        }}
-      >
-        <div className="absolute inset-0 flex items-center justify-center px-4">
-          <h3 className={`${korna.className} scroll-m-20 text-xl md:text-2xl lg:text-3xl font-extrabold text-black tracking-tight text-center max-w-4xl`}>
-            High Ping PCCOE E-Sports Event
-            <br/>
-            1) Valorant Tournament
-            <br/>
-            2) BGMI Tournament
-          </h3>
+        {/* Registration Sections */}
+        <div className="space-y-12">
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8">
+            <h3 className={`${krona.className} text-2xl text-white mb-6`}>Valorant Registration</h3>
+            <Electrica_registarion />
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8">
+            <h3 className={`${krona.className} text-2xl text-white mb-6`}>BGMI Registration</h3>
+            <Electrica_registarion2 />
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8">
+            <h3 className={`${krona.className} text-2xl text-white mb-6`}>Free Fire Registration</h3>
+            <Electrica_registarion3 />
+          </div>
         </div>
+
+        {/* Rules Sections */}
+        <div className="space-y-12 mt-12">
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8">
+            <h3 className={`${krona.className} text-2xl text-white mb-6`}>Valorant Tournament Rules</h3>
+            <div className="rules-wrapper">
+              <RulesValo />
+            </div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8">
+            <h3 className={`${krona.className} text-2xl text-white mb-6`}>BGMI Tournament Rules</h3>
+            <div className="rules-wrapper">
+              <RulesBGMI />
+            </div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8">
+            <h3 className={`${krona.className} text-2xl text-white mb-6`}>Free Fire Tournament Rules</h3>
+            <div className="rules-wrapper">
+              <RulesFreefire />
+            </div>
+          </div>
+        </div>
+
+        <style jsx global>{`
+          .rules-wrapper {
+            color: white;
+          }
+          .rules-wrapper h1, .rules-wrapper h3, .rules-wrapper h4 {
+            color: white;
+          }
+          .rules-wrapper p {
+            color: rgba(255, 255, 255, 0.8);
+          }
+          .rules-wrapper .bg-white {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+          }
+          .rules-wrapper .bg-[#EBE9E0] {
+            background: rgba(255, 255, 255, 0.15);
+          }
+          .rules-wrapper .text-gray-600,
+          .rules-wrapper .text-gray-700,
+          .rules-wrapper .text-gray-800,
+          .rules-wrapper .text-gray-900 {
+            color: rgba(255, 255, 255, 0.9);
+          }
+          .rules-wrapper .shadow-sm,
+          .rules-wrapper .shadow-md {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          }
+        `}</style>
       </div>
-
-      <picture> 
-        <img className="mx-auto my-4 sm:my-8" width="800" height="50" alt="divider" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" draggable="false" />
-      </picture> 
-
-      <Electrica_registarion />
-      <Electrica_registarion2 />
-      <Electrica_registarion3 />
-
-      <picture> 
-        <img className="mx-auto my-4 sm:my-8" width="800" height="50" alt="divider" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1705931875/Spectrum/global/lbNfJM2-min_n0yrof.webp" draggable="false" />
-      </picture> 
-
-      <div className="text-gray-700 leading-7 mb-4 p-2 sm:p-4 md:p-6 lg:p-8">
-        <RulesBGMI />
-        <RulesValo />
-        <RulesFreefire />
-      </div>
-
-      <picture> 
-        <img className="mx-auto my-8" width="800" height="50" alt="footer-image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1737645290/Spectrum/side-images/f_htarul.webp" draggable="false" />
-      </picture> 
     </main>
   );
 }

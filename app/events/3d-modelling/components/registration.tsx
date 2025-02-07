@@ -15,7 +15,7 @@ export function ThreeModelling() {
                         <div className="md:w-[45%] relative h-[150px] sm:h-[200px] md:h-full bg-[#EBE9E0]">
                             <Image 
                                 className="object-contain object-center w-full h-full p-2 sm:p-4"
-                                src="https://i.postimg.cc/43d25Qmq/9.png" 
+                                src="https://i.postimg.cc/7Y4xwpR1/11.png" 
                                 alt="product image" 
                                 width={1200} 
                                 height={1000} 
@@ -30,6 +30,9 @@ export function ThreeModelling() {
                                 <div>
                                     <span className="inline-block px-2 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
                                         Limited Spots Available
+                                    </span>
+                                    <span className="inline-block px-2 py-1 rounded-full bg-green-50 text-green-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
+                                    ₹100 - Non PCCOEians
                                     </span>
                                     <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-black mb-1.5 sm:mb-2">
                                     3D Modelling &apos;25
@@ -61,8 +64,8 @@ export function ThreeModelling() {
                                     </div>
                                     
                                     <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
-                                        <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
-                                        <div className="flex flex-col items-end">
+                                    <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
+                                    <div className="flex flex-col items-end">
                                             <div className="text-[11px] sm:text-sm text-gray-500">per participant</div>
                                             <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
                                         </div>

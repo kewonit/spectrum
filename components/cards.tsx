@@ -12,7 +12,7 @@ export default function Cards() {
   const cardsData = [
     {
       href: "/events/e-paradox",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265444/Spectrum/main-icons-2025/1_2_1_1_upbgnz.png",
+      image: "https://i.postimg.cc/yYWmxgfr/2.png",
       alt: "image",
       title: "E-Paradox '25",
       description: "A code-breaking challenge that tests logic and problem-solving skills.",
@@ -24,7 +24,7 @@ export default function Cards() {
     },
     {
       href: "/events/blindcoding",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265444/Spectrum/main-icons-2025/2_2_1_svvp9u.png",
+      image: "https://i.postimg.cc/XYC9cM6f/5.png",
       alt: "image",
       title: "Blind Coding '25",
       description: "A programming contest where coding is done without real-time visibility.",
@@ -36,7 +36,7 @@ export default function Cards() {
     },
     {
       href: "/events/brain-dasher",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265444/Spectrum/main-icons-2025/3_2_1_yiirfx.png",
+      image: "https://i.postimg.cc/wxw59ckm/1.png",
       alt: "image",
       title: "Brain Dasher '25",
       description: "A logic and reasoning event that challenges critical thinking skills.",
@@ -48,7 +48,7 @@ export default function Cards() {
     },
     {
       href: "/events/treasure-hunt",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265445/Spectrum/main-icons-2025/4_2_1_mhyx4u.png",
+      image: "https://i.postimg.cc/9MJ9FCyh/9.png",
       alt: "image",
       title: "Treasure Hunt '25",
       description: "An adventurous quest to solve clues and uncover hidden treasures.",
@@ -60,7 +60,7 @@ export default function Cards() {
     },
     {
       href: "/events/chem-prastuti",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265400/Spectrum/main-icons-2025/5_2_1_eikodn.png",
+      image: "https://i.postimg.cc/QCdppHjC/10.png",
       alt: "image",
       title: "Chem Prastuti '25",
       description: "A chemistry-based presentation event to showcase scientific ideas.",
@@ -79,7 +79,7 @@ export default function Cards() {
     },
     {
       href: "/events/bottle-rocket",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265400/Spectrum/main-icons-2025/6_2_1_aofltr.png",
+      image: "https://i.postimg.cc/YSNgZ19j/6.png",
       alt: "image",
       title: "Water Rocket '25",
       description: "A physics-driven contest to design and launch water-propelled rockets.",
@@ -91,7 +91,7 @@ export default function Cards() {
     },
     {
       href: "/events/debate",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265400/Spectrum/main-icons-2025/7_2_1_okg9fx.png",
+      image: "https://i.postimg.cc/qqD2Q47L/3.png",
       alt: "image",
       title: "War of Words '25",
       description: "A competitive debate event that tests persuasion and argumentation skills.",
@@ -103,7 +103,7 @@ export default function Cards() {
     },
     {
       href: "/events/video-games",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265399/Spectrum/main-icons-2025/8_1_1_neplcb.png",
+      image: "https://i.postimg.cc/ZqzpwfJ1/7.png",
       alt: "image",
       title: "High Ping '25",
       description: "A thrilling e-sports tournament showcasing gaming skills and strategy.",
@@ -115,7 +115,7 @@ export default function Cards() {
     },
     {
       href: "/events/sharktank",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265400/Spectrum/main-icons-2025/10_2_1_oclzl1.png",
+      image: "https://i.postimg.cc/gk5vZzQc/4.png",
       alt: "image",
       title: "Shark Tank '25",
       description: "A business pitch competition to present innovative startup ideas.",
@@ -127,7 +127,7 @@ export default function Cards() {
     },
     {
       href: "/events/3d-modelling",
-      image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1738265400/Spectrum/main-icons-2025/9_2_1_fbm4uw.png",
+      image: "https://i.postimg.cc/PxtZjPpy/8.png",
       alt: "image",
       title: "Model Making '25",
       description: "A design competition to create cutting-edge 3D architectural models.",
