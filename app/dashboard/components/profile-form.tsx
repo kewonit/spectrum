@@ -390,6 +390,20 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
               </FormItem>
             )}
           />
+        </div> {/* End of grid */}
+
+        {/* New confirmation checkbox block */}
+        <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-6">
+          <div className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              required
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <div className="text-sm leading-relaxed text-blue-700">
+              I understand that my college name cannot be changed later.
+            </div>
+          </div>
         </div>
 
         <div className="border-t border-dashed border-gray-200 pt-6 -mx-0 sm:-mx-6 md:-mx-8" />

@@ -137,7 +137,9 @@ export async function POST(request: Request) {
       if (teamError.code === '23505') {
         return NextResponse.json({
           error: "Team name already exists for this event"
-        }, { status: 400 });
+        }, {
+          status: 409
+        });
       }
       throw teamError;
     }

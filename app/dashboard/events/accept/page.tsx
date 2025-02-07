@@ -1,14 +1,14 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from 'react';
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, UserPlus, Users, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CompleteProfilePopup } from '@/components/CompleteProfilePopup'; // new import
 
 interface Invite {
   id: string;
@@ -31,6 +31,13 @@ interface Invite {
   };
 }
 
+// Add helper and state for user profile
+const isProfileComplete = (profile: any) => {
+  return profile && profile.full_name && profile.email && profile.phone &&
+         profile.college_name && profile.prn && profile.branch &&
+         profile.class && profile.gender;
+};
+
 export default function AcceptPage() {
   const [invites, setInvites] = useState<Invite[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +45,10 @@ export default function AcceptPage() {
   const [selectedInvite, setSelectedInvite] = useState<Invite | null>(null);
   const [rejectInvite, setRejectInvite] = useState<Invite | null>(null);
   const [errorAlert, setErrorAlert] = useState<{ title: string; message: string } | null>(null);
+
+  // New state to fetch user data for profile completeness check
+  const [userData, setUserData] = useState<any>(null);
+  const [userLoading, setUserLoading] = useState(true);
 
   const pendingInvites = invites.filter(invite => invite.invitation_status === 'pending');
   const historyInvites = invites.filter(invite => invite.invitation_status !== 'pending');
@@ -62,6 +73,21 @@ export default function AcceptPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch('/api/user');
+        const data = await res.json();
+        setUserData(data);
+      } catch (error: any) {
+        toast.error("Failed to load user profile", { description: error.message });
+      } finally {
+        setUserLoading(false);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   const handleInviteAction = async (invite: Invite, action: 'accept' | 'reject') => {
     setProcessing(invite.team_id);
@@ -551,6 +577,18 @@ export default function AcceptPage() {
           </AlertDialogContent>
         </AlertDialog>
       </div>
+      {/* Render global popup if profile is incomplete */}
+      { !userLoading && userData && !isProfileComplete(userData.profile) && (
+          <CompleteProfilePopup 
+            profile={userData.profile} 
+            onProfileUpdate={async () => {
+              // Re-fetch user data to update profile after update
+              const res = await fetch('/api/user');
+              const data = await res.json();
+              setUserData(data);
+            }} 
+          />
+      )}
     </main>
   );
 }

@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Loader2, Pencil, X } from "lucide-react";
 import { ProfileForm } from "./components/profile-form";
 import { ProfileView } from "./components/profile-view";
+import { CompleteProfilePopup } from '@/components/CompleteProfilePopup'; // new import
 
 export default function DashboardPage() {
   const [userData, setUserData] = useState<any>(null);
@@ -61,6 +62,13 @@ export default function DashboardPage() {
         description: "Your changes may not be reflected. Please refresh the page.",
       });
     }
+  };
+
+  // Helper to check required profile details
+  const isProfileComplete = (profile: any) => {
+    return profile && profile.full_name && profile.email && profile.phone &&
+      profile.college_name && profile.prn && profile.branch &&
+      profile.class && profile.gender;
   };
 
   if (loading) {
@@ -151,8 +159,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#EBE9E0] p-2 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
+    <main className="min-h-screen bg-[#EBE9E0] overflow-auto">
+      <div className="w-full max-w-screen-xl mx-auto p-4 sm:px-6 lg:p-8">
         <Breadcrumbs
           items={[
             { label: 'Home', href: '/' },
@@ -344,6 +352,16 @@ export default function DashboardPage() {
             </p>
           </div>
         </div>
+
+        {/* Render global popup if profile is incomplete */}
+        {!isProfileComplete(profile) && (
+          <CompleteProfilePopup 
+            profile={profile} 
+            onProfileUpdate={() => {
+              refreshUserData();
+            }} 
+          />
+        )}
       </div>
     </main>
   );
