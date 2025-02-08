@@ -79,13 +79,14 @@ export default function Footer() {
                   },
                   {
                     name: "Ved",
-                    instagram: "#",
-                    linkedin: "#",
+                    linkedin: "vedjadhav",
+                    instagram: "vedjadhav_10",
                   },
                   {
                     name: "Aadi",
-                    instagram: "#",
-                    linkedin: "#  ",
+                    instagram: 'aadi.a10',
+                    github: 'aadithyanr',
+                    linkedin: 'aadithyanrajesh',
                   },
                 ].map((member) => (
                   <div

@@ -70,6 +70,11 @@ export function BlindCoding_registarion() {
                                             <div className="text-[11px] sm:text-sm text-gray-500">per participant</div>
                                             <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
                                         </div>
+                                        <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
+                                        <div className="flex flex-col items-end">
+                                            <div className="text-[11px] sm:text-sm text-gray-500">per participant</div>
+                                            <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
