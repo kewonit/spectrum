@@ -10,6 +10,15 @@ const krona = Krona_One({
   weight: '400',
 });
 
+interface TeamMember {
+    name: string;
+    role: string;
+    image: string;
+    linkedin?: string;
+    instagram?: string;
+    github?: string;
+}
+
 export default function TeamBehindSpectrum() {
     const teamSections = [
     {
@@ -270,7 +279,7 @@ export default function TeamBehindSpectrum() {
     // Add more sections as needed
 ];
 
-const TeamMemberCard = ({ member }) => (
+const TeamMemberCard = ({ member }: { member: TeamMember }) => (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-1 hover:shadow-xl">
         <div className="relative aspect-[3/4] overflow-hidden">
             <Image
