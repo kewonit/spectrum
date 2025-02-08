@@ -9,6 +9,7 @@ import { Suspense } from "react";
 import { slugify } from "@/app/utils/slugify";
 import EventLoading from "./loading";
 import { Image as ImageIcon } from "lucide-react"; // Add this import
+import ProfilePopupWrapper from '@/app/dashboard/events/components/ProfilePopupWrapper';
 
 interface EventDetails {
   id: string;
@@ -152,7 +153,9 @@ export default async function EventPage({
               </div>            </div>
           </div>
         </div>
+        {/* Render global popup if profile is incomplete */}
+        <ProfilePopupWrapper />
       </main>
-    </Suspense>
+    </Suspense> 
   );
 }

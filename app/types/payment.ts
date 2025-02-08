@@ -68,3 +68,15 @@ interface PaymentMetadata {
   transaction_details?: any;
   gateway_info?: any;
 }
+
+interface PaymentInfo {
+  required: boolean;
+  status: string;
+  amount: number | null;
+  timestamp: string | null;
+  pendingMembers?: number;
+  acceptedMembers?: number;
+  perMemberAmount?: number; // e.g., set to 100 in your logic
+  totalMembers?: number;  // New field
+  totalAmount?: number;  // Add this for total amount including pending members
+}

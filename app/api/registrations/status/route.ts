@@ -27,6 +27,10 @@ interface TeamStatus {
     team_name: string;
     event_id: string;
     leader_id: string;
+    team_members: Array<{
+      invitation_status: string;
+      member_id: string;
+    }>;
     registrations: Array<{
       registration_status: string;
       payment_status: string;
@@ -40,6 +44,33 @@ interface TeamRegistrationResponse {
   registration_status: string;
   payment_status: string;
   created_at: string;
+}
+
+// Update PaymentInfo interface
+interface PaymentInfo {
+  required: boolean;
+  status: string;
+  amount: number | null;
+  timestamp: string | null;
+  pendingMembers?: number;
+  acceptedMembers?: number;
+  perMemberAmount?: number;
+  totalMembers?: number;  // Add this property to match the usage
+}
+
+// Update the response type
+interface RegistrationResponse {
+  isRegistered: boolean;
+  type: 'team' | 'solo' | null;
+  teamId: string | null;
+  teamName: string | null;
+  isLeader: boolean;
+  registrationStatus: string | null;
+  paymentStatus: string | null;
+  profile: {
+    is_pccoe_student: boolean;
+  };
+  payment: PaymentInfo;
 }
 
 export const revalidate = 0; // Disable cache
@@ -168,12 +199,12 @@ export async function GET(request: Request) {
     );
 
     // Determine registration status with proper fallbacks
-    const response = {
+    const response: RegistrationResponse = {
       isRegistered: !!(registration || teamRegistration),
       type: registration?.team_id ? 'team' : (registration?.individual_id ? 'solo' : null),
       teamId: registration?.teams?.id || (teamStatus?.teams && teamStatus.teams.id) || null,
       teamName: registration?.teams?.team_name || (teamStatus?.teams && teamStatus.teams.team_name) || null,
-      isLeader: (registration?.teams?.leader_id === user.id) || (teamStatus?.teams && teamStatus.teams.leader_id === user.id),
+      isLeader: !!(registration?.teams?.leader_id === user.id || (teamStatus?.teams && teamStatus.teams.leader_id === user.id)),
       registrationStatus: registration?.registration_status || teamRegistration?.registration_status || null,
       paymentStatus: registration?.payment_status || teamRegistration?.payment_status || null,
       profile: {
@@ -186,6 +217,37 @@ export async function GET(request: Request) {
         timestamp: registration?.payment?.payment_time || null
       }
     };
+
+    const { data: pendingMembers } = await supabase
+      .from('team_members')
+      .select('id')
+      .eq('team_id', response.teamId)
+      .eq('invitation_status', 'pending')
+      .select();
+
+    // When adding payment info for team registrations
+    if (response.type === 'team' && !profile?.is_pccoe_student) {
+      // Get ALL team members (both accepted and pending)
+      const { data: teamMembers } = await supabase
+        .from('team_members')
+        .select('invitation_status')
+        .eq('team_id', response.teamId);
+
+      const acceptedCount = teamMembers?.filter(m => m.invitation_status === 'accepted').length || 0;
+      const pendingCount = teamMembers?.filter(m => m.invitation_status === 'pending').length || 0;
+      const totalMembers = acceptedCount + pendingCount;
+      const perMemberFee = 100;
+
+      response.payment = {
+        ...response.payment,
+        required: true,
+        amount: totalMembers * perMemberFee,
+        perMemberAmount: perMemberFee,
+        totalMembers,
+        acceptedMembers: acceptedCount,
+        pendingMembers: pendingCount
+      };
+    }
 
     return NextResponse.json(response);
 

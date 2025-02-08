@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import Link from 'next/link';
 import PaymentButton from "@/app/components/PaymentButton";
+import InviteMembersComponent from "./InviteMembersComponent";
 
 const createTeamSchema = z.object({
   teamName: z.string()
@@ -141,7 +142,6 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   const onCreateTeam = async (data: z.infer<typeof createTeamSchema>) => {
     setIsLoading(true);
     try {
-      toast.loading("Creating team...");
       const response = await fetch("/api/teams", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -152,7 +152,22 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
       });
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Failed to create team");
+      
+      if (!response.ok) {
+        if (response.status === 409 || result.error === "Team name already exists for this event") {
+          toast.error("Team name already exists for this event", {
+            description: "Please choose a different name",
+            // Styling for subtle red toast
+            className: "bg-red-50 border-red-200",
+            descriptionClassName: "text-red-600",
+            duration: 5000,
+            icon: <AlertTriangle className="h-5 w-5 text-red-500" />
+          });
+          setIsLoading(false);
+          return;
+        }
+        throw new Error(result.error || "Failed to create team");
+      }
       
       setCurrentTeamId(result.teamId);
       toast.success("Team created successfully!", {
@@ -585,7 +600,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clipRule="evenodd" />
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM9 6a1 1 100 2h2a1 1 100-2H9zM9 9a1 1 000 2h2a1 1 000-2H9z" clipRule="evenodd" />
                       </svg>
                       Important Information
                     </h4>
@@ -664,19 +679,20 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   const renderTeamActionButton = (
     canRegister: boolean,
     totalRequired: number,
-    acceptedMembers: TeamMember[]
+    acceptedMembers: TeamMember[],
+    pendingMembers: TeamMember[]
   ) => {
-    const acceptedMembersCount = acceptedMembers.length;
+    const totalMembersCount = acceptedMembers.length + pendingMembers.length;
     
-    // Show message if not enough members
-    if (acceptedMembersCount < totalRequired) {
+    // Show message if not enough total members (accepted + pending)
+    if (totalMembersCount < totalRequired) {
       return (
         <Button 
           className="w-full" 
           disabled={true}
           variant="secondary"
         >
-          Need {totalRequired - acceptedMembersCount} more members to register
+          Need {totalRequired - totalMembersCount} more members to register
         </Button>
       );
     }
@@ -687,7 +703,8 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     const paymentRequired = registrationStatus?.payment?.required;
     
     if (isNonPccoeLeader && paymentRequired) {
-      const amount = registrationStatus.payment.amount || (acceptedMembersCount * 100);
+      // Calculate amount based on total members (accepted + pending)
+      const amount = registrationStatus.payment.amount || (totalMembersCount * 100);
       return (
         <PaymentButton
           eventId={eventDetails.id}
@@ -734,9 +751,11 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   
     // Show payment button for non-PCCOE team leader
     if (registrationStatus?.isLeader && !registrationStatus?.profile?.is_pccoe_student) {
-      // Calculate amount based on total accepted members
-      const acceptedMembersCount = acceptedMembers.length;
-      const totalAmount = acceptedMembersCount * 100; // ₹100 per member
+      const acceptedMembers = teamMembers?.filter(m => m.status === 'accepted') || [];
+      const pendingMembers = teamMembers?.filter(m => m.status === 'pending') || [];
+      const totalMemberCount = acceptedMembers.length + pendingMembers.length; // Count BOTH accepted AND pending
+      const perMemberFee = 100;
+      const totalAmount = totalMemberCount * perMemberFee; // Total amount for ALL members
     
       return (
         <div className="space-y-4">
@@ -879,104 +898,14 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
             </TabsContent>
     
             <TabsContent value="invite">
-              <Card>
-                <CardHeader className="p-4 sm:p-6">
-                  <CardTitle className="text-lg sm:text-xl">Invite Members</CardTitle>
-                  <div className="mb-4 p-3 sm:p-4 bg-red-50/50 border border-red-100 rounded-md">
-                    <p className="text-red-700 text-xs sm:text-sm">
-                      <strong>Important:</strong>
-                    </p>
-                    <ul className="mt-1 text-[11px] sm:text-sm text-red-600 space-y-1">
-                      <li>• PCCOE students can only team up with other PCCOE students</li>
-                      <li>• Non-PCCOE students can only team up with other non-PCCOE students</li>
-                    </ul>
-                  </div>
-                  <div className="mb-4 p-3 sm:p-4 bg-blue-50/50 border border-blue-100 rounded-lg">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-                      <div className="shrink-0">
-                        <svg 
-                          className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth="2" 
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-blue-800 font-medium text-sm sm:text-base mb-1">
-                          Team Invitation Instructions
-                        </p>
-                        <p className="text-blue-600 text-xs sm:text-sm">
-                          Share this link with your team members:
-                          <Link 
-                            href="/dashboard/events/accept" 
-                            className="ml-1.5 font-medium underline decoration-dashed underline-offset-4 hover:text-blue-700"
-                          >
-                            /dashboard/events/accept
-                          </Link>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <CardDescription className="space-y-1 text-xs sm:text-sm">
-                    {!canInvite ? (
-                      <p className="text-yellow-600">Maximum team size reached ({maxAllowed} members)</p>
-                    ) : (
-                      <>
-                        <p>You can add up to {maxAllowed - totalMembers} more members</p>
-                        {pendingMembers.length > 0 && (
-                          <p className="text-yellow-600 text-[11px] sm:text-xs">
-                            {pendingMembers.length} invitation{pendingMembers.length !== 1 ? 's' : ''} have been sent out and are pending.
-                          </p>
-                        )}
-                      </>
-                    )}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-4 sm:p-6">
-                  <Form {...inviteMemberForm}>
-                    <form onSubmit={inviteMemberForm.handleSubmit(onInviteMember)} className="space-y-4">
-                      <FormField
-                        control={inviteMemberForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <div className="flex flex-col sm:flex-row gap-2">
-                                <Input 
-                                  placeholder="member@email.com" 
-                                  {...field} 
-                                  disabled={!canInvite || isLoading}
-                                  className="text-sm"
-                                />
-                                <Button 
-                                  type="submit" 
-                                  disabled={!canInvite || isLoading}
-                                  className="sm:w-auto"
-                                >
-                                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Invite"}
-                                </Button>
-                              </div>
-                            </FormControl>
-                            {!canInvite && (
-                              <p className="text-[11px] sm:text-xs text-red-500 mt-1">
-                                Cannot send more invites: maximum team size would be exceeded
-                              </p>
-                            )}
-                            <FormMessage className="text-[11px] sm:text-xs" />
-                          </FormItem>
-                        )}
-                      />
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
+              <InviteMembersComponent
+                currentTeamId={currentTeamId}
+                canInvite={canInvite}
+                maxAllowed={eventDetails.max_team_size}
+                totalMembers={totalMembers}
+                pendingMembers={pendingMembers}
+                onInviteSuccess={fetchTeamMembers}
+              />
             </TabsContent>
           </Tabs>
     
@@ -989,7 +918,6 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                 Payment Details:
               </p>
               <ul className="text-sm text-yellow-800">
-                <li>• Total team members: {acceptedMembersCount}</li>
                 <li>• Registration fee: ₹100 per member</li>
                 <li className="font-medium border-t border-yellow-200 mt-2 pt-2">
                   • Total amount: ₹{totalAmount}
@@ -1006,7 +934,6 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
             teamId={currentTeamId || undefined}
             type="team"
             amount={totalAmount}
-            disabled={!canRegister}
             onSuccess={checkRegistrationStatus}
           />
         </div>
@@ -1154,112 +1081,221 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
           </TabsContent>
   
           <TabsContent value="invite">
-          <div className="mb-4 p-3 sm:p-4 bg-red-50/50 border border-red-100 rounded-md">
-                  <p className="text-red-700 text-xs sm:text-sm">
-                    <strong>Important:</strong>
-                  </p>
-                  <ul className="mt-1 text-[11px] sm:text-sm text-red-600 space-y-1">
-                    <li>• PCCOE students can only team up with other PCCOE students</li>
-                    <li>• Non-PCCOE students can only team up with other non-PCCOE students</li>
-                  </ul>
-                </div>
-                <div className="mb-4 p-3 sm:p-4 bg-blue-50/50 border border-blue-100 rounded-lg">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-                    <div className="shrink-0">
-                      <svg 
-                        className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          strokeWidth="2" 
-                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-blue-800 font-medium text-sm sm:text-base mb-1">
-                        Team Invitation Instructions
-                      </p>
-                      <p className="text-blue-600 text-xs sm:text-sm">
-                        Share this link with your team members:
-                        <Link 
-                          href="/dashboard/events/accept" 
-                          className="ml-1.5 font-medium underline decoration-dashed underline-offset-4 hover:text-blue-700"
-                        >
-                          /dashboard/events/accept
-                        </Link>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-            <Card>
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-lg sm:text-xl">Invite Members</CardTitle>
-                <CardDescription className="space-y-1 text-xs sm:text-sm">
-                  {!canInvite ? (
-                    <p className="text-yellow-600">Maximum team size reached ({maxAllowed} members)</p>
-                  ) : (
-                    <>
-                      <p>You can add up to {maxAllowed - totalMembers} more members</p>
-                      {pendingMembers.length > 0 && (
-                        <p className="text-yellow-600 text-[11px] sm:text-xs">
-                          {pendingMembers.length} invitation{pendingMembers.length !== 1 ? 's' : ''} have been sent out and are pending.
-                        </p>
-                      )}
-                    </>
-                  )}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-4 sm:p-6">
-                <Form {...inviteMemberForm}>
-                  <form onSubmit={inviteMemberForm.handleSubmit(onInviteMember)} className="space-y-4">
-                    <FormField
-                      control={inviteMemberForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <div className="flex flex-col sm:flex-row gap-2">
-                              <Input 
-                                placeholder="member@email.com" 
-                                {...field} 
-                                disabled={!canInvite || isLoading}
-                                className="text-sm"
-                              />
-                              <Button 
-                                type="submit" 
-                                disabled={!canInvite || isLoading}
-                                className="sm:w-auto"
-                              >
-                                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Invite"}
-                              </Button>
-                            </div>
-                          </FormControl>
-                          {!canInvite && (
-                            <p className="text-[11px] sm:text-xs text-red-500 mt-1">
-                              Cannot send more invites: maximum team size would be exceeded
-                            </p>
-                          )}
-                          <FormMessage className="text-[11px] sm:text-xs" />
-                        </FormItem>
-                      )}
-                    />
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
+            <InviteMembersComponent
+              currentTeamId={currentTeamId}
+              canInvite={canInvite}
+              maxAllowed={eventDetails.max_team_size}
+              totalMembers={totalMembers}
+              pendingMembers={pendingMembers}
+              onInviteSuccess={fetchTeamMembers}
+            />
           </TabsContent>
         </Tabs>
   
-        {renderTeamActionButton(canRegister, totalRequired, acceptedMembers)}
+        {renderTeamActionButton(
+          canRegister, 
+          totalRequired, 
+          acceptedMembers,
+          pendingMembers // Add pendingMembers here
+        )}
       </div>
     );
   }
-  
+
+  // In the non-PCCOE team leader section, move this section before the return statement
+  if (registrationStatus?.isLeader && !registrationStatus?.profile?.is_pccoe_student) {
+    const acceptedMembers = teamMembers?.filter(m => m.status === 'accepted') || [];
+    const pendingMembers = teamMembers?.filter(m => m.status === 'pending') || [];
+    const totalMembersCount = acceptedMembers.length + pendingMembers.length;
+    const totalAmount = totalMembersCount * 100; // ₹100 per member
+
+    if (registrationStatus.type === 'team' && !registrationStatus.profile?.is_pccoe_student) {
+      // Calculate amount based on total members (accepted + pending)
+      return (
+        <div className="space-y-4">
+          <Tabs defaultValue="members">
+            <TabsList className="grid w-full grid-cols-2 h-auto">
+              <TabsTrigger value="members" className="px-2 py-2 h-auto text-[13px] sm:text-sm">
+                Team Members
+                {pendingMembers.length > 0 && (
+                  <span className="ml-1 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                    {pendingMembers.length} pending
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="invite" className="px-2 py-2 h-auto text-[13px] sm:text-sm">
+                Invite Members
+                {pendingMembers.length > 0 && (
+                  <span className="ml-1 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                    {totalMembersCount}/{eventDetails.max_team_size}
+                  </span>
+                )}
+              </TabsTrigger>
+            </TabsList>
+    
+            <TabsContent value="members">
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-lg sm:text-xl">Team Members</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">
+                    {acceptedMembers.length} of {eventDetails.min_team_size}-{eventDetails.max_team_size} team members
+                    {acceptedMembers.length < eventDetails.min_team_size && 
+                      ` (need ${eventDetails.min_team_size - acceptedMembers.length} more)`}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+                  {/* Accepted Members Section */}
+                  <div>
+                    <h4 className="text-sm font-semibold mb-2">Current Team Members</h4>
+                    <div className="space-y-2">
+                      {acceptedMembers.map((member, idx) => (
+                        <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between p-2 sm:p-3 border rounded bg-green-50 gap-2 sm:gap-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-green-600 hidden sm:inline">●</span>
+                            <div className="flex flex-col">
+                              <span className="font-medium text-sm sm:text-base">{member.email}</span>
+                              {member.name && (
+                                <span className="text-xs sm:text-sm text-gray-600">
+                                  {member.name}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 ml-6 sm:ml-0">
+                            {member.isLeader && (
+                              <span className="text-[10px] sm:text-xs bg-blue-100 text-blue-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
+                                Team Leader
+                              </span>
+                            )}
+                            <span className="text-[10px] sm:text-xs bg-green-100 text-green-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
+                              Accepted
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+    
+                  {/* Pending Invitations Section */}
+                  {pendingMembers.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-muted-foreground mb-2">Pending Invitations</h4>
+                      <div className="space-y-2">
+                        {pendingMembers.map((member, idx) => (
+                          <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between p-2 sm:p-3 border rounded bg-yellow-50 gap-2 sm:gap-0">
+                            <div className="flex items-center gap-2">
+                              <span className="text-yellow-600 hidden sm:inline">●</span>
+                              <div className="flex flex-col">
+                                <span className="font-medium text-sm sm:text-base">{member.email}</span>
+                                {member.name && (
+                                  <span className="text-xs sm:text-sm text-gray-600">
+                                    {member.name}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 ml-6 sm:ml-0">
+                              <span className="text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
+                                Awaiting Response
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 sm:h-8 sm:w-8 text-gray-500 hover:text-red-500"
+                                onClick={() => setRemovingInvite(member.id)}
+                                disabled={isRemovingInvite}
+                              >
+                                <X className="h-3 w-3 sm:h-4 sm:w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+    
+                      <AlertDialog open={!!removingInvite} onOpenChange={() => setRemovingInvite(null)}>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Remove Invitation</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to remove this invitation? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <div className="flex justify-end gap-4 mt-4">
+                            <AlertDialogCancel 
+                              disabled={isRemovingInvite}
+                              onClick={() => setRemovingInvite(null)}
+                            >
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              disabled={isRemovingInvite}
+                              onClick={() => {
+                                if (removingInvite) {
+                                  handleRemoveInvite(removingInvite);
+                                }
+                              }}
+                              className="bg-red-500 hover:bg-red-600"
+                            >
+                              {isRemovingInvite ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                "Remove"
+                              )}
+                            </AlertDialogAction>
+                          </div>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+    
+            <TabsContent value="invite">
+              <InviteMembersComponent
+                currentTeamId={currentTeamId}
+                canInvite={totalMembersCount < eventDetails.max_team_size}
+                maxAllowed={eventDetails.max_team_size}
+                totalMembers={totalMembersCount}
+                pendingMembers={pendingMembers}
+                onInviteSuccess={fetchTeamMembers}
+              />
+            </TabsContent>
+          </Tabs>
+    
+          <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4">
+            <p className="text-yellow-800 text-sm">
+              As a non-PCCOE team leader, you need to complete payment for all team members (including pending invitations).
+            </p>
+            <div className="mt-2 space-y-1">
+              <p className="text-yellow-700 font-medium">Payment Details:</p>
+              <ul className="text-sm text-yellow-800">
+                <li>• Current team members: {acceptedMembers.length}</li>
+                <li>• Pending invitations: {pendingMembers.length}</li>
+                <li>• Registration fee: ₹100 per member</li>
+                <li className="font-medium border-t border-yellow-200 mt-2 pt-2">
+                  • Total amount: ₹{totalAmount} ({totalMembersCount} members)
+                </li>
+              </ul>
+            </div>
+            <div className="mt-3 text-xs text-yellow-700">
+              <p>Note: Payment will automatically approve pending invitations.</p>
+            </div>
+          </div>
+    
+          <PaymentButton
+            eventId={eventDetails.id}
+            teamId={currentTeamId || undefined}
+            type="team"
+            amount={totalAmount}
+            disabled={totalMembersCount < eventDetails.min_team_size}
+            onSuccess={checkRegistrationStatus}
+          />
+        </div>
+      );
+    }
+  }
+
   // Only show team creation form if user isn't part of any team
   if (!currentTeamId && !registrationStatus.teamId) {
     return (

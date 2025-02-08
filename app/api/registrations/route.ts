@@ -84,6 +84,17 @@ export async function POST(request: Request) {
     const supabase = await createClient();
     const { eventId, type, teamId } = await request.json();
 
+    // Get event details at the beginning
+    const { data: eventDetails } = await supabase
+      .from('events')
+      .select('*')
+      .eq('id', eventId)
+      .single();
+
+    if (!eventDetails) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
+
     // Get current user
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -294,6 +305,76 @@ export async function POST(request: Request) {
       }
     }
 
+    // For team registrations, check total member count (accepted + pending)
+    if (type === 'team' && teamId) {
+      // Get both accepted and pending members
+      const { data: allMembers } = await supabase
+        .from('team_members')
+        .select('invitation_status')
+        .eq('team_id', teamId);
+
+      const totalMembers = allMembers?.length || 0;
+      
+      // For non-PCCOE teams, verify payment for total members
+      if (!profile?.is_pccoe_student) {
+        const totalAmount = totalMembers * 100; // ₹100 per member
+
+        // Get latest successful payment
+        const { data: payment } = await supabase
+          .from('payments')
+          .select('*')
+          .eq('team_id', teamId)
+          .eq('status', 'success')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
+
+        if (!payment) {
+          return NextResponse.json({ 
+            error: "Payment required",
+            requiredAmount: totalAmount,
+            message: `Payment of ₹${totalAmount} required for team registration (includes pending invitations)`
+          }, { status: 402 });
+        }
+
+        if (payment.amount < totalAmount) {
+          return NextResponse.json({ 
+            error: "Insufficient payment",
+            requiredAmount: totalAmount,
+            paidAmount: payment.amount,
+            message: `Additional payment of ₹${totalAmount - payment.amount} required`
+          }, { status: 402 });
+        }
+
+        // If payment is verified, approve all pending members
+        if (payment.status === 'success') {
+          await supabase
+            .from('team_members')
+            .update({ invitation_status: 'accepted' })
+            .eq('team_id', teamId)
+            .eq('invitation_status', 'pending');
+        }
+      }
+
+      if (totalMembers < eventDetails.min_team_size) {
+        return NextResponse.json({
+          error: "Not enough team members",
+          message: `Team needs at least ${eventDetails.min_team_size} members (including pending invitations)`
+        }, { status: 400 });
+      }
+
+      // For non-PCCOE teams, prepare registration data
+      if (!profile?.is_pccoe_student) {
+        const totalAmount = totalMembers * 100; // ₹100 per member
+        return NextResponse.json({
+          error: "Payment required",
+          required: true,
+          requiredAmount: totalAmount,
+          message: `Payment of ₹${totalAmount} required for team registration`
+        }, { status: 402 });
+      }
+    }
+
     // For team registrations
     if (type === 'team' && teamId) {
       // First get the team with leader and members
@@ -340,31 +421,63 @@ export async function POST(request: Request) {
 
       // If leader is non-PCCOE, verify payment
       if (!team.leader.is_pccoe_student) {
-        const requiredAmount = memberCount * 100; // ₹100 per member
+        // Get ALL team members (accepted + pending)
+        const { data: allMembers } = await supabase
+          .from('team_members')
+          .select('invitation_status')
+          .eq('team_id', teamId);
 
-        // Check for successful payment
+        const totalMembers = allMembers?.length || 0;
+        const requiredAmount = totalMembers * 100; // ₹100 per member
+
+        // Get latest successful payment
         const { data: payment } = await supabase
           .from('payments')
           .select('*')
           .eq('team_id', teamId)
-          .eq('event_id', eventId)
           .eq('status', 'success')
           .order('created_at', { ascending: false })
           .limit(1)
           .single();
 
-        // If payment is successful, remove pending invites and prevent new registrations
-        if (payment && payment.amount >= requiredAmount) {
-          await removePendingInvites(supabase, teamId);
-          await preventNewRegistrations(supabase, teamId);
-        } else {
-          await preventNewRegistrations(supabase, teamId); // Lock team when payment is initiated
+        if (!payment) {
+          const acceptedCount = allMembers?.filter(m => m.invitation_status === 'accepted').length || 0;
+          const pendingCount = allMembers?.filter(m => m.invitation_status === 'pending').length || 0;
+          
           return NextResponse.json({ 
             error: "Payment required",
-            required: true,
             requiredAmount,
-            message: `Payment of ₹${requiredAmount} required for team registration`
+            details: {
+              acceptedMembers: acceptedCount,
+              pendingMembers: pendingCount,
+              totalMembers,
+              perMemberAmount: 100,
+              totalAmount: requiredAmount
+            },
+            message: `Payment of ₹${requiredAmount} required for team registration (includes ${pendingCount} pending invitations)`
           }, { status: 402 });
+        }
+
+        if (payment.amount < requiredAmount) {
+          return NextResponse.json({ 
+            error: "Insufficient payment",
+            requiredAmount,
+            paidAmount: payment.amount,
+            message: `Additional payment of ₹${requiredAmount - payment.amount} required`
+          }, { status: 402 });
+        }
+
+        // If payment is successful, automatically accept all pending invitations
+        if (payment.status === 'success') {
+          const { error: updateError } = await supabase
+            .from('team_members')
+            .update({ invitation_status: 'accepted' })
+            .eq('team_id', teamId)
+            .eq('invitation_status', 'pending');
+
+          if (updateError) {
+            console.error("Failed to update pending members:", updateError);
+          }
         }
       } else {
         // For PCCOE teams, also remove pending invites before registration

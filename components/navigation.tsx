@@ -5,18 +5,8 @@ import Link from "next/link"
 import { Button } from "./ui/button"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
@@ -73,14 +63,9 @@ export function Navigation() {
               <Link href="/dashboard">Dashboard</Link>
             </Button>
           ) : (
-            <div className="flex space-x-2">
-              <Button asChild variant="outline" onClick={() => setSheetOpen(false)}>
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button asChild onClick={() => setSheetOpen(false)}>
-                <Link href="/signup">Sign Up</Link>
-              </Button>
-            </div>
+            <Button asChild variant="outline" onClick={() => setSheetOpen(false)}>
+              <Link href="/login">Login</Link>
+            </Button>
           )}
         </>
       )}
@@ -105,34 +90,6 @@ export function Navigation() {
 
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-muted-foreground px-2">MENU</h4>
-        {/* <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start text-base font-normal"
-            >
-              📅 Events
-              <EventsMenu />
-            </Button>
-          </DialogTrigger>
-          <DialogContent 
-            className="sm:max-w-[425px]"
-            onOpenAutoFocus={(e) => e.preventDefault()}
-          >
-            <DialogHeader>
-              <DialogTitle>Spectrum Events 2025</DialogTitle>
-              <DialogDescription>
-                Explore our exciting events!
-              </DialogDescription>
-            </DialogHeader>
-            <div className="relative">
-              <VisuallyHidden>List of events</VisuallyHidden>
-              <ul className="p-10 space-y-2" role="list" aria-label="Events list">
-                <EventsList onNavigate={handleNavigation} />
-              </ul>
-            </div>
-          </DialogContent>
-        </Dialog> */}
         <EventsMenu />
 
 
@@ -167,17 +124,6 @@ export function Navigation() {
               >
                 <Link href="/login">Sign In</Link>
               </Button>
-              <Button 
-                asChild 
-                variant="default" 
-                className="w-full"
-                onClick={() => setSheetOpen(false)}
-              >
-                <Link href="/signup">Create Account</Link>
-              </Button>
-              <p className="text-xs text-center text-muted-foreground pt-2">
-                Join us to participate in events!
-              </p>
             </div>
           )}
         </div>

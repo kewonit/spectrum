@@ -6,6 +6,7 @@ import Footer  from '@/components/footer'
 import './globals.css'
 import Script from 'next/script'
 import { GoogleTagManager } from '@next/third-parties/google'
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -65,6 +66,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={[inter.variable, calSans.variable].join(" ")}>
       <body className={inter.className}>
+        <Toaster theme="light" richColors />
         <Navigation />
           {children}
           <Script src='https://www.cssscript.com/demo/cat-follow-cursor-oneko/oneko.js' />

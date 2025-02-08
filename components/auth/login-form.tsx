@@ -90,7 +90,8 @@ export function LoginForm() {
     setError(null);
 
     try {
-      // Check if user exists with better error handling
+      // Removed account existence check to allow login without an account
+      /*
       const { data: user, error: userError } = await supabase
         .from('profiles')
         .select('email')
@@ -101,6 +102,7 @@ export function LoginForm() {
         toast.error("No account found with this email. Please sign up first!");
         return;
       }
+      */
 
       const { error: otpError } = await supabase.auth.signInWithOtp({ 
         email: email.toLowerCase().trim(),

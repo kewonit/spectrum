@@ -3,6 +3,12 @@ import { createClient } from "@/app/utils/supabase/server";
 import { generateOrderId } from "@/app/lib/payment";
 import { Cashfree } from '@/app/lib/cashfree';
 
+// Add interface for team member
+interface TeamMember {
+  id: string;
+  invitation_status: 'pending' | 'accepted' | 'rejected';
+}
+
 export async function POST(request: Request) {
   try {
     const supabase = await createClient();
@@ -33,7 +39,7 @@ export async function POST(request: Request) {
 
     // Validate payment amount for team
     if (type === 'team' && teamId) {
-      // Get team details
+      // Get team details including ALL members (both accepted and pending)
       const { data: team } = await supabase
         .from('teams')
         .select(`
@@ -45,7 +51,6 @@ export async function POST(request: Request) {
           )
         `)
         .eq('id', teamId)
-        .eq('team_members.invitation_status', 'accepted')
         .single();
 
       if (!team) {
@@ -57,16 +62,38 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Only team leader can make payment" }, { status: 403 });
       }
 
-      // Calculate required amount
-      const memberCount = team.team_members.length;
-      const requiredAmount = memberCount * 100; // ₹100 per member
+      // Count both accepted and pending members
+      const totalMembers = team.team_members.length;
+      const requiredAmount = totalMembers * 100; // ₹100 per member (including pending)
 
       if (amount !== requiredAmount) {
+        const acceptedCount = (team.team_members as TeamMember[])
+          .filter((m: TeamMember) => m.invitation_status === 'accepted').length;
+        const pendingCount = (team.team_members as TeamMember[])
+          .filter((m: TeamMember) => m.invitation_status === 'pending').length;
+        
         return NextResponse.json({ 
           error: "Invalid payment amount",
           requiredAmount,
-          message: `Payment amount must be ₹${requiredAmount}`
+          details: {
+            acceptedMembers: acceptedCount,
+            pendingMembers: pendingCount,
+            totalMembers,
+            perMemberAmount: 100
+          },
+          message: `Payment must cover all team members (₹100 × ${totalMembers} members = ₹${requiredAmount})`
         }, { status: 400 });
+      }
+
+      // Lock the team to prevent new invitations during payment
+      const { error: lockError } = await supabase
+        .from('teams')
+        .update({ registration_locked: true })
+        .eq('id', teamId);
+
+      if (lockError) {
+        console.error("Failed to lock team:", lockError);
+        // Continue anyway, not critical
       }
     }
 

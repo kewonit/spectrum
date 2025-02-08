@@ -355,37 +355,70 @@ export default function RegistrationsPage() {
                                 Team: {reg.team.name}
                               </h3>
                               
-                              <div className="space-y-2">
-                                {reg.team.members.map((member) => (
-                                  <div
-                                    key={member.id}
-                                    className="bg-white rounded-lg p-2.5 sm:p-3 border flex flex-col sm:flex-row sm:items-center justify-between gap-2"
-                                  >
-                                    <div className="min-w-0">
-                                      <p className="font-medium text-sm sm:text-base truncate">{member.name}</p>
-                                      <div className="space-y-0.5">
-                                        <p className="text-[11px] sm:text-xs text-gray-500 truncate">{member.email}</p>
-                                        {member.profile?.prn && (
-                                          <p className="text-[11px] sm:text-xs text-gray-600 font-mono">
-                                            PRN: {member.profile.prn}
-                                          </p>
-                                        )}
-                                      </div>
-                                    </div>
-                                    <div className="flex items-center gap-1.5 sm:gap-2">
-                                      {member.isLeader && (
-                                        <Badge className="bg-blue-100 text-blue-700">Leader</Badge>
-                                      )}
-                                      <Badge className={
-                                        member.status === 'accepted' ? 'bg-green-100 text-green-700' :
-                                        member.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                                        'bg-red-100 text-red-700'
-                                      }>
-                                        {member.status}
-                                      </Badge>
+                              <div className="space-y-4">
+                                {/* Accepted Members */}
+                                <div>
+                                  <h4 className="text-sm font-medium text-gray-600 mb-2">Current Members</h4>
+                                  <div className="space-y-2">
+                                    {reg.team.members
+                                      .filter(member => member.status === 'accepted')
+                                      .map((member) => (
+                                        <div
+                                          key={member.id}
+                                          className="bg-white rounded-lg p-2.5 sm:p-3 border flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                                        >
+                                          <div className="min-w-0">
+                                            <p className="font-medium text-sm sm:text-base truncate">{member.name}</p>
+                                            <div className="space-y-0.5">
+                                              <p className="text-[11px] sm:text-xs text-gray-500 truncate">{member.email}</p>
+                                              {member.profile?.prn && (
+                                                <p className="text-[11px] sm:text-xs text-gray-600 font-mono">
+                                                  PRN: {member.profile.prn}
+                                                </p>
+                                              )}
+                                            </div>
+                                          </div>
+                                          <div className="flex items-center gap-1.5 sm:gap-2">
+                                            {member.isLeader && (
+                                              <Badge className="bg-blue-100 text-blue-700">Leader</Badge>
+                                            )}
+                                            <Badge className="bg-green-100 text-green-700">
+                                              Accepted
+                                            </Badge>
+                                          </div>
+                                        </div>
+                                      ))}
+                                  </div>
+                                </div>
+
+                                {/* Pending Members */}
+                                {reg.team.members.some(member => member.status === 'pending') && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-600 mb-2">Pending Invitations (If paid, these will be auto confirmed in the next 30 mins)</h4>
+                                    <div className="space-y-2">
+                                      {reg.team.members
+                                        .filter(member => member.status === 'pending')
+                                        .map((member) => (
+                                          <div
+                                            key={member.id}
+                                            className="bg-white/50 rounded-lg p-2.5 sm:p-3 border border-yellow-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                                          >
+                                            <div className="min-w-0">
+                                              <p className="font-medium text-sm sm:text-base truncate">{member.email}</p>
+                                              {member.name && (
+                                                <p className="text-[11px] sm:text-xs text-gray-500">
+                                                  {member.name}
+                                                </p>
+                                              )}
+                                            </div>
+                                            <Badge className="bg-yellow-100 text-yellow-700">
+                                              Awaiting Response
+                                            </Badge>
+                                          </div>
+                                        ))}
                                     </div>
                                   </div>
-                                ))}
+                                )}
                               </div>
                             </div>
                           )}

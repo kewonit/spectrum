@@ -234,17 +234,27 @@ export async function PATCH(
       }
     }
 
-    // Update member status
-    const { error: updateError } = await supabase
+    // Update member status - modified to allow updating 'rejected' invites to 'accepted'
+    const updateQuery = supabase
       .from('team_members')
       .update({
         invitation_status: action === 'accept' ? 'accepted' : 'rejected',
         member_id: user.id,
         updated_at: new Date().toISOString()
       })
-      .eq('team_id', teamId)
-      .eq('invitation_status', 'pending')
-      .or(`member_email.eq.${userProfile?.email?.toLowerCase()},member_email.eq.${user.email?.toLowerCase()}`);
+      .eq('team_id', teamId);
+      
+    if (action === 'accept') {
+      updateQuery.in('invitation_status', ['pending', 'rejected']);
+    } else {
+      updateQuery.eq('invitation_status', 'pending');
+    }
+    
+    updateQuery.or(
+      `member_email.eq.${userProfile?.email?.toLowerCase()},member_email.eq.${user.email?.toLowerCase()}`
+    );
+
+    const { error: updateError } = await updateQuery;
 
     if (updateError) {
       console.error("Member update error:", updateError);

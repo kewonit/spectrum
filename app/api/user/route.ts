@@ -39,6 +39,12 @@ export async function PUT(request: Request) {
     }
 
     const updates = await request.json();
+
+    // Compute is_pccoe_student flag robustly
+    const requiredCollege = "Pimpri Chinchwad College of Engineering, Pune".toLowerCase();
+    const inputCollege = (updates.college_name || "").toString().trim().toLowerCase();
+    updates.is_pccoe_student = inputCollege === requiredCollege;
+
     const { data, error } = await supabase
       .from('profiles')
       .update(updates)
