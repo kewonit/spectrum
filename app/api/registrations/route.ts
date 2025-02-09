@@ -131,7 +131,7 @@ export async function POST(request: Request) {
       if (team.registrations && team.registrations.length > 0) {
         const activeRegistration = team.registrations.find((r: { registration_status: string }) => 
           r.registration_status !== 'cancelled'
-        );
+        );  
         if (activeRegistration) {
           return NextResponse.json({ 
             success: true,

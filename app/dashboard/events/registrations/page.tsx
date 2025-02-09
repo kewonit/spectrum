@@ -394,7 +394,7 @@ export default function RegistrationsPage() {
                                 {/* Pending Members */}
                                 {reg.team.members.some(member => member.status === 'pending') && (
                                   <div>
-                                    <h4 className="text-sm font-medium text-gray-600 mb-2">Pending Invitations (If paid, these will be auto confirmed in the next 30 mins)</h4>
+                                    <h4 className="text-sm font-medium text-gray-600 mb-2">Pending Invitations (Non-PCCoE students, if paid, these will be auto confirmed in the next 30 mins)</h4>
                                     <div className="space-y-2">
                                       {reg.team.members
                                         .filter(member => member.status === 'pending')

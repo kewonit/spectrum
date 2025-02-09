@@ -65,10 +65,10 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   const [isTeamStatusLoading, setIsTeamStatusLoading] = useState(true);
   const [removingInvite, setRemovingInvite] = useState<string | null>(null);
   const [isRemovingInvite, setIsRemovingInvite] = useState(false);
+  const [disqualificationAck, setDisqualificationAck] = useState(false);
   
   const createTeamForm = useForm<z.infer<typeof createTeamSchema>>({
     resolver: zodResolver(createTeamSchema),
-    defaultValues: { teamName: "" }
   });
 
   const inviteMemberForm = useForm<z.infer<typeof inviteMemberSchema>>({
@@ -334,6 +334,32 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   const handlePayment = async () => {
     // This will be implemented later
     toast.info("Payment functionality will be implemented soon");
+  };
+
+  // Add this helper function
+  const renderTeamSizeWarning = (acceptedCount: number, requiredCount: number) => {
+    if (acceptedCount < requiredCount) {
+      return (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <div className="flex items-start">
+            <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-yellow-800">
+                More Team Members Needed
+              </h3>
+              <div className="mt-2 text-sm text-yellow-700">
+                <p>Your team needs {requiredCount} accepted members to register.</p>
+                <p className="mt-1">Currently has {acceptedCount} accepted {acceptedCount === 1 ? 'member' : 'members'}.</p>
+                <p className="mt-2 font-medium">
+                  Need {requiredCount - acceptedCount} more {requiredCount - acceptedCount === 1 ? 'member' : 'members'} to complete registration.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
   };
 
   // Modify the condition that checks registration status
@@ -928,20 +954,39 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
               <p>Note: As a non-PCCOE team leader, payment is required for all team members.</p>
             </div>
           </div>
-    
+          <label className="flex items-start space-x-3 mt-3 text-sm text-red-600 p-3 bg-red-50/50 rounded-lg border border-red-100">
+            <input
+              type="checkbox"
+              checked={disqualificationAck}
+              onChange={(e) => setDisqualificationAck(e.target.checked)}
+              className="w-4 h-4 mt-0.5 accent-red-500 rounded"
+            />
+            <span>
+              I understand that the minimum team size is {eventDetails.min_team_size} members and registering below this will lead to immediate disqualification with no refunds.
+            </span>
+          </label>
           <PaymentButton
             eventId={eventDetails.id}
             teamId={currentTeamId || undefined}
             type="team"
             amount={totalAmount}
+            disabled={!disqualificationAck || totalMemberCount < eventDetails.min_team_size}
             onSuccess={checkRegistrationStatus}
           />
+          {totalMemberCount < eventDetails.min_team_size && (
+            <div className="mt-2 text-xs text-red-600">
+              You need at least {eventDetails.min_team_size} team members (approved + pending) before you can proceed with payment.
+            </div>
+          )}
         </div>
       );
     }
   
     return (
       <div className="space-y-6">
+        {registrationStatus?.profile?.is_pccoe_student && 
+          renderTeamSizeWarning(acceptedMembers.length, totalRequired)}
+
         <Tabs defaultValue="members">
           <TabsList className="grid w-full grid-cols-2 h-auto">
             <TabsTrigger value="members" className="px-2 py-2 h-auto text-[13px] sm:text-sm">
@@ -1092,11 +1137,27 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
           </TabsContent>
         </Tabs>
   
-        {renderTeamActionButton(
-          canRegister, 
-          totalRequired, 
-          acceptedMembers,
-          pendingMembers // Add pendingMembers here
+        {registrationStatus?.profile?.is_pccoe_student ? (
+          <Button
+            className="w-full"
+            disabled={!canRegister || isLoading}
+            onClick={onTeamSubmit}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : !canRegister ? (
+              `Need ${totalRequired - acceptedMembers.length} More Accepted ${
+                totalRequired - acceptedMembers.length === 1 ? 'Member' : 'Members'
+              }`
+            ) : (
+              "Complete Registration"
+            )}
+          </Button>
+        ) : (
+          renderTeamActionButton(canRegister, totalRequired, acceptedMembers, pendingMembers)
         )}
       </div>
     );
@@ -1282,15 +1343,33 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
               <p>Note: Payment will automatically approve pending invitations.</p>
             </div>
           </div>
-    
+          <label className="flex items-start space-x-3 mt-3 text-sm text-red-600 p-3 bg-red-50/50 rounded-lg border border-red-100">
+            <input
+              type="checkbox"
+              checked={disqualificationAck}
+              onChange={(e) => setDisqualificationAck(e.target.checked)}
+              className="w-4 h-4 mt-0.5 accent-red-500 rounded"
+            />
+            <span>
+              I understand that the minimum team size is {eventDetails.min_team_size} members and registering below this will lead to immediate disqualification with no refunds.
+            </span>
+          </label>
           <PaymentButton
             eventId={eventDetails.id}
             teamId={currentTeamId || undefined}
             type="team"
             amount={totalAmount}
-            disabled={totalMembersCount < eventDetails.min_team_size}
+            disabled={!disqualificationAck || totalMembersCount < eventDetails.min_team_size}
             onSuccess={checkRegistrationStatus}
           />
+          {totalMembersCount < eventDetails.min_team_size && (
+            <div className="mt-2 text-xs text-red-600">
+              You need at least {eventDetails.min_team_size} team members (approved + pending) before you can proceed with payment.
+            </div>
+          )}
+          <div className="mt-2 text-xs text-red-600">
+            Minimum team size is {eventDetails.min_team_size}. Registering below this will lead to immediate disqualification.
+          </div>
         </div>
       );
     }
