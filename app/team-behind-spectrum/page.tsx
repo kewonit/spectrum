@@ -263,7 +263,7 @@ export default function TeamBehindSpectrum() {
                 image: "https://fe.pccoepune.com/images/faculty/neha-sharma.JPG",
             },
             {
-                name: "Dr. Mohit Prasad",
+                name: "Dr. Mohit Prasad⬜",
                 role: "Faculty Co-Ordinator",
                 image: "https://fe.pccoepune.com/images/faculty/prasad.webp",
             },

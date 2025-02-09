@@ -66,9 +66,7 @@ const sections = [
     title: "Research Themes",
     description: "Choose one of the following themes for your presentation:",
     rules: [
-      "Water conservation techniques in Ancient Bharat",
-      "Chemistry in Ancient Bharat",
-      "Nanotechnology/Nanomaterials used in Ancient Bharat"
+      "Green Chemistry for a Better Future",
     ]
   },
   {

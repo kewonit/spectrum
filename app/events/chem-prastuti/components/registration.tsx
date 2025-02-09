@@ -25,20 +25,21 @@ export function Chem_prastuti_registarion() {
                         </div>
                         
                         {/* Right side - Ticket Content */}
-                        <div className="md:w-[55%] p-4 sm:p-6 lg:p-8 flex flex-col justify-between bg-gradient-to-br from-white to-gray-50">
-                            <div className="space-y-4 sm:space-y-8">
+                        <div className="md:w-[55%] p-4 sm:p-6 lg:p-8 flex flex-col bg-gradient-to-br from-white to-gray-50">
+                            {/* Main content section */}
+                            <div className="flex-grow space-y-4 sm:space-y-6">
                                 <div>
-                                    <span className="inline-block px-2 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
+                                    <span className="inline-block px-2 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3 mr-2">
                                         Limited Spots Available
                                     </span>
                                     <span className="inline-block px-2 py-1 rounded-full bg-green-50 text-green-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
-                                    ₹100 - Non PCCOEians
+                                        ₹100 - Non PCCOEians
                                     </span>
                                     <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-black mb-1.5 sm:mb-2">
-                                    Chem-Prastuti &apos;25
+                                        Chem-Prastuti &apos;25
                                     </h1>
                                     <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
-                                    Join us for an engaging presentation event exploring the theme of &quot;Green Chemistry for a Better Future.&quot; Showcase your innovative ideas and research in a competitive and collaborative environment.
+                                        Join us for an engaging presentation event exploring the theme of &quot;Green Chemistry for a Better Future.&quot; Showcase your innovative ideas and research in a competitive and collaborative environment.
                                     </p>
                                 </div>
 
@@ -64,18 +65,30 @@ export function Chem_prastuti_registarion() {
                                         </div>
                                     </div>
                                     
-                                    <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
-                                        <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
-                                        <div className="flex flex-col items-end">
-                                            <div className="text-[11px] sm:text-sm text-gray-500">per participant</div>
-                                            <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
+                                    <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end">
+                                        <div className="space-y-2 w-full">
+                                            <div className="flex justify-between items-center">
+                                                <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
+                                                <div className="flex flex-col items-end">
+                                                    <div className="text-[11px] sm:text-sm text-gray-500">PCCOEians</div>
+                                                    <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹100</div>
+                                                <div className="flex flex-col items-end">
+                                                    <div className="text-[11px] sm:text-sm text-gray-500">Non PCCOEians</div>
+                                                    <div className="text-[9px] sm:text-xs text-blue-600 font-medium">Register Now!</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="mt-4 md:mt-0">
-                                <div className="border-t-2 border-dashed border-gray-300 my-3 sm:my-6 -mx-3 sm:-mx-8"></div>
+                            {/* Button section */}
+                            <div className="mt-4">
+                                <div className="border-t-2 border-dashed border-gray-300 my-3 sm:my-4"></div>
                                 <a href="/signup" className="block w-full">
                                     <Button className="w-full py-2.5 sm:py-4 text-xs sm:text-base font-medium bg-blue-50 hover:bg-blue-100 text-blue-600 transition-all duration-300 rounded-lg flex items-center justify-between px-3 sm:px-6 group">
                                         <span>Register Now</span>

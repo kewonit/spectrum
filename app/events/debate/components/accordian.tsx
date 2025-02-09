@@ -68,7 +68,8 @@ const sections = [
     rules: [
       "Competition is exclusively open to First-year students",
       "Teams must consist of exactly two members",
-      "All team members must register together before the event"
+      "All team members must register together before the event",
+      "Must pick one language. Marathi, Hindi, English, but cannot be changed after the selection.",
     ]
   },
   {

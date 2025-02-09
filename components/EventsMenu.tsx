@@ -88,10 +88,28 @@ export default function EventsMenu() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="h-10 w-full md:w-24 bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white">
+    {/* desktop's darker variant */}
+    <Button 
+      variant="outline" 
+      className="h-10 w-full md:w-24 hidden md:flex justify-center items-center
+      bg-white/10 border-white/20 text-white font-medium 
+      hover:bg-white/20 hover:text-white hover:border-white/40"
+    >
+      Events
+    </Button>
+  </DialogTrigger>
+      <div className="md:hidden w-full">
+        <Button 
+          variant="outline" 
+          className="h-10 w-full flex justify-center items-center
+          bg-background border-input text-foreground font-medium 
+          hover:bg-accent hover:text-accent-foreground"
+          onClick={() => setOpen(true)}
+        >
           Events
         </Button>
-      </DialogTrigger>
+      </div>
+
       <DialogContent className="w-full h-[100dvh] max-w-full m-0 p-0 overflow-y-auto"
         style={{
           background: "radial-gradient(at left top, rgb(91, 192, 222), rgb(51, 142, 218))",

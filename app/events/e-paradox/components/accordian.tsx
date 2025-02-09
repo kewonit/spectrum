@@ -8,12 +8,12 @@ import {
 export function Rules() {
   return (
     <div className="w-full text-white">
-      <h1 className="scroll-m-20 text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
+      {/* <h1 className="scroll-m-20 text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
         Rules of E-Paradox
       </h1>
       <p className="leading-7 mb-8 text-white/80 text-sm sm:text-base">
         Total 4 rounds
-      </p>
+      </p> */}
 
       <Accordion type="single" collapsible className="space-y-4">
         {rounds.map((round, index) => (

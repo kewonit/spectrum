@@ -28,11 +28,8 @@ export function BrainDashers_registarion() {
                         <div className="md:w-[55%] p-4 sm:p-6 lg:p-8 flex flex-col justify-between bg-gradient-to-br from-white to-gray-50">
                             <div className="space-y-4 sm:space-y-8">
                                 <div>
-                                    <span className="inline-block px-2 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
+                                    <span className="inline-block px-2 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3 mr-2">
                                         Limited Spots Available
-                                    </span>
-                                    <span className="inline-block px-2 py-1 rounded-full bg-green-50 text-green-600 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-1.5 sm:mb-3">
-                                    ₹100 - Non PCCOEians
                                     </span>
                                     <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-black mb-1.5 sm:mb-2">
                                         Brain Dasher &apos;25
@@ -64,11 +61,23 @@ export function BrainDashers_registarion() {
                                         </div>
                                     </div>
                                     
+                                    {/* Pricing section */}
                                     <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
-                                        <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
-                                        <div className="flex flex-col items-end">
-                                            <div className="text-[11px] sm:text-sm text-gray-500">per participant</div>
-                                            <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
+                                        <div className="space-y-2 w-full">
+                                            <div className="flex justify-between items-center">
+                                                <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
+                                                <div className="flex flex-col items-end">
+                                                    <div className="text-[11px] sm:text-sm text-gray-500">PCCOEians</div>
+                                                    <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹100</div>
+                                                <div className="flex flex-col items-end">
+                                                    <div className="text-[11px] sm:text-sm text-gray-500">Non PCCOEians</div>
+                                                    <div className="text-[9px] sm:text-xs text-blue-600 font-medium">Register Now!</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

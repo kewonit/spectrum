@@ -38,7 +38,7 @@ export function ThreeModelling() {
                                     3D Modelling &apos;25
                                     </h1>
                                     <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
-                                    Put your engineering skills to the test in the Tower Construction Challenge! Build a stable popsicle stick tower that meets design criteria and withstands load testing under expert supervision.</p>
+                                    Put your engineering skills to the test in the Tower Construction Challenge!</p>
                                 </div>
 
                                 <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:gap-6">
@@ -64,10 +64,21 @@ export function ThreeModelling() {
                                     </div>
                                     
                                     <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
-                                    <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
-                                    <div className="flex flex-col items-end">
-                                            <div className="text-[11px] sm:text-sm text-gray-500">per participant</div>
-                                            <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
+                                        <div className="space-y-2 w-full">
+                                            <div className="flex justify-between items-center">
+                                                <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
+                                                <div className="flex flex-col items-end">
+                                                    <div className="text-[11px] sm:text-sm text-gray-500">PCCOEians</div>
+                                                    <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹100</div>
+                                                <div className="flex flex-col items-end">
+                                                    <div className="text-[11px] sm:text-sm text-gray-500">Non PCCOEians</div>
+                                                    <div className="text-[9px] sm:text-xs text-blue-600 font-medium">Register Now!</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

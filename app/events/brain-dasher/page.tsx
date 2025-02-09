@@ -12,11 +12,14 @@ const krona = Krona_One({
 });
 
 const ruleList = [
-  "A total of 15 questions will be asked during the quiz, covering a variety of topics and difficulty levels. Participants are expected to showcase their knowledge and quick thinking throughout the session.",
-  "If the question is related to an established word/proverb/or a saying, participants need to answer perfectly. Or else no point would be awarded.",
-  "Negative marking is applicable for the participant pressing the buzzer and not answering even after 5 secs.",
-  "If there's a tie, another set of 5 difficult questions (with varying points) will be displayed and accordingly, the winner would be selected."
+  "Maximum registration for this event is 150",
+  "Strictly no on spot registrations",
+  "Top 30 - 40 students will be selected for 2nd round based on their marks and timely submission of the quiz",
+  "In case of a tie, the results will be declared on the basis of number of difficult questions solved and the time taken to finish the quiz",
+  "The decision of the event organizers will be final and binding",
+  "Rules for every round will be communicated prior to each round"
 ];
+
 
 
 export default function Home() {

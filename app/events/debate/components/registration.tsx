@@ -64,18 +64,29 @@ export function Debate_registarion() {
                                         </div>
                                     </div>
                                     
-                                    <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
-                                        <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
-                                        <div className="flex flex-col items-end">
-                                            <div className="text-[11px] sm:text-sm text-gray-500">per participant</div>
-                                            <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
+                                    <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end">
+                                            <div className="space-y-2 w-full">
+                                                <div className="flex justify-between items-center">
+                                                    <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
+                                                    <div className="flex flex-col items-end">
+                                                        <div className="text-[11px] sm:text-sm text-gray-500">PCCOEians</div>
+                                                        <div className="text-[9px] sm:text-xs text-blue-600 font-medium">It&apos;s on us!</div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                    <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹100</div>
+                                                    <div className="flex flex-col items-end">
+                                                        <div className="text-[11px] sm:text-sm text-gray-500">Non PCCOEians</div>
+                                                        <div className="text-[9px] sm:text-xs text-blue-600 font-medium">Register Now!</div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
 
-                            <div className="mt-4 md:mt-0">
-                                <div className="border-t-2 border-dashed border-gray-300 my-3 sm:my-6 -mx-3 sm:-mx-8"></div>
+                            <div className="mt-4">
+                                <div className="border-t-2 border-dashed border-gray-300 my-3"></div>
                                 <a href="/signup" className="block w-full">
                                     <Button className="w-full py-2.5 sm:py-4 text-xs sm:text-base font-medium bg-blue-50 hover:bg-blue-100 text-blue-600 transition-all duration-300 rounded-lg flex items-center justify-between px-3 sm:px-6 group">
                                         <span>Register Now</span>
