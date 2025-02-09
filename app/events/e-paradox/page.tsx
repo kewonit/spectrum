@@ -69,7 +69,8 @@ export default function Home() {
                   brought to you by AS&H, PCCOE
                 </h2>
                 <p className="text-lg text-white/80 font-light max-w-xl mt-6">
-                  A sophisticated activity-based challenge where you must find digital solutions through elegant problem-solving approaches.
+                Tagline-Crack the code, Break the Paradox—Can you solve the unsolvable, where C is the key to every Challenge!
+                <br />Note:All the Rounds are based on C language only
                 </p>
               </div>
             </div>

@@ -71,7 +71,6 @@ import {
         "All players must have minimum account level of 30",
         "Death replay must be enabled for all players",
         "Teams must join match lobby 15 minutes before start time",
-        "Matches start sharply at 12 PM - late comers will not be accommodated"
       ]
     },
     {

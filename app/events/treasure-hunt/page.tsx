@@ -12,17 +12,19 @@ const krona = Krona_One({
 });
 
 const ruleList = [
-  "Each team should consist of 4 people.",
-  "The competition will be conducted in hybrid mode.",
-  "The use of A.I. chatbots like ChatGPT is strictly prohibited.",
-  "Participants are not allowed to use laptops, smartwatches.",
-  "Strict monitoring of participants will be implemented, with assistance from volunteers if necessary.",
-  "Each round will have a specified time limit that participants must adhere to.",
-  "The final decision will be based on computerized results and made by the event coordinators.",
-  "The decision of the event coordinators is final and binding, not subject to contestation.",
-  "The organizers may make changes or updates to the contest rules, and participants are kindly encouraged to stay informed of the same.",
-  "Violation of any rule may result in immediate disqualification."
+  "Maximum Participants: Team Size: 4 members per team",
+  "Participants must be registered attendees of the Spectrum 2025 Event.",
+  "Use of personal gadgets is strictly prohibited unless specified during a round.",
+  "Teams must solve clues and challenges in sequence to progress.",
+  "Misconduct or breach of rules may lead to immediate disqualification.",
+  "Use of electronic device and printed material is not allowed.",
+  "Examiner decision will be final.",
+  "Teams participating in the competition must not collaborate, share information, or exchange clues with other teams. Any team found leaking or receiving clues from another team will face immediate disqualification.",
+  "Teams will be evaluated based on Speed: The team that completes the treasure hunt first wins.",
+  "Teams will be evaluated based on Accuracy: Points will be awarded for solving clues correctly.",
+  "Teams will be evaluated based on Bonus Challenges: Additional points may be awarded for completing optional tasks."
 ];
+
 
 export default function Home() {
   return (
@@ -42,7 +44,7 @@ export default function Home() {
                   brought to you by AS&H, PCCOE
                 </h2>
                 <p className="text-lg text-white/80 font-light max-w-xl mt-6">
-                  Solve clues, navigate challenges, and embark on an exciting adventure to uncover hidden treasures!
+                The path is hidden, the clues are set-only the sharpest minds will find the treasure yet!
                 </p>
               </div>
             </div>

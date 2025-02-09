@@ -12,7 +12,8 @@ export function Rules() {
         Model Making Competition Rules
       </h1>
       <p className="leading-7 mb-8 text-white/80 text-sm sm:text-base">
-        Tower Construction Challenge using Popsicle Sticks
+      Are you ready to design, build, and impress—all in the moment? Let’s see who can turn a spark of inspiration into a masterpiece.
+      Maximum registration for the event is 50.
       </p>
 
       <Accordion type="single" collapsible className="space-y-4">

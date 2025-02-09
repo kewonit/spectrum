@@ -12,7 +12,7 @@ export function Rules() {
       Rules of Chem Prastuti
       </h1>
       <p className="leading-7 mb-8 text-white/80 text-sm sm:text-base">
-        Theme: Ancient Indian Chemistry & Conservation
+        Theme: Green Chemistry & Conservation
       </p>
 
       <Accordion type="single" collapsible className="space-y-4">
@@ -64,7 +64,6 @@ export function Rules() {
 const sections = [
   {
     title: "Research Themes",
-    description: "Choose one of the following themes for your presentation:",
     rules: [
       "Green Chemistry for a Better Future",
     ]

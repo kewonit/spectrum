@@ -67,10 +67,9 @@ const rounds = [
     description:
       "A quick 15-minute assessment of your logical reasoning and English language skills. No coding knowledge required for any rounds of this competition.",
     rules: [
-      "Test duration is 15 minutes",
-      "Questions will focus on logical reasoning and English",
-      "No technical or coding knowledge required",
-      "Top performers will qualify for Round 2",
+      "Each team will be given an MCQ - based question paper of 20 min",
+      "The paper will a combination of all easy, medium and hard level questions",
+      "Top teams with the highest score proceed to the next round.",
     ],
   },
   {
@@ -78,11 +77,9 @@ const rounds = [
     description:
       "Step into the world of mystery in Mystery Mania, where puzzling photos await! Use your observation skills and deductive reasoning to uncover hidden clues and solve visual mysteries.",
     rules: [
-      "Participants must analyze mysterious photographs to find clues",
-      "Time limit will be enforced for each puzzle",
-      "Points awarded based on accuracy and speed of solving",
-      "Team collaboration may be required for certain challenges",
-      "Qualified teams advance to the final treasure hunt",
+      "All the teams will be divided into 4 colours.",
+      "QR code clues will be scattered across the maps each team needs to collect all the clues leading to the final point.",
+      "Fastest teams from each colour proceed to the next round.",
     ],
   },
   {
@@ -90,13 +87,14 @@ const rounds = [
     description:
       "Whispers of fortune guide your path in this ultimate challenge. Navigate through a series of puzzles and physical challenges, including an exciting laser maze obstacle course, to claim the final prize.",
     rules: [
-      "Teams must solve interconnected puzzles to progress",
-      "Time limits apply for each section of the hunt",
-      "Physical activity will be required - wear appropriate clothing",
-      "Follow all safety instructions for the laser maze",
-      "First team to complete all challenges and find the treasure wins",
+      "Every person will have to hunt for treasure",
+      "4 set of different puzzles/rounds will be there",
+      "Every participant from each team will choose their set according to their abilities.",
+      "At the end there are 3 treasure chest, the team that opens any one of the 3 chests are the winners",
+      "The first 3 teams to open the three boxes accordingly win.",
     ],
   },
 ];
+
 
 export default Rules;
