@@ -72,7 +72,7 @@ const sections = [
       "Competition is open to first-year students only",
       "Event will be divided into 2 levels: Quiz Round and Blind Coding",
       "Programming languages allowed: C, C++, Java, and Python",
-      "Teams must have 2-3 members",
+      "Participation is solo.",
       "Scientific calculators allowed for first round"
     ]
   },
@@ -91,6 +91,7 @@ const sections = [
     title: "Level 1: Quiz Round",
     description: "First stage of the competition:",
     rules: [
+      "Mode: Online",
       "Duration: 30 minutes",
       "Format: Multiple Choice Questions (MCQs)",
       "Topics: Basic Programming Concepts and Data Structures",

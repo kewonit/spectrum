@@ -13,7 +13,7 @@ const krona = Krona_One({
 
 const ruleList = [
   "Event will be solo.",
-  "Event will be divided into 5 rounds.",
+  "Event will be divided into 2 rounds.",
   "Scientific Calculators are allowed for the first round of the event.",
   "Participants will have to carry their own stationary (Calculators, pens, etc).",
   "Personal computers, electronic/Blind Coding components are not allowed for use during the event.",

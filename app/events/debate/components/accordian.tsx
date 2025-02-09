@@ -68,8 +68,10 @@ const sections = [
     rules: [
       "Competition is exclusively open to First-year students",
       "Teams must consist of exactly two members",
+      "The use of phrases or sentences more than 10% in any other language will result in disqualification",
       "All team members must register together before the event",
       "Must pick one language. Marathi, Hindi, English, but cannot be changed after the selection.",
+      "USE OF MOBILE PHONES IS STRICTLY PROHIBITED"
     ]
   },
   {

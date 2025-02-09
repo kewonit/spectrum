@@ -29,7 +29,7 @@ export default function Home() {
                   brought to you by AS&H, PCCOE
                 </h2>
                 <p className="text-lg text-white/80 font-light max-w-xl mt-6">
-                  Battle of Ideas: Showcase your debating skills and intellectual prowess
+                Is climate change more of a political issue than a scientific one?
                 </p>
               </div>
             </div>
