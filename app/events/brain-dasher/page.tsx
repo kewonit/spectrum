@@ -91,7 +91,7 @@ export default function Home() {
         </div>
 
         {/* Rules Section */}
-        {/* <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12">
+        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12">
           <h3 className={`${krona.className} text-2xl text-white mb-6`}>Event Rules</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {ruleList.map((rule, idx) => (
@@ -101,7 +101,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div> */}
+        </div>
       </div>
     </main>
   );
