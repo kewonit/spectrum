@@ -65,9 +65,9 @@ const rounds = [
   {
     title: "ROUND 1: Aptitude Test",
     description:
-      "A quick 15-minute assessment of your logical reasoning and English language skills. No coding knowledge required for any rounds of this competition.",
+      "A quick assessment of your logical reasoning skills. No coding knowledge required.",
     rules: [
-      "Each team will be given an MCQ - based question paper of 20 min",
+      "Each team will be given a  n MCQ - based question paper of 20 min",
       "The paper will a combination of all easy, medium and hard level questions",
       "Top teams with the highest score proceed to the next round.",
     ],
