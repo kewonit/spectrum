@@ -8,6 +8,7 @@ import { RulesValo } from "./components/valorant";
 import RulesFreefire from "./components/freefire";
 import { Krona_One } from 'next/font/google'
 import Image from "next/image";
+import { RegistrationNotice } from "./components/RegistrationNotice";
 
 const krona = Krona_One({
   subsets: ['latin'],
@@ -49,6 +50,10 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <RegistrationNotice />
+      </div>
 
         {/* Registration Sections */}
         <div className="space-y-12">
