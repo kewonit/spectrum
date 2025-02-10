@@ -12,7 +12,7 @@ export const RegistrationNotice = () => {
             <li>You can <strong>only participate in ONE game</strong>.</li>
             <li>All game matches are scheduled for the same dates.</li>
             <li>Register for <strong>only one game</strong> in High-Ping.</li>
-            <li>If you've joined multiple game groups, <strong>exit the groups you won't play in</strong>.</li>
+            <li>If you&apos;ve joined multiple game groups, <strong>exit the groups you won&apos;t play in</strong>.</li>
           </ul>
         </p>
       </div>
