@@ -118,33 +118,39 @@ export default function Home() {
 
 
 
-          <div className="rounded-3xl mx-[20px] md:mx-auto bg-white/10 p-12 shadow-2xl max-w-4xl ">
-          <div className="flex flex-col items-center justify-between gap-12 md:flex-row">
-            <div className="text-center md:text-left">
-              <h3 className="text-3xl font-bold text-black">Meet Our Previous Team</h3>
-              <p className="mt-4 text-lg text-black-200">Last year&apos;s Spectrum Pccoe&apos;24 team members</p>
+          <div className="rounded-3xl mx-[20px] md:mx-auto bg-gradient-to-br from-gray-900 to-gray-800 p-8 md:p-12 shadow-xl backdrop-blur-sm max-w-4xl border border-gray-700 transform transition-all hover:shadow-2xl hover:scale-[1.01]">
+            <div className="flex flex-col items-center md:items-stretch justify-between gap-8 md:flex-row">
+              <div className="text-center md:text-left space-y-3">
+                <h3 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-black">
+                  Meet Our Previous Team
+                </h3>
+                <p className="text-gray-600 text-lg max-w-md">
+                  Discover the dedicated individuals who made Spectrum&apos;24 a remarkable success
+                </p>
+              </div>
+              <div className="flex items-center">
+                <Link
+                  href="/2024"
+                  className="group relative inline-flex items-center gap-4 rounded-full bg-white/10 px-8 py-4 text-lg text-black transition-all hover:bg-white/20 hover:shadow-lg border border-gray-600"
+                >
+                  <span className="font-medium">View 2024 Team</span>
+                  <svg
+                    className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </Link>
+              </div>
             </div>
-            <Link
-              href="/2024"
-              className="group flex items-center gap-4 rounded-full bg-black/20 px-8 py-4 text-lg text-black transition-all hover:bg-white/30"
-            >
-              <span>View 2024 Team</span>
-              <svg
-                className="h-6 w-6 transition-transform group-hover:translate-x-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </Link>
           </div>
-        </div>
 
 
 

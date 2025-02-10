@@ -9,7 +9,7 @@ export function Rules() {
   return (
     <div className="w-full text-white">
       <h1 className="scroll-m-20 text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
-        Rules of Treasure Hunt
+        Rules of Tech Treasure Hunt
       </h1>
       <p className="leading-7 mb-8 text-white/80 text-sm sm:text-base">
         Total 3 rounds
@@ -67,7 +67,7 @@ const rounds = [
     description:
       "A quick assessment of your logical reasoning skills. No coding knowledge required.",
     rules: [
-      "Each team will be given a  n MCQ - based question paper of 20 min",
+      "Each team will be given an MCQ - based question paper of 20 min",
       "The paper will a combination of all easy, medium and hard level questions",
       "Top teams with the highest score proceed to the next round.",
     ],

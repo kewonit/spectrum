@@ -4,7 +4,7 @@ const TermsandConditions: React.FC = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="max-w-md p-8 bg-black rounded shadow-md text-white">
-           <Image className="mx-auto pb-8" width="200" height="200" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1738268929/Spectrum/2024/261354d2-c404-4cb2-8f06-704ab7555b36_mty2zl.webp" /> 
+           <Image className="mx-auto pb-8" width="200" height="200" alt="image" src="https://res.cloudinary.com/dr38lv00a/image/upload/v1739175910/cat4_tpftwi.jpg" /> 
             <h1 className="text-2xl font-bold mb-6 text-white">Terms and Conditions</h1>
   
             <p className="mb-4">
@@ -13,9 +13,14 @@ const TermsandConditions: React.FC = () => {
             </p>
 
             <p className="mb-4">
-            <strong>Effective Date:</strong> These terms are effective as of{' '}
-            <span className="underline">January 1, 2024</span>.
-            </p>
+          <strong>Effective Date:</strong> These terms are effective as of{' '}
+           {new Date().toLocaleDateString('en-US', {
+           year: 'numeric',
+           month: 'long',
+           day: 'numeric',
+           })}
+           </p>
+
 
             <p className="mb-4">
             <strong>Limitation of Liability:</strong> Spectrum PCCOE and [Your College/Organization Name] shall not be held liable for any direct, indirect, incidental, consequential, or special damages arising out of or in any way connected with your participation in the event.

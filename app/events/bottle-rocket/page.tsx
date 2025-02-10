@@ -1,4 +1,4 @@
-import { Bottle_rocket_registarion } from "@/app/events/bottle-rocket/components/registration";
+import { Bottle_rocket_registarion } from "@/app/events/bottle-rocket/components/registration"
 import { Krona_One } from 'next/font/google'
 import Image from "next/image";
 
@@ -10,11 +10,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Spectrum x Water Rocket',
     description: "Tech event for first year students",  
-    url: "https://pccoespectrum.tech",
-    siteName: "pccoespectrum.tech",
+    url: "https://spectrumpccoe25.tech",
+    siteName: "spectrumpccoe25.tech",
     images: [
       {
-        url: "https://i.imgur.com/rmVmQ7C.png",
+        url: "https://i.postimg.cc/Wzs7zpZf/s.webp",
         width: 548,
         height: 253,
         alt: 'Image',
@@ -71,16 +71,21 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full md:w-1/2 flex justify-center">
-              <div className="relative w-64 h-64 md:w-80 md:h-80">
-                <div className="absolute inset-0 bg-white/20 rounded-lg transform rotate-45"></div>
-                <div className="absolute inset-2 bg-white/30 rounded-lg transform rotate-12"></div>
-                <div className="absolute inset-4 bg-white/40 rounded-lg transform -rotate-6"></div>
-              </div>
+              <Image 
+                src="https://i.postimg.cc/Wzs7zpZf/s.webp" 
+                alt="Event Image" 
+                width={300} 
+                height={300} 
+                className="rounded-lg" 
+                draggable={false}
+              />
             </div>
           </div>
         </div>
 
-        <Bottle_rocket_registarion />
+        <div className="mb-20">
+          <Bottle_rocket_registarion />
+        </div>
 
         {/* Competition Field Section */}
         <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12">
@@ -120,6 +125,16 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+        <div className="flex justify-center items-center w-full">
+          <Image 
+            src="https://i.postimg.cc/9M5b3YQ2/s-1.webp" 
+            alt="Event Image" 
+            width={500} 
+            height={500} 
+            className="rounded-lg" 
+            draggable={false}
+          />
         </div>
       </div>
     </main>

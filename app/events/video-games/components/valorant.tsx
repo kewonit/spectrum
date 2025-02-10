@@ -79,7 +79,7 @@ import {
       description: "Structure and progression of the tournament:",
       rules: [
         "Single elimination bracket system",
-        "Group Stage: Best of 1 (Bo3) matches",
+        "Group Stage: Best of 1 (Bo1) matches",
         "Semifinals & Finals: Best of 3 (Bo3) matches",
         "Competitive mode with random map selection",
         "All agents are allowed for selection"

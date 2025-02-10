@@ -3,7 +3,7 @@ const Cancellationandrefund: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-white">
       <div className="max-w-md p-8 bg-black rounded shadow-md">
-        <Image className="mx-auto pb-8" width="200" height="200" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1738268929/Spectrum/2024/clipboard-image-1738268905_u8jhcs.webp" /> 
+        <Image className="mx-auto pb-8" width="200" height="200" alt="image" src="https://res.cloudinary.com/dr38lv00a/image/upload/v1739175911/cat2_jewelc.png" /> 
         <h2 className="text-2xl font-bold mb-4">Cancellation and Refund Policy</h2>
 
         <p className="mb-4">

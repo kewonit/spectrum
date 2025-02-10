@@ -20,7 +20,7 @@ export function BrainDashers_registarion() {
                                 width={1200} 
                                 height={1000} 
                                 loading="lazy" 
-                                draggable="false"
+                                draggable={false}
                             />
                         </div>
                         
@@ -52,7 +52,7 @@ export function BrainDashers_registarion() {
                                         </div>
                                         <div className="flex items-center gap-1.5 sm:gap-3">
                                             <svg className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.11 0-2.08.402-2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                             <div>
                                                 <p className="text-[11px] sm:text-sm font-semibold text-gray-900">Prizes & Rewards</p>
@@ -72,7 +72,8 @@ export function BrainDashers_registarion() {
                                                 </div>
                                             </div>
                                             <div className="flex justify-between items-center">
-                                                <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹100</div>
+                                                {/* Updated pricing block for Non PCCOEians */}
+                                                <div className="text-base sm:text-lg md:text-xl font-bold text-gray-900">₹100</div>
                                                 <div className="flex flex-col items-end">
                                                     <div className="text-[11px] sm:text-sm text-gray-500">Non PCCOEians</div>
                                                     <div className="text-[9px] sm:text-xs text-blue-600 font-medium">Register Now!</div>
@@ -85,7 +86,7 @@ export function BrainDashers_registarion() {
 
                             <div className="mt-4 md:mt-0">
                                 <div className="border-t-2 border-dashed border-gray-300 my-3 sm:my-6 -mx-3 sm:-mx-8"></div>
-                                <a href="/signup" className="block w-full">
+                                <a href="/login" className="block w-full">
                                     <Button className="w-full py-2.5 sm:py-4 text-xs sm:text-base font-medium bg-blue-50 hover:bg-blue-100 text-blue-600 transition-all duration-300 rounded-lg flex items-center justify-between px-3 sm:px-6 group">
                                         <span>Register Now</span>
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

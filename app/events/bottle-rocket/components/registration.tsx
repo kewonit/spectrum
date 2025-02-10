@@ -35,10 +35,10 @@ export function Bottle_rocket_registarion() {
                                             Limited Spots Available
                                         </span>
                                         <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-black mb-1.5 sm:mb-2">
-                                            Bottle Rocket &apos;25
+                                            Water Rocket &apos;25
                                         </h1>
                                         <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed">
-                                            Experience the thrill of scientific exploration with &quot;Bottle Rocket.&quot; Dive into the realm of rocket science as you design, build, and launch innovative models, showcasing your creativity and engineering prowess in this dynamic competition.
+                                            Experience the thrill of scientific exploration with &quot;Water Rocket.&quot; Dive into the realm of rocket science as you design, build, and launch innovative models, showcasing your creativity and engineering prowess in this dynamic competition.
                                         </p>
                                     </div>
 
@@ -64,7 +64,7 @@ export function Bottle_rocket_registarion() {
                                             </div>
                                         </div>
                                         
-                                        <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end">
+                                        <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
                                             <div className="space-y-2 w-full">
                                                 <div className="flex justify-between items-center">
                                                     <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹0</div>
@@ -74,10 +74,10 @@ export function Bottle_rocket_registarion() {
                                                     </div>
                                                 </div>
                                                 <div className="flex justify-between items-center">
-                                                    <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900">₹100</div>
+                                                    <div className="text-base sm:text-lg md:text-xl font-bold text-gray-900">₹100</div>
                                                     <div className="flex flex-col items-end">
-                                                        <div className="text-[11px] sm:text-sm text-gray-500">Non PCCOEians</div>
-                                                        <div className="text-[9px] sm:text-xs text-blue-600 font-medium">Register Now!</div>
+                                                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-gray-500">Non PCCOEians</div>
+                                                        <div className="text-[7px] sm:text-[8px] md:text-[9px] text-blue-600 font-medium">Register Now!</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -89,7 +89,7 @@ export function Bottle_rocket_registarion() {
                             {/* Button section - Always at bottom */}
                             <div className="mt-4">
                                 <div className="border-t-2 border-dashed border-gray-300 my-3"></div>
-                                <a href="/signup" className="block w-full">
+                                <a href="/login" className="block w-full">
                                     <Button className="w-full py-2.5 sm:py-4 text-xs sm:text-base font-medium bg-blue-50 hover:bg-blue-100 text-blue-600 transition-all duration-300 rounded-lg flex items-center justify-between px-3 sm:px-6 group">
                                         <span>Register Now</span>
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

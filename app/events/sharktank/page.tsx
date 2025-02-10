@@ -1,29 +1,28 @@
-"use client"
 import { Rules } from "@/app/events/sharktank/components/accordian"
 import { Sharktank_registarion } from "@/app/events/sharktank/components/registration";
 import { Krona_One } from 'next/font/google'
 import Image from "next/image";
 
-// import { Metadata } from 'next'
+import { Metadata } from 'next'
  
-// export const metadata: Metadata = {
-//   title: 'Spectrum x Shark Tank',
-//   description: "Business pitch competition for innovative minds",  
-//   openGraph: {
-//     title: 'Spectrum x Shark Tank',
-//     description: "Business pitch competition for innovative minds",  
-//     url: "https://pccoespectrum.tech",
-//     siteName: "pccoespectrum.tech",
-//     images: [
-//       {
-//         url: "https://i.imgur.com/rmVmQ7C.png",
-//         width: 548,
-//         height: 253,
-//         alt: 'Image',
-//       },
-//     ],
-//   }, 
-// }
+export const metadata: Metadata = {
+  title: 'Spectrum x Shark Tank',
+  description: "Business pitch competition for innovative minds",  
+  openGraph: {
+    title: 'Spectrum x Shark Tank',
+    description: "Business pitch competition for innovative minds",  
+    url: "https://spectrumpccoe25.tech",
+    siteName: "spectrumpccoe25.tech",
+    images: [
+      {
+        url: "https://i.postimg.cc/gk5vZzQc/4.png",
+        width: 548,
+        height: 253,
+        alt: 'Image',
+      },
+    ],
+  }, 
+}
  
 const krona = Krona_One({
   subsets: ['latin'],
@@ -73,16 +72,21 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full md:w-1/2 flex justify-center">
-              <div className="relative w-64 h-64 md:w-80 md:h-80">
-                <div className="absolute inset-0 bg-white/20 rounded-lg transform rotate-45"></div>
-                <div className="absolute inset-2 bg-white/30 rounded-lg transform rotate-12"></div>
-                <div className="absolute inset-4 bg-white/40 rounded-lg transform -rotate-6"></div>
-              </div>
+              <Image 
+                src="https://i.postimg.cc/gk5vZzQc/4.png" 
+                alt="Event Image" 
+                width={400} 
+                height={400} 
+                className="rounded-lg" 
+                draggable={false}
+              />
             </div>
           </div>
         </div>
 
-        <Sharktank_registarion />
+        <div className="mb-20">
+          <Sharktank_registarion />
+        </div>
 
         {/* Rules Section with Accordion */}
         <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12">
@@ -91,48 +95,7 @@ export default function Home() {
             <p className="text-white/80">Showcase your entrepreneurial spirit through multiple stages of business excellence</p>
           </div>
           
-          {/* Custom styled wrapper for the Rules component */}
-          <div className="rules-wrapper">
-            <Rules />
-          </div>
-          
-          {/* CSS to override Rules component styles to match our theme */}
-          <style jsx global>{`
-            .rules-wrapper {
-              color: white;
-            }
-            
-            .rules-wrapper h1,
-            .rules-wrapper h3,
-            .rules-wrapper h4 {
-              color: white;
-            }
-            
-            .rules-wrapper p {
-              color: rgba(255, 255, 255, 0.8);
-            }
-            
-            .rules-wrapper .bg-white {
-              background: rgba(255, 255, 255, 0.1);
-              backdrop-filter: blur(8px);
-            }
-            
-            .rules-wrapper .bg-[#EBE9E0] {
-              background: rgba(255, 255, 255, 0.15);
-            }
-            
-            .rules-wrapper .text-gray-600,
-            .rules-wrapper .text-gray-700,
-            .rules-wrapper .text-gray-800,
-            .rules-wrapper .text-gray-900 {
-              color: rgba(255, 255, 255, 0.9);
-            }
-            
-            .rules-wrapper .shadow-sm,
-            .rules-wrapper .shadow-md {
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
-          `}</style>
+          <Rules />
         </div>
 
         {/* Rules Section */}

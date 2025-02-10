@@ -179,7 +179,7 @@ const events = [
   { href: "/events/e-paradox", title: "E paradox' 25", bgColor: "bg-red-500", description: "Find clues, crack codes, win prizes" },
   { href: "/events/blindcoding", title: "Blind Coding' 25", bgColor: "bg-orange-500", description: "Based on knowledge of Basic Programming concepts" },
   { href: "/events/brain-dasher", title: "Brain Dasher' 25", bgColor: "bg-yellow-400", description: "Quick thinking quiz" },
-  { href: "/events/treasure-hunt", title: "Treasure Hunt' 25", bgColor: "bg-green-400", description: "Hunt for treasures" },
+  { href: "/events/treasure-hunt", title: "Tech Treasure Hunt' 25", bgColor: "bg-green-400", description: "Hunt for treasures" },
   { href: "/events/chem-prastuti", title: "Chem Prastuti' 25", bgColor: "bg-blue-400", description: "Chemical engineering presentations" },
   { href: "/events/bottle-rocket", title: "Water Rocket' 25", bgColor: "bg-purple-400", description: "Build & launch water rockets" },
   { href: "/events/debate", title: "War of Words' 25", bgColor: "bg-pink-300", description: "Debate competition" },

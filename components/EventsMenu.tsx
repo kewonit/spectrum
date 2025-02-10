@@ -47,7 +47,7 @@ const events: Event[] = [
   { id: 1, href: "/events/e-paradox", title: "E paradox' 25", description: "Find clues, crack codes, win prizes", color: "text-white" },
   { id: 2, href: "/events/blindcoding", title: "Blind Coding' 25", description: "Based on knowledge of Basic Programming concepts", color: "text-gray-100" },
   { id: 3, href: "/events/brain-dasher", title: "Brain Dasher' 25", description: "Quick thinking quiz", color: "text-slate-100" },
-  { id: 4, href: "/events/treasure-hunt", title: "Treasure Hunt' 25", description: "Hunt for treasures", color: "text-zinc-100" },
+  { id: 4, href: "/events/treasure-hunt", title: "Tech Treasure Hunt' 25", description: "Hunt for treasures", color: "text-zinc-100" },
   { id: 5, href: "/events/chem-prastuti", title: "Chem Prastuti' 25", description: "Chemical engineering presentations", color: "text-neutral-100" },
   { id: 6, href: "/events/bottle-rocket", title: "Water Rocket' 25", description: "Build & launch water rockets", color: "text-white" },
   { id: 7, href: "/events/debate", title: "War of Words' 25", description: "Debate competition", color: "text-gray-100" },
@@ -156,14 +156,6 @@ export default function EventsMenu() {
                 onNavigate={handleNavigation}
               />
             ))}
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="fixed bottom-0 left-0 right-0 p-4 text-center bg-white/10 backdrop-blur-sm"
-          >
-            <p className="text-sm text-white/80">Spectrum 2025 - Annual Technical Festival</p>
           </motion.div>
         </div>
       </DialogContent>

@@ -4,12 +4,12 @@ const PrivacyPolicy: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-black">
       <div className="max-w-md p-8 bg-black rounded shadow-md text-white">
-        <Image className="mx-auto pb-8" width="200" height="200" alt="image" src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1738269594/Spectrum/2024/49bcedfb-eaca-4227-a394-0dcd4ac97e3d_blhcbt.jpg" /> 
+        <Image className="mx-auto pb-8" width="200" height="200" alt="image" src="https://res.cloudinary.com/dr38lv00a/image/upload/v1739175910/cat1_oginwg.webp" /> 
 
         <h1 className="text-2xl font-bold mb-6">Privacy Policy</h1>
         
         <p className="mb-4">
-          Thank you for visiting Spectrum Pccoe&apos;24 website. This Privacy Policy outlines the types of personal information we collect, how we collect it, how we use it, and how we keep it safe. By using our website, you agree to the terms outlined in this policy.
+          Thank you for visiting Spectrum Pccoe&apos;25 website. This Privacy Policy outlines the types of personal information we collect, how we collect it, how we use it, and how we keep it safe. By using our website, you agree to the terms outlined in this policy.
         </p>
 
         {/* Information We Collect */}
@@ -80,7 +80,7 @@ const PrivacyPolicy: React.FC = () => {
         {/* Contact Information */}
         <section className="mb-6">
           <h2 className="text-xl font-bold mb-4">Contact Information:</h2>
-          <p>If you have any questions or concerns regarding this Privacy Policy, please contact us at spectrum@pccoepune.org</p>
+          <p>If you have any questions or concerns regarding this Privacy Policy, please contact us at pccoe.spectrum.25@gmail.com</p>
         </section>
 
         <p className="text-sm text-gray-500">By using our website, you acknowledge that you have read and understood this Privacy Policy and agree to its terms.</p>

@@ -66,6 +66,8 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   const [removingInvite, setRemovingInvite] = useState<string | null>(null);
   const [isRemovingInvite, setIsRemovingInvite] = useState(false);
   const [disqualificationAck, setDisqualificationAck] = useState(false);
+  const [confirmMembers, setConfirmMembers] = useState(false);
+  const [confirmInvalidation, setConfirmInvalidation] = useState(false);
   
   const createTeamForm = useForm<z.infer<typeof createTeamSchema>>({
     resolver: zodResolver(createTeamSchema),
@@ -1138,24 +1140,57 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
         </Tabs>
   
         {registrationStatus?.profile?.is_pccoe_student ? (
-          <Button
-            className="w-full"
-            disabled={!canRegister || isLoading}
-            onClick={onTeamSubmit}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing...
-              </>
-            ) : !canRegister ? (
-              `Need ${totalRequired - acceptedMembers.length} More Accepted ${
-                totalRequired - acceptedMembers.length === 1 ? 'Member' : 'Members'
-              }`
-            ) : (
-              "Complete Registration"
-            )}
-          </Button>
+          <div className="space-y-4">
+            <div className="space-y-3 bg-blue-50/50 rounded-lg border border-blue-100 p-4">
+              <label className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={confirmMembers}
+                  onChange={(e) => setConfirmMembers(e.target.checked)}
+                  className="w-5 h-5 mt-0.5 accent-blue-500 rounded"
+                />
+                <span className="text-sm text-blue-700">
+                  I confirm that all team members are currently my teammates, and any changes to the current team won&apos;t be allowed later on.
+                </span>
+              </label>
+
+              <div className="border-t border-blue-200 my-2"></div>
+
+              <label className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={confirmInvalidation}
+                  onChange={(e) => setConfirmInvalidation(e.target.checked)}
+                  className="w-4 h-4 mt-0.5 accent-red-500 rounded"
+                />
+                <div className="text-sm">
+                  <span className="text-red-600 font-medium">Important:</span>
+                  <span className="text-red-700"> I understand that completing registration  <u> will invalidate all pending invitations. </u></span>
+                </div>
+              </label>
+            </div>
+
+            <Button
+              className="w-full"
+              disabled={!canRegister || isLoading || !(confirmMembers && confirmInvalidation)}
+              onClick={onTeamSubmit}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : !canRegister ? (
+                `Need ${totalRequired - acceptedMembers.length} More Accepted ${
+                  totalRequired - acceptedMembers.length === 1 ? 'Member' : 'Members'
+                }`
+              ) : !(confirmMembers && confirmInvalidation) ? (
+                "Please Confirm All Checkboxes"
+              ) : (
+                "Complete Registration"
+              )}
+            </Button>
+          </div>
         ) : (
           renderTeamActionButton(canRegister, totalRequired, acceptedMembers, pendingMembers)
         )}

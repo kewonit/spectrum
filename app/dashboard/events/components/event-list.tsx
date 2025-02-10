@@ -124,7 +124,7 @@ function EventCard({ event }: { event: EventDetails }) {
     >
       <div className="bg-white border-2 rounded-xl overflow-hidden hover:border-primary/40 transition-all duration-300">
         {/* Event Image */}
-        <div className="relative h-48">
+        <div className="relative h-48 bg-blue-200">
           {event.img_url ? (
             <picture>
               <source
@@ -139,7 +139,7 @@ function EventCard({ event }: { event: EventDetails }) {
               />
             </picture>
           ) : (
-            <div className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/10" />
+            <div className="w-full h-full bg-gradient-to-r from-yellow-100 to-yellow-50" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           

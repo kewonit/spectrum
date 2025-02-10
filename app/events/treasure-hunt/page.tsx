@@ -1,9 +1,28 @@
-"use client"
-
 import { Rules } from "@/app/events/treasure-hunt/components/accordian";
 import { Treasurehunt_registarion } from "@/app/events/treasure-hunt/components/registration";
 import { Krona_One } from 'next/font/google';
 import Image from "next/image";
+
+import { Metadata } from 'next'
+ 
+export const metadata: Metadata = {
+  title: 'Spectrum x Tech Treasure Hunt',
+  description: "Tech event for first year students",  
+  openGraph: {
+    title: 'Spectrum x Tech Treasure Hunt',
+    description: "Tech event for first year students",  
+    url: "https://spectrumpccoe25.tech",
+    siteName: "spectrumpccoe25.tech",
+    images: [
+      {
+        url: "https://i.postimg.cc/9MJ9FCyh/9.png",
+        width: 548,
+        height: 253,
+        alt: 'Image',
+      },
+    ],
+  }, 
+}
 
 const krona = Krona_One({
   subsets: ['latin'],
@@ -38,27 +57,32 @@ export default function Home() {
             <div className="w-full md:w-1/2">
               <div className={`${krona.className} space-y-4`}>
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#ece9e0]">
-                  Treasure Hunt &apos;25
+                  Tech Treasure Hunt &apos;25
                 </h1>
                 <h2 className="text-xl md:text-2xl text-white/90">
                   brought to you by AS&H, PCCOE
                 </h2>
                 <p className="text-lg text-white/80 font-light max-w-xl mt-6">
-                The path is hidden, the clues are set-only the sharpest minds will find the treasure yet!
+                  The path is hidden, the clues are set-only the sharpest minds will find the treasure yet!
                 </p>
               </div>
             </div>
             <div className="w-full md:w-1/2 flex justify-center">
-              <div className="relative w-64 h-64 md:w-80 md:h-80">
-                <div className="absolute inset-0 bg-white/20 rounded-lg transform rotate-45"></div>
-                <div className="absolute inset-2 bg-white/30 rounded-lg transform rotate-12"></div>
-                <div className="absolute inset-4 bg-white/40 rounded-lg transform -rotate-6"></div>
-              </div>
+              <Image 
+                src="https://i.postimg.cc/9MJ9FCyh/9.png" 
+                alt="Event Image" 
+                width={400} 
+                height={400} 
+                className="rounded-lg" 
+                draggable={false}
+              />
             </div>
           </div>
         </div>
 
-        <Treasurehunt_registarion />
+        <div className="mb-20">
+          <Treasurehunt_registarion />
+        </div>
 
         {/* Rules Section with Accordion */}
         <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12">

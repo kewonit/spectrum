@@ -326,24 +326,17 @@ export default function DashboardPage() {
             </p>
             <div className="space-y-3 sm:space-y-2 mt-2">
               <div className="text-xs sm:text-sm text-yellow-800">
-                <p className="font-medium mb-1">• For API endpoints, backend, or data-related bugs:</p>
+                <p className="font-medium mb-1">• For Queries, payment issues, or other concerns:</p>
+                <a href="mailto:pccoe.spectrum.25@gmail.com" 
+                   className="block pl-3 font-medium text-yellow-700 hover:text-yellow-900 break-all">
+                 pccoe.spectrum.25@gmail.com
+                </a>
+              </div>
+              <div className="text-xs sm:text-sm text-yellow-800">
+                <p className="font-medium mb-1">• For Website, Backend, or data-related bugs:</p>
                 <a href="mailto:kartik.kulloli23@pccoepune.org" 
                    className="block pl-3 font-medium text-yellow-700 hover:text-yellow-900 break-all">
                   kartik.kulloli23@pccoepune.org
-                </a>
-              </div>
-              <div className="text-xs sm:text-sm text-yellow-800">
-                <p className="font-medium mb-1">• For UI/UX issues, visual glitches, or frontend concerns:</p>
-                <a href="mailto:mayank.kadam23@pccoepune.org" 
-                   className="block pl-3 font-medium text-yellow-700 hover:text-yellow-900 break-all">
-                  mayank.kadam23@pccoepune.org
-                </a>
-              </div>
-              <div className="text-xs sm:text-sm text-yellow-800">
-                <p className="font-medium mb-1">• For other concerns:</p>
-                <a href="mailto:ved.jadhav24@pccoepune.org" 
-                   className="block pl-3 font-medium text-yellow-700 hover:text-yellow-900 break-all">
-                  ved.jadhav24@pccoepune.org
                 </a>
               </div>
             </div>

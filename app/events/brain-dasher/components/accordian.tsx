@@ -65,7 +65,7 @@ const rounds = [
   {
     title: "ROUND 1: Quiz",
     description:
-      "The initial qualifying round conducted by faculties. From a pool of 150-200 participants, 30-32 participants will be selected for Round 2. Before the actual rounds begin, DEMO VIDEOS of all games will be shown to the participants.",
+      "The initial qualifying round conducted by faculties. From a pool of 150 participants, 32 participants will be selected for Round 2. Before the actual rounds begin, DEMO VIDEOS of all games will be shown to the participants.",
     rules: [
       "Faculty members will conduct the quiz",
       "Top 30-32 participants will qualify for the next round",

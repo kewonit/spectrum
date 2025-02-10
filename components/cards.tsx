@@ -50,7 +50,7 @@ export default function Cards() {
       href: "/events/treasure-hunt",
       image: "https://i.postimg.cc/9MJ9FCyh/9.png",
       alt: "image",
-      title: "Treasure Hunt '25",
+      title: "Tech Treasure Hunt '25",
       description: "An adventurous quest to solve clues and uncover hidden treasures.",
       borderColor: "border-green-700",
       buttonBgColor: "bg-green-500",
@@ -79,7 +79,7 @@ export default function Cards() {
     },
     {
       href: "/events/bottle-rocket",
-      image: "https://i.postimg.cc/YSNgZ19j/6.png",
+      image: "https://i.postimg.cc/Wzs7zpZf/s.webp",
       alt: "image",
       title: "Water Rocket '25",
       description: "A physics-driven contest to design and launch water-propelled rockets.",

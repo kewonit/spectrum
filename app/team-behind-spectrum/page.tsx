@@ -1,7 +1,4 @@
-"use client"
-
 import React from 'react';
-import Image from "next/image";
 import { Krona_One } from 'next/font/google';
 
 const krona = Krona_One({
@@ -225,14 +222,14 @@ export default function TeamBehindSpectrum() {
             },
             {
                 name: "Asmi Palekar",
-                role: "Treasure Hunt",
+                role: "Tech Treasure Hunt",
                 image: "https://i.postimg.cc/j2t8kLpM/63763386-35f4-4140-a262-4f84df76fa0d.jpg",
                 linkedin: "https://www.linkedin.com/in/asmi-palekar-1a931230a/",
                 instagram: "https://www.instagram.com/asmi_palekar/",
             },
             {
                 name: "Debottam Debnath",
-                role: "Treasure Hunt",
+                role: "Tech Treasure Hunt",
                 image: "https://i.postimg.cc/mrd2rHwH/b679415d-4ac1-4705-9f19-1c91466dd825.jpg",
                 linkedin:
                     "https://www.linkedin.com/in/debottam-debnath-1b747b32b/",
@@ -263,7 +260,7 @@ export default function TeamBehindSpectrum() {
                 image: "https://fe.pccoepune.com/images/faculty/neha-sharma.JPG",
             },
             {
-                name: "Dr. Mohit Prasad⬜",
+                name: "Dr. Mohit Prasad",
                 role: "Faculty Co-Ordinator",
                 image: "https://fe.pccoepune.com/images/faculty/prasad.webp",
             },
@@ -281,13 +278,15 @@ export default function TeamBehindSpectrum() {
 
 const TeamMemberCard = ({ member }: { member: TeamMember }) => (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-        <div className="relative aspect-[3/4] overflow-hidden">
-            <Image
-                src={member.image}
-                alt={member.name}
-                fill
-                className="object-cover object-center"
-            />
+        <div className="relative aspect-[3/4] w-full">
+            <picture>
+                <img
+                    src={member.image}
+                    alt={member.name}
+                    className="absolute w-full h-full object-cover object-center"
+                    loading="lazy"
+                />
+            </picture>
         </div>
         
         <div className="p-6 bg-white">
@@ -340,7 +339,7 @@ return (
                     Meet Our Team
                 </h1>
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                    The passionate individuals behind Spectrum 2024, working together to create an unforgettable experience.
+                    The passionate individuals behind Spectrum 2025, working together to create an unforgettable experience.
                 </p>
             </div>
 
