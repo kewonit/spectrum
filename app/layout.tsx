@@ -5,7 +5,6 @@ import Navigation from '@/components/navigation'
 import Footer  from '@/components/footer'
 import './globals.css'
 import Script from 'next/script'
-import { GoogleTagManager } from '@next/third-parties/google'
 
 const inter = Inter({
   subsets: ["latin"],
@@ -64,11 +63,28 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={[inter.variable, calSans.variable].join(" ")}>
-      <GoogleTagManager gtmId="G-0WEDSQL3ZX" />
+      <head>
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=G-BN0TDQ03XE`}
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-BN0TDQ03XE');
+            `,
+          }}
+        />
+      </head>
       <body className={inter.className}>
         <Navigation />
-          <Script src='https://www.cssscript.com/demo/cat-follow-cursor-oneko/oneko.js' />
-          {children}
+        <Script src='https://www.cssscript.com/demo/cat-follow-cursor-oneko/oneko.js' />
+        {children}
         <Footer />
       </body>
     </html> 
