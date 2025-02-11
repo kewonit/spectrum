@@ -58,12 +58,12 @@ export default function Home() {
         {/* Registration Sections */}
         <div className="space-y-12">
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8">
-            <h3 className={`${krona.className} text-2xl text-white mb-6`}>Valorant Registration</h3>
+            <h3 className={`${krona.className} text-2xl text-white mb-6`}>BGMI Registration</h3>
             <Electrica_registarion />
           </div>
 
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8">
-            <h3 className={`${krona.className} text-2xl text-white mb-6`}>BGMI Registration</h3>
+            <h3 className={`${krona.className} text-2xl text-white mb-6`}>Valorant Registration</h3>
             <Electrica_registarion2 />
           </div>
 
