@@ -23,8 +23,8 @@ export function Rules() {
             className="border-none rounded-xl bg-white/10 transition-all duration-300"
           >
             <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/15 rounded-xl transition-all duration-300 w-full">
-            <div className="flex items-center gap-6 w-full">
-            <span className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-white/20 text-white font-bold text-lg">
+              <div className="flex items-center gap-6 w-full">
+                <span className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-white/20 text-white font-bold text-lg">
                   {index + 1}
                 </span>
                 <h3 className="text-xl font-semibold text-left flex-1">
@@ -42,7 +42,7 @@ export function Rules() {
                   <ul className="space-y-3">
                     {round.rules.map((rule, idx) => (
                       <li key={idx} className="flex items-start gap-3">
-                      <span className="font-medium min-w-[20px]">
+                        <span className="font-medium min-w-[20px]">
                           {idx + 1}.
                         </span>
                         <span className="leading-relaxed text-white/90">
@@ -63,15 +63,15 @@ export function Rules() {
 
 const rounds = [
   {
-    title: "ROUND 1: Idea and Video Clip Submission",
-    description: "Submit your innovative business idea that could potentially revolutionize the market. Your submission should include a comprehensive overview of your business concept, target audience, problem statement, and proposed solution in P.D.F. format. You should also submit a 2-minute video clip giving a brief description about your business idea.",
+    title: "ROUND 1: Idea Submission",
+    description: "Submit your innovative business idea that could potentially revolutionize the market. Your submission should include a comprehensive overview of your business concept, target audience, problem statement, and proposed solution in P.D.F. format.",
     rules: [
-      "Submit a 300-word description and a 2-minute video clip of your business idea",
+      "Submit a 300-word description essay of your business idea",
       "Include technical and financial details in your submission",
       "Clearly outline the problem your idea solves",
       "Describe your target audience and market size",
       "Explain your competitive advantage",
-      "The video clip should not be more than 2-minutes long. It should describe the business concept and the profitability of the business in brief",
+      "Round 1 requires a 300-word description in PDF of the business idea",
       "Only the foremost ideas will be selected for the next round"
     ]
   },
