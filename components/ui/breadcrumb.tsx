@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ChevronRight } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/app/libs/utils"
 import Link from "next/link"
 
 const Breadcrumb = React.forwardRef<

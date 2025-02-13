@@ -21,7 +21,7 @@ export function RulesFreefire() {
           <AccordionItem 
             key={index} 
             value={`item-${index + 1}`} 
-            className="border-none rounded-xl bg-white/10 backdrop-blur-lg transition-all duration-300"
+            className="border-none rounded-xl bg-white/10  transition-all duration-300"
           >
             <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/15 rounded-xl transition-all duration-300 w-full">
               <div className="flex items-center gap-6 w-full">
@@ -38,7 +38,7 @@ export function RulesFreefire() {
                 <p className="text-white/80 leading-relaxed text-lg">
                   {section.description}
                 </p>
-                <div className="bg-white/15 backdrop-blur-lg rounded-xl p-6 space-y-4">
+                <div className="bg-white/15 rounded-xl p-6 space-y-4">
                   <h4 className="font-semibold text-lg">Guidelines:</h4>
                   <ul className="space-y-3">
                     {section.rules.map((rule, idx) => (

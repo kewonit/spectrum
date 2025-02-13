@@ -5,6 +5,7 @@ import Navigation from '@/components/navigation'
 import Footer  from '@/components/footer'
 import './globals.css'
 import Script from 'next/script'
+import { cn } from "@/app/libs/utils"
 
 const inter = Inter({
   subsets: ["latin"],

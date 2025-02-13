@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/app/libs/utils"
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"

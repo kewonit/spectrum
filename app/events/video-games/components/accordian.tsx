@@ -13,7 +13,7 @@ import {
             Total 4 rounds
         </p>
         
-        <AccordionItem value="item-1" className="border-none rounded-xl bg-white/10 backdrop-blur-lg transition-all duration-300"        >
+        <AccordionItem value="item-1" className="border-none rounded-xl bg-white/10 transition-all duration-300"        >
           <AccordionTrigger>ROUND 1: Resistance is Futile</AccordionTrigger>
           <AccordionContent>
           1. Aptitude Test <br/>

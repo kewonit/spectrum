@@ -7,7 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/libs/utils';
 
 interface BreadcrumbItemType {
   label: string;
