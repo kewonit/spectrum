@@ -1,63 +1,65 @@
-# The base image
-FROM node:20.16.0-bookworm-slim AS base
+# Builder image
+FROM node:18-alpine AS builder
 
-
-
-# The "dependencies" stage
-# It's good to install dependencies in a separate stage to be explicit about
-# the files that make it into production stage to avoid image bloat
-FROM base AS deps
-
-# Enable Corepack so that Yarn can be installed
-RUN corepack enable
-
-# The application directory
 WORKDIR /app
 
-# Copy fiels for package management
-COPY package.json yarn.lock .yarnrc.yml ./
+# First install dependencies so we can cache them
+RUN apk update && apk upgrade
+RUN apk add curl
 
-# Install packages
-RUN yarn install --force --immutable --inline-builds
+COPY package.json package-lock.json ./
+RUN npm install --force
 
+# Now copy the rest of the app and build it
+COPY . .
 
+# Define build arguments
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ARG DATABASE_URL
+ARG DIRECT_URL
+ARG CASHFREE_BASE_URL
+ARG CASHFREE_SECRET_KEY_PROD
+ARG CASHFREE_APP_ID_PROD
+ARG SUPABASE_SERVICE_KEY
+ARG NEXT_PUBLIC_APP_URL
 
-# The final image
-FROM base AS production
+# Set environment variables before build
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY \
+    DATABASE_URL=$DATABASE_URL \
+    DIRECT_URL=$DIRECT_URL \
+    CASHFREE_BASE_URL=$CASHFREE_BASE_URL \
+    CASHFREE_SECRET_KEY_PROD=$CASHFREE_SECRET_KEY_PROD \
+    CASHFREE_APP_ID_PROD=$CASHFREE_APP_ID_PROD \
+    SUPABASE_SERVICE_KEY=$SUPABASE_SERVICE_KEY \
+    NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 
-# Enable Corepack so that Yarn can be installed
-RUN corepack enable
+# Run build after environment setup
+RUN npm run build
 
-# Create a group and a non-root user to run the app
-RUN groupadd --gid 1001 "nodejs"
-RUN useradd --uid 1001 --create-home --shell /bin/bash --groups "nodejs" "nextjs"
+# Production image
+FROM node:18-alpine AS runner
 
-# The application directory
 WORKDIR /app
 
-# Make sure that the .next directory exists
-RUN mkdir -p /app/.next && chown -R nextjs:nodejs /app
+# Create a non-root user
+RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
+USER nonroot
 
-# Copy packages from the dependencies stage
-COPY --from=deps --chown=nextjs:nodejs /app/.yarn /app/.yarn
+# Copy the standalone output from the builder image
+COPY --from=builder --chown=nonroot:nonroot /app/.next/standalone ./
+COPY --from=builder --chown=nonroot:nonroot /app/public ./public
+COPY --from=builder --chown=nonroot:nonroot /app/.next/static ./.next/static
 
-# Copy the rest of the application files
-COPY --chown=nextjs:nodejs . .
-
-# Enable production mode
-ENV NODE_ENV=production
-
-# Disable Next.js telemetry
+# Prepare the app for production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+ENV HOSTNAME="0.0.0.0"
 
-# Configure application port
-ENV PORT=3000
-
-# Let image users know what port the app is going to listen on
 EXPOSE 3000
 
-# Change the user
-USER nextjs:nodejs
-
-# Make sure dependencies are picked up correctly
-RUN yarn install --immutable --inline-builds
+# Start the app
+CMD ["node", "server.js"]
