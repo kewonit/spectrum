@@ -35,7 +35,7 @@ const ruleList = [
   "Each team can have a maximum of 3 members.",
   "Registration is mandatory through the official event portal.",
   "The competition will have two rounds.",
-  "Round 1 requires a 300-word description in PDF and a 2-minute video of the business idea.",
+  "Round 1 requires a 300-word description in PDF.",
   "Top business ideas will be shortlisted for the final round based on submissions.",
   "Pitch presentations must be 5 to 7 minutes long.",
   "Use PowerPoint or similar visual aids for the presentation.",

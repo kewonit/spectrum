@@ -50,7 +50,7 @@ export function Electrica_registarion3() {
                                             </svg>
                                             <div>
                                                 <p className="text-[11px] sm:text-sm font-semibold text-gray-900">Event Format</p>
-                                                <p className="text-[9px] sm:text-xs text-gray-500">5v5 Competitive Matches + Single Elimination Bracket
+                                                <p className="text-[9px] sm:text-xs text-gray-500">4v4 Competitive Matches + Single Elimination Bracket
 </p>
                                             </div>
                                         </div>
