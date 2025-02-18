@@ -26,6 +26,11 @@ jobs:
       CASHFREE_APP_ID_PROD: ${{ secrets.CASHFREE_APP_ID_PROD }}
       SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
       NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+      SPACES_KEY: ${{ secrets.SPACES_KEY }}
+      SPACES_SECRET: ${{ secrets.SPACES_SECRET }}
+      NEXT_PUBLIC_SPACE_NAME: ${{ secrets.NEXT_PUBLIC_SPACE_NAME }}
+      NEXT_PUBLIC_SPACES_REGION: ${{ secrets.NEXT_PUBLIC_SPACES_REGION }}
+      SPACE_NAME: ${{ secrets.SPACE_NAME }}
       
     steps:
       - name: Checkout repository
@@ -54,3 +59,8 @@ jobs:
             CASHFREE_APP_ID_PROD=${{ secrets.CASHFREE_APP_ID_PROD }}
             SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
             NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
+            SPACES_KEY=${{ secrets.SPACES_KEY }}
+            SPACES_SECRET=${{ secrets.SPACES_SECRET }}
+            NEXT_PUBLIC_SPACE_NAME=${{ secrets.NEXT_PUBLIC_SPACE_NAME }}
+            NEXT_PUBLIC_SPACES_REGION=${{ secrets.NEXT_PUBLIC_SPACES_REGION }}
+            SPACE_NAME=${{ secrets.SPACE_NAME }}

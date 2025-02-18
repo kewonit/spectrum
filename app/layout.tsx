@@ -24,10 +24,10 @@ export const metadata: Metadata = {
     default: "PCCOE Spectrum'25",
     template: "%s | spectrumpccoe25.tech",
   },
-  description: "PCCOE Spectrum'25 | PCET's PIMPRI CHINCHWAD COLLEGE OF ENGINEERING, Pune | Department of Applied Sciences and Humanities presents | Tech event for first year students | Annual State Level Technical Symposium for Extra Oridinary First Year Engineering Students!",
+  description: "PCCOE Spectrum'25 | PCET'S PIMPRI CHINCHWAD COLLEGE OF ENGINEERING, PUNE | Department of Applied Sciences and Humanities presents | Tech event for first year students | Annual State Level Technical Symposium for Extra Oridinary First Year Engineering Students!",
   openGraph: {
     title: "PCCOE Spectrum'25",
-    description: "PCCOE Spectrum'25 | PCET's PIMPRI CHINCHWAD COLLEGE OF ENGINEERING, Pune | Department of Applied Sciences and Humanities presents | Tech event for first year students | Annual State Level Technical Symposium for Extra Oridinary First Year Engineering Students!",
+    description: "PCCOE Spectrum'25 | PCET's PIMPRI CHINCHWAD COLLEGE OF ENGINEERING, PUNE | Department of Applied Sciences and Humanities presents | Tech event for first year students | Annual State Level Technical Symposium for Extra Oridinary First Year Engineering Students!",
     url: "https://pccoespectrum25.tech",
     siteName: "spectrumpccoe25.tech",
     images: [
@@ -83,10 +83,15 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <Navigation />
-        <Script src='https://www.cssscript.com/demo/cat-follow-cursor-oneko/oneko.js' />
-        {children}
-        <Footer />
+        <main>
+          <div style={{ backgroundColor: '#e6ffe6', color: '#2e7d32', padding: '10px', textAlign: 'center', fontWeight: 'bold' }}>
+            Registrations are now open again for NON-PCCoE students!
+          </div>
+          <Navigation />
+          <Script src='https://www.cssscript.com/demo/cat-follow-cursor-oneko/oneko.js' />
+          {children}
+          <Footer />
+        </main>
       </body>
     </html> 
   )

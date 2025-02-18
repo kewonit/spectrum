@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -9,6 +9,7 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,7 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, X, AlertTriangle } from "lucide-react";
+import { Loader2, X, AlertTriangle, ImageIcon, Download } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { EventDetails, RegistrationStatusResponse, TeamMember } from "@/app/types/events";
@@ -37,6 +38,8 @@ import {
 import Link from 'next/link';
 import PaymentButton from "@/app/components/PaymentButton";
 import InviteMembersComponent from "./InviteMembersComponent";
+import PaymentScreenshotUpload from "@/app/components/PaymentScreenshotUpload";  // NEW import
+import Image from "next/image"; // NEW import
 
 const createTeamSchema = z.object({
   teamName: z.string()
@@ -47,6 +50,14 @@ const createTeamSchema = z.object({
 
 const inviteMemberSchema = z.object({
   email: z.string().email("Invalid email address")
+});
+
+// Add a new schema for manual payment details
+const manualPaymentSchema = z.object({
+  transactionNumber: z.string().min(1, "Transaction number is required"),
+  amountPaid: z.number().positive("Amount must be positive"),
+  screenshotUrl: z.string().min(1, "Payment screenshot is required"),
+  teamId: z.string().nullable()  // Add this line
 });
 
 interface TeamData {
@@ -68,6 +79,10 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   const [disqualificationAck, setDisqualificationAck] = useState(false);
   const [confirmMembers, setConfirmMembers] = useState(false);
   const [confirmInvalidation, setConfirmInvalidation] = useState(false);
+  const [showManualPaymentForm, setShowManualPaymentForm] = useState(false);
+  // NEW: state for team manual payment form
+  const [showTeamManualPaymentForm, setShowTeamManualPaymentForm] = useState(false);
+  const [screenshotUrl, setScreenshotUrl] = useState<string>("");  // NEW state
   
   const createTeamForm = useForm<z.infer<typeof createTeamSchema>>({
     resolver: zodResolver(createTeamSchema),
@@ -77,6 +92,8 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     resolver: zodResolver(inviteMemberSchema),
     defaultValues: { email: "" }
   });
+
+  const manualPaymentForm = useForm<z.infer<typeof manualPaymentSchema>>();
 
   const fetchTeamMembers = useCallback(async () => {
     if (!currentTeamId) return;
@@ -338,6 +355,59 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     toast.info("Payment functionality will be implemented soon");
   };
 
+  const onManualPayment = async (data: z.infer<typeof manualPaymentSchema>) => {
+    try {
+      setIsLoading(true);
+      // Validate required fields
+      if (!data.transactionNumber || !data.amountPaid || !data.screenshotUrl) {
+        toast.error("Missing required fields", {
+          description: "Please fill in all required fields including the payment screenshot"
+        });
+        return;
+      }
+  
+      const payload = {
+        eventId: eventDetails.id,
+        transactionNumber: data.transactionNumber,
+        amountPaid: data.amountPaid,
+        screenshotUrl: data.screenshotUrl,
+        teamId: data.teamId // Include teamId for team registrations
+      };
+  
+      const response = await fetch("/api/manual-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+  
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Manual payment registration failed");
+      }
+  
+      const result = await response.json();
+      
+      // Close the form
+      setShowManualPaymentForm(false);
+      setShowTeamManualPaymentForm(false);
+      
+      // Update registration status
+      await checkRegistrationStatus();
+      
+      toast.success("Registration completed successfully!");
+      
+      // Reload the page to show updated status
+      window.location.reload();
+      
+    } catch (error: any) {
+      toast.error("Registration failed", {
+        description: error.message || "Please try again later"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Add this helper function
   const renderTeamSizeWarning = (acceptedCount: number, requiredCount: number) => {
     if (acceptedCount < requiredCount) {
@@ -579,19 +649,27 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
         <div className="space-y-4">
           <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4">
             <p className="text-yellow-800 text-sm">
-              Non-PCCOE students need to complete payment before registration.
+              Non-PCCOE students need to submit your transaction details below.
             </p>
             <p className="text-yellow-700 font-medium mt-2">
               Registration Fee: ₹100.00
             </p>
           </div>
           
-          <PaymentButton
-            eventId={eventDetails.id}
-            type="solo"
-            amount={100}
-            onSuccess={checkRegistrationStatus}
-          />
+          {showManualPaymentForm ? (
+            <ManualPaymentForm
+              onSubmit={onManualPayment}
+              onCancel={() => setShowManualPaymentForm(false)}
+              totalAmount={100}
+            />
+          ) : (
+            <Button
+              onClick={() => setShowManualPaymentForm(true)}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Enter Payment Details
+            </Button>
+          )}
         </div>
       );
     }
@@ -781,9 +859,9 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
     if (registrationStatus?.isLeader && !registrationStatus?.profile?.is_pccoe_student) {
       const acceptedMembers = teamMembers?.filter(m => m.status === 'accepted') || [];
       const pendingMembers = teamMembers?.filter(m => m.status === 'pending') || [];
-      const totalMemberCount = acceptedMembers.length + pendingMembers.length; // Count BOTH accepted AND pending
+      const totalMembersCount = acceptedMembers.length + pendingMembers.length; // Count BOTH accepted AND pending
       const perMemberFee = 100;
-      const totalAmount = totalMemberCount * perMemberFee; // Total amount for ALL members
+      const totalAmount = totalMembersCount * perMemberFee; // Total amount for ALL members
     
       return (
         <div className="space-y-4">
@@ -967,15 +1045,26 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
               I understand that the minimum team size is {eventDetails.min_team_size} members and registering below this will lead to immediate disqualification with no refunds.
             </span>
           </label>
-          <PaymentButton
-            eventId={eventDetails.id}
-            teamId={currentTeamId || undefined}
-            type="team"
-            amount={totalAmount}
-            disabled={!disqualificationAck || totalMemberCount < eventDetails.min_team_size}
-            onSuccess={checkRegistrationStatus}
-          />
-          {totalMemberCount < eventDetails.min_team_size && (
+          {showTeamManualPaymentForm ? (
+            <ManualPaymentForm
+              onSubmit={onManualPayment}
+              onCancel={() => setShowTeamManualPaymentForm(false)}
+              totalAmount={totalAmount}
+              isTeam={true}
+              memberCount={totalMembersCount}
+              teamId={currentTeamId}  // Pass the teamId
+            />
+          ) : (
+            <Button
+              onClick={() => setShowTeamManualPaymentForm(true)}
+              // NEW: disable button unless disqualification is acknowledged and team size meets minimum
+              disabled={!disqualificationAck || totalMembersCount < eventDetails.min_team_size}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Enter Payment Details (Manual)
+            </Button>
+          )}
+          {totalMembersCount < eventDetails.min_team_size && (
             <div className="mt-2 text-xs text-red-600">
               You need at least {eventDetails.min_team_size} team members (approved + pending) before you can proceed with payment.
             </div>
@@ -1389,14 +1478,29 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
               I understand that the minimum team size is {eventDetails.min_team_size} members and registering below this will lead to immediate disqualification with no refunds.
             </span>
           </label>
-          <PaymentButton
-            eventId={eventDetails.id}
-            teamId={currentTeamId || undefined}
-            type="team"
-            amount={totalAmount}
-            disabled={!disqualificationAck || totalMembersCount < eventDetails.min_team_size}
-            onSuccess={checkRegistrationStatus}
-          />
+
+          {/* NEW: Render manual payment option for team registration */}
+          {showTeamManualPaymentForm ? (
+            <ManualPaymentForm
+              onSubmit={onManualPayment}
+              onCancel={() => setShowTeamManualPaymentForm(false)}
+              totalAmount={totalAmount}
+              isTeam={true}
+              memberCount={totalMembersCount}
+              teamId={currentTeamId}  // Pass the teamId
+            />
+          ) : (
+            <Button
+              onClick={() => setShowTeamManualPaymentForm(true)}
+              // NEW: disable button unless disqualification is acknowledged and team size meets minimum
+              disabled={!disqualificationAck || totalMembersCount < eventDetails.min_team_size}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Enter Payment Details (Manual)
+            </Button>
+          )}
+
+          {/* Fix JSX syntax errors: wrap stray text in a div */}
           {totalMembersCount < eventDetails.min_team_size && (
             <div className="mt-2 text-xs text-red-600">
               You need at least {eventDetails.min_team_size} team members (approved + pending) before you can proceed with payment.
@@ -1405,6 +1509,16 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
           <div className="mt-2 text-xs text-red-600">
             Minimum team size is {eventDetails.min_team_size}. Registering below this will lead to immediate disqualification.
           </div>
+
+          {/* Existing PaymentButton for cases where manual payment is not used */}
+          <PaymentButton
+            eventId={eventDetails.id}
+            teamId={currentTeamId || undefined}
+            type="team"
+            amount={totalAmount}
+            disabled={!disqualificationAck || totalMembersCount < eventDetails.min_team_size}
+            onSuccess={checkRegistrationStatus}
+          />
         </div>
       );
     }
@@ -1430,7 +1544,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
               control={createTeamForm.control}
               name="teamName"
               render={({ field }) => (
-                <FormItem>
+                <FormItem> 
                   <FormLabel>Team Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter team name" {...field} />
@@ -1439,11 +1553,7 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
                 </FormItem>
               )}
             />
-            <Button 
-              type="submit" 
-              className="w-full"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -1460,4 +1570,362 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
   }
   
   return null; // Fallback return
+}
+
+// Add this new component inside the same file
+function ManualPaymentForm({ 
+  onSubmit, 
+  onCancel, 
+  totalAmount,
+  isTeam = false,
+  memberCount = 0,
+  teamId = null  // NEW: Add teamId prop
+}: { 
+  onSubmit: (data: z.infer<typeof manualPaymentSchema>) => void;
+  onCancel: () => void;
+  totalAmount: number;
+  isTeam?: boolean;
+  memberCount?: number;
+  teamId?: string | null;
+}) {
+  const form = useForm<z.infer<typeof manualPaymentSchema>>({
+    resolver: zodResolver(manualPaymentSchema),
+    defaultValues: {
+      amountPaid: totalAmount,
+      transactionNumber: "",
+      screenshotUrl: "",
+      teamId: teamId || null  // Add this line
+    },
+    mode: "onChange" // Enable real-time validation
+  });
+
+  const [screenshotUrl, setScreenshotUrl] = useState("");
+  const isValid = form.formState.isValid;
+  const isDirty = form.formState.isDirty;
+
+  // Watch all relevant fields for validation
+  const watchedFields = form.watch(["transactionNumber", "amountPaid", "screenshotUrl"]);
+
+  const isFormComplete = useMemo(() => {
+    const [transactionNumber, amountPaid, screenshot] = watchedFields;
+    return Boolean(
+      transactionNumber &&
+      amountPaid &&
+      screenshot &&
+      !form.formState.errors.transactionNumber &&
+      !form.formState.errors.amountPaid
+    );
+  }, [watchedFields, form.formState.errors]);
+
+  const onSubmitWithValidation = async (data: z.infer<typeof manualPaymentSchema>) => {
+    try {
+      // Make sure we have screenshot URL
+      if (!screenshotUrl) {
+        toast.error("Please upload payment screenshot");
+        return;
+      }
+
+      // Make sure amount matches
+      if (data.amountPaid !== totalAmount) {
+        toast.error("Amount paid must match the required amount");
+        return;
+      }
+
+      // Call the provided onSubmit with all data including screenshot URL and teamId
+      await onSubmit({
+        transactionNumber: data.transactionNumber,
+        amountPaid: data.amountPaid,
+        screenshotUrl,
+        teamId: teamId || null  // Include teamId in the schema-compliant way
+      });
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast.error("Failed to submit payment details");
+    }
+  };
+
+  const handleDownloadQR = () => {
+    fetch('https://res.cloudinary.com/dfyrk32ua/image/upload/v1739875787/Spectrum/5dd65983-ce58-41e4-beeb-cea7264b0d2e.png')
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'spectrum-qr.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      });
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmitWithValidation)} className="space-y-6">
+        <Card className="border-2">
+          <CardHeader className="space-y-3 border-b bg-muted/20">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-1 bg-blue-600 rounded-full" />
+              <div>
+                <CardTitle className="text-xl">Complete Your Payment</CardTitle>
+                <CardDescription className="text-sm text-muted-foreground">
+                  Follow these steps to finish registration
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="space-y-6 p-4 sm:p-6">
+            {/* Step 1: Amount Section */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <span className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold">
+                  1
+                </span>
+                Pay Using UPI
+              </h3>
+              
+              <div className="bg-blue-50 p-4 sm:p-6 rounded-lg border border-blue-100">
+                <div className="flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-4">
+                  <div className="space-y-1 text-center sm:text-left">
+                    <p className="text-sm text-blue-600 font-medium">Amount to Pay</p>
+                    <p className="text-3xl font-bold text-blue-700">₹{totalAmount.toFixed(2)}</p>
+                    {isTeam && (
+                      <p className="text-sm text-blue-600">
+                        {memberCount} {memberCount === 1 ? 'member' : 'members'} × ₹100
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-40 sm:w-32 h-40 sm:h-32 bg-white p-3 rounded-lg shadow-sm">
+                      <Image
+                        src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1739875787/Spectrum/5dd65983-ce58-41e4-beeb-cea7264b0d2e.png"
+                        alt="Spectrum UPI QR Code"
+                        width={160}
+                        height={160}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleDownloadQR}
+                      className="text-xs w-full sm:w-auto"
+                    >
+                      <Download className="h-3 w-3 mr-1" />
+                      Save QR Code
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2: Transaction Details */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <span className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold">
+                  2
+                </span>
+                Enter Transaction Details
+              </h3>
+
+              <FormField
+                control={form.control}
+                name="transactionNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      Transaction Reference/UPI ID
+                    </FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Enter the transaction number from your payment" 
+                        {...field} 
+                        className="bg-white"
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs">
+                      Check your payment app for the transaction reference number
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Step 3: Screenshot Upload */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <span className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold">
+                  3
+                </span>
+                Upload Payment Proof
+              </h3>
+
+              <FormField
+                control={form.control}
+                name="screenshotUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="space-y-4">
+                        {!screenshotUrl && (
+                          <div className="rounded-xl border bg-white p-4 sm:p-6">
+                            <div className="flex flex-col items-center gap-4">
+                              {/* Icon Section */}
+                              <div className="p-3 bg-blue-50 rounded-full">
+                                <ImageIcon className="h-6 w-6 text-blue-600" />
+                              </div>
+
+                              {/* Instructions Card */}
+                              <div className="w-full space-y-4">
+                                <div className="text-center">
+                                  <h4 className="font-medium text-gray-900">
+                                    Payment Screenshot Guide
+                                  </h4>
+                                  <p className="text-sm text-gray-500 mt-1">
+                                    Please ensure your screenshot clearly shows:
+                                  </p>
+                                </div>
+
+                                {/* Responsive Grid for Requirements */}
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                  {/* Success Message Card */}
+                                  <div className="bg-green-50 p-3 rounded-lg border border-green-100 flex sm:flex-col items-center sm:items-center gap-3 sm:gap-2">
+                                    <div className="p-2 bg-green-100 rounded-full shrink-0">
+                                      <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                      </svg>
+                                    </div>
+                                    <p className="text-xs font-medium text-green-800 sm:text-center">Transaction Success Message</p>
+                                  </div>
+
+                                  {/* Amount Card */}
+                                  <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 flex sm:flex-col items-center sm:items-center gap-3 sm:gap-2">
+                                    <div className="p-2 bg-blue-100 rounded-full shrink-0">
+                                      <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                      </svg>
+                                    </div>
+                                    <div className="sm:text-center">
+                                      <p className="text-xs font-medium text-blue-800">Amount: ₹{totalAmount}</p>
+                                    </div>
+                                  </div>
+
+                                  {/* Transaction ID Card */}
+                                  <div className="bg-purple-50 p-3 rounded-lg border border-purple-100 flex sm:flex-col items-center sm:items-center gap-3 sm:gap-2">
+                                    <div className="p-2 bg-purple-100 rounded-full shrink-0">
+                                      <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                                      </svg>
+                                    </div>
+                                    <p className="text-xs font-medium text-purple-800 sm:text-center">Transaction Reference</p>
+                                  </div>
+                                </div>
+
+                                {/* Upload Area */}
+                                <div className="mt-4 sm:mt-6">
+                                  <PaymentScreenshotUpload
+                                    onUpload={(url) => {
+                                      field.onChange(url);
+                                      setScreenshotUrl(url);
+                                    }}
+                                    screenshotUrl={screenshotUrl}
+                                    isRequired={true}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Preview Section */}
+                        {screenshotUrl && (
+                          <div className="rounded-xl border bg-white p-4 sm:p-6">
+                            <div className="space-y-4">
+                              <div className="flex items-center justify-between">
+                                <h4 className="text-sm font-medium text-gray-900">Uploaded Screenshot</h4>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setScreenshotUrl("")}
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                >
+                                  Change
+                                </Button>
+                              </div>
+                              <div className="relative aspect-[3/2] w-full overflow-hidden rounded-lg border bg-gray-50">
+                                <Image
+                                  src={screenshotUrl}
+                                  alt="Payment Screenshot"
+                                  fill
+                                  className="object-contain"
+                                />
+                              </div>
+                              <p className="text-xs text-gray-500 text-center">
+                                ✓ Screenshot uploaded successfully
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Action Buttons - Made More Mobile Friendly */}
+        <div className="flex flex-col-reverse sm:flex-row gap-3">
+          <Button 
+            type="submit" 
+            className="flex-1 bg-green-600 hover:bg-green-700 h-11 sm:h-12 text-sm sm:text-base"
+            disabled={
+              !isFormComplete || 
+              form.formState.isSubmitting || 
+              !screenshotUrl
+            }
+          >
+            {form.formState.isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              `Complete Registration`
+            )}
+          </Button>
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={onCancel}
+            className="h-11 sm:h-12 text-sm sm:text-base"
+          >
+            Cancel
+          </Button>
+        </div>
+
+        {/* Validation Message */}
+        {!isFormComplete && isDirty && (
+          <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-4 text-sm text-yellow-700">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+              <div className="space-y-1">
+                <p className="font-medium">Please complete all required fields:</p>
+                <ul className="list-disc list-inside text-xs space-y-1 text-yellow-600">
+                  {!form.watch('transactionNumber') && <li>Enter transaction reference</li>}
+                  {!screenshotUrl && <li>Upload payment screenshot</li>}
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+      </form>
+    </Form>
+  );
 }

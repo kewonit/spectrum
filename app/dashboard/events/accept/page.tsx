@@ -136,17 +136,17 @@ export default function AcceptPage() {
                 label: "Learn More",
                 onClick: () => {
                   toast.info("About Team Categories", {
-                    description: "To ensure fair competition, teams are divided into PCCOE and non-PCCOE categories. This helps maintain a level playing field for all participants.",
+                    description: "To ensure fair competition, PCCOE students can only join PCCOE teams and non-PCCOE participants can only join non-PCCOE teams.",
                     duration: 8000,
                   });
                 }
               }
             });
             
-            // Show in the error dialog with clearer explanation
+            // Show error dialog using the backend message
             setErrorAlert({
               title: "Important Team Rule",
-              message: "For fair competition:\n\n• PCCOE students can only join PCCOE teams\n• Non-PCCOE participants can only join non-PCCOE teams\n\nThis ensures all participants compete in their respective categories."
+              message: data.message,
             });
             break;
 
@@ -552,17 +552,23 @@ export default function AcceptPage() {
               </AlertDialogTitle>
               
               <AlertDialogDescription asChild>
-                <div className="space-y-4">
-                  <div className="text-base text-gray-600 space-y-4">
-                    <p>Something went wrong! This could be because:</p>
-                    <ul className="list-disc pl-4 space-y-2">
-                      <li>You&apos;re trying to accept an invite you previously rejected</li>
-                      <li>Our server is having issues (just like us)</li>
-                      <li>Something unexpected happened (probably your fault)</li>
-                    </ul>
-                    <p>Please try again or contact support if the issue persists.</p>
+                {errorAlert?.title === "Important Team Rule" ? (
+                  <div>
+                    {errorAlert.message}
                   </div>
-                </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="text-base text-gray-600 space-y-4">
+                      <p>Something went wrong! This could be because:</p>
+                      <ul className="list-disc pl-4 space-y-2">
+                        <li>You&apos;re trying to accept an invite you previously rejected</li>
+                        <li>Our server is having issues (just like us)</li>
+                        <li>Something unexpected happened (probably your fault)</li>
+                      </ul>
+                      <p>Please try again or contact support if the issue persists.</p>
+                    </div>
+                  </div>
+                )}
               </AlertDialogDescription>
             </AlertDialogHeader>
 

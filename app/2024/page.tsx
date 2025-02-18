@@ -1,3 +1,22 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Spectrum 2024 | Team Members',
+  description: 'Meet the amazing team behind Spectrum 2024, the technical fest of First Year Engineering at PCCOE.',
+  openGraph: {
+    title: 'Spectrum 2024 | Team Members',
+    description: 'Meet the amazing team behind Spectrum 2024, the technical fest of First Year Engineering at PCCOE.',
+    type: 'website',
+    url: 'https://spectrumpccoe25.tech/2024',
+    siteName: 'Spectrum 2024',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Spectrum 2024 | Team Members',
+    description: 'Meet the amazing team behind Spectrum 2024, the technical fest of First Year Engineering at PCCOE.',
+  }
+}
+
 import localFont from 'next/font/local'
 import { Inter } from 'next/font/google'
 
