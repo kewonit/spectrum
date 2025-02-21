@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import Hero from "@/components/hero";
 import Cards from "@/components/cards";
-import Link from 'next/link';
+import Link from "next/link";
 import { EmblaOptionsType } from "embla-carousel";
 import "@/components/parallax/embla.css";
 import EmblaCarousels from "@/components/thumbs/EmblaCarousels";
@@ -71,7 +71,7 @@ export default function Home() {
             <div className="relative h-80 mb-4 sm:mb-0">
               <Image
                 alt="A man looking at a robot a spectrum 2023"
-                src="https://i.imgur.com/escfJ52.jpg"
+                src="https://i.postimg.cc/4xt9nfHM/escfJ52.jpg"
                 fill
                 sizes="(max-width: 768px) 213px, 33vw"
                 className="rounded-lg object-cover  sm:object-center"
@@ -115,9 +115,6 @@ export default function Home() {
             </div>
           </div>
 
-
-
-
           <div className="rounded-3xl mx-[20px] md:mx-auto bg-gradient-to-br from-gray-900 to-gray-800 p-8 md:p-12 shadow-xl backdrop-blur-sm max-w-4xl border border-gray-700 transform transition-all hover:shadow-2xl hover:scale-[1.01]">
             <div className="flex flex-col items-center md:items-stretch justify-between gap-8 md:flex-row">
               <div className="text-center md:text-left space-y-3">
@@ -125,7 +122,8 @@ export default function Home() {
                   Meet Our Previous Team
                 </h3>
                 <p className="text-gray-600 text-lg max-w-md">
-                  Discover the dedicated individuals who made Spectrum&apos;24 a remarkable success
+                  Discover the dedicated individuals who made Spectrum&apos;24 a
+                  remarkable success
                 </p>
               </div>
               <div className="flex items-center">
@@ -151,9 +149,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-
-
         </div>
         {/* <section className="sandbox__carousel">
               <EmblaCarousels slides={SLIDES} options={OPTIONS} />
@@ -169,7 +164,6 @@ export default function Home() {
           <EmblaCarousels slides={SLIDES} options={OPTIONS} />
         </section> */}
       </div>
-      
     </main>
   );
 }
