@@ -85,10 +85,10 @@ export function EventList({ events }: EventListProps) {
   );
 
   return (
-    <div className="p-2 sm:p-4 border-4 border-dashed border-gray-300/50 rounded-3xl">
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden relative">
+    // Updated outer container container styling
+    <div className="p-4">
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden relative">
         {/* Dots for ticket effect */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-r-full"></div>
         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-l-full"></div>
 
         <div className="px-4 sm:px-8 lg:px-10 py-6 sm:py-8 lg:py-10">

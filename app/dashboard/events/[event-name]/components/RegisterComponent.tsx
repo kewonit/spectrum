@@ -884,20 +884,24 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
           <Tabs defaultValue="members">
             <TabsList className="grid w-full grid-cols-2 h-auto">
               <TabsTrigger value="members" className="px-2 py-2 h-auto text-[13px] sm:text-sm">
-                Team Members
-                {pendingMembers.length > 0 && (
-                  <span className="ml-1 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
-                    {pendingMembers.length} pending
-                  </span>
-                )}
+                <div className="flex flex-col sm:flex-row items-center">
+                  <span>Team Members</span>
+                  {pendingMembers.length > 0 && (
+                    <span className="mt-1 sm:mt-0 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                      {pendingMembers.length} pending
+                    </span>
+                  )}
+                </div>
               </TabsTrigger>
               <TabsTrigger value="invite" className="px-2 py-2 h-auto text-[13px] sm:text-sm">
-                Invite Members
-                {pendingMembers.length > 0 && (
-                  <span className="ml-1 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
-                    {totalMembers}/{maxAllowed}
-                  </span>
-                )}
+                <div className="flex flex-col sm:flex-row items-center">
+                  <span>Invite Members</span>
+                  {pendingMembers.length > 0 && (
+                    <span className="mt-1 sm:mt-0 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                      {totalMembers}/{maxAllowed}
+                    </span>
+                  )}
+                </div>
               </TabsTrigger>
             </TabsList>
     
@@ -1097,20 +1101,24 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
         <Tabs defaultValue="members">
           <TabsList className="grid w-full grid-cols-2 h-auto">
             <TabsTrigger value="members" className="px-2 py-2 h-auto text-[13px] sm:text-sm">
-              Team Members
-              {pendingMembers.length > 0 && (
-                <span className="ml-1 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
-                  {pendingMembers.length} pending
-                </span>
-              )}
+              <div className="flex flex-col sm:flex-row items-center">
+                <span>Team Members</span>
+                {pendingMembers.length > 0 && (
+                  <span className="mt-1 sm:mt-0 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                    {pendingMembers.length} pending
+                  </span>
+                )}
+              </div>
             </TabsTrigger>
             <TabsTrigger value="invite" className="px-2 py-2 h-auto text-[13px] sm:text-sm">
-              Invite Members
-              {pendingMembers.length > 0 && (
-                <span className="ml-1 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
-                  {totalMembers}/{maxAllowed}
-                </span>
-              )}
+              <div className="flex flex-col sm:flex-row items-center">
+                <span>Invite Members</span>
+                {pendingMembers.length > 0 && (
+                  <span className="mt-1 sm:mt-0 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                    {totalMembers}/{maxAllowed}
+                  </span>
+                )}
+              </div>
             </TabsTrigger>
           </TabsList>
   
@@ -1317,20 +1325,24 @@ export default function RegisterComponent({ eventDetails }: { eventDetails: Even
           <Tabs defaultValue="members">
             <TabsList className="grid w-full grid-cols-2 h-auto">
               <TabsTrigger value="members" className="px-2 py-2 h-auto text-[13px] sm:text-sm">
-                Team Members
-                {pendingMembers.length > 0 && (
-                  <span className="ml-1 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
-                    {pendingMembers.length} pending
-                  </span>
-                )}
+                <div className="flex flex-col sm:flex-row items-center">
+                  <span>Team Members</span>
+                  {pendingMembers.length > 0 && (
+                    <span className="mt-1 sm:mt-0 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                      {pendingMembers.length} pending
+                    </span>
+                  )}
+                </div>
               </TabsTrigger>
               <TabsTrigger value="invite" className="px-2 py-2 h-auto text-[13px] sm:text-sm">
-                Invite Members
-                {pendingMembers.length > 0 && (
-                  <span className="ml-1 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
-                    {totalMembersCount}/{eventDetails.max_team_size}
-                  </span>
-                )}
+                <div className="flex flex-col sm:flex-row items-center">
+                  <span>Invite Members</span>
+                  {pendingMembers.length > 0 && (
+                    <span className="mt-1 sm:mt-0 sm:ml-2 px-1.5 py-0.5 text-[10px] sm:text-xs bg-yellow-100 text-yellow-700 rounded-full">
+                      {totalMembersCount}/{eventDetails.max_team_size}
+                    </span>
+                  )}
+                </div>
               </TabsTrigger>
             </TabsList>
     

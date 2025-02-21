@@ -8,8 +8,10 @@ import RegisterComponent from "./components/RegisterComponent";
 import { Suspense } from "react";
 import { slugify } from "@/app/utils/slugify";
 import EventLoading from "./loading";
-import { Image as ImageIcon } from "lucide-react"; // Add this import
+import { CalendarIcon, Image as ImageIcon, Users } from "lucide-react"; // Add this import
 import ProfilePopupWrapper from '@/app/dashboard/events/components/ProfilePopupWrapper';
+import { Badge } from "@/components/ui/badge";
+import { format, isToday, isTomorrow, isPast, isFuture, isValid } from "date-fns"; // Add isValid
 
 interface EventDetails {
   id: string;
@@ -43,6 +45,54 @@ async function getEventDetails(eventName: string) {
   return event || null;
 }
 
+// Add this utility function before the component
+function getFormattedDateRange(startDate: string, endDate: string) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  
+  // Handle invalid dates
+  if (!isValid(start) || !isValid(end)) {
+    return {
+      dateRange: 'Dates to be announced',
+      status: '(TBA)'
+    };
+  }
+
+  const now = new Date();
+
+  // Determine status
+  let status = '';
+  if (isPast(end)) {
+    status = '(Closed)';
+  } else if (isFuture(start)) {
+    const daysUntilStart = Math.ceil((start.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    status = daysUntilStart <= 7 ? '(Starting Soon)' : '(Upcoming)';
+  } else {
+    const daysUntilEnd = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    status = daysUntilEnd <= 2 ? '(Ending Soon)' : '(Active)';
+  }
+
+  // Format dates
+  const formatDate = (date: Date) => {
+    if (isToday(date)) return 'Today';
+    if (isTomorrow(date)) return 'Tomorrow';
+    return format(date, 'MMM d, yyyy');
+  };
+
+  // Special case: Same day event
+  if (format(start, 'yyyy-MM-dd') === format(end, 'yyyy-MM-dd')) {
+    return {
+      dateRange: formatDate(start),
+      status
+    };
+  }
+
+  return {
+    dateRange: `${formatDate(start)} to ${formatDate(end)}`,
+    status
+  };
+}
+
 export default async function EventPage({
   params,
 }: {
@@ -60,7 +110,7 @@ export default async function EventPage({
 
   return (
     <Suspense fallback={<EventLoading />}>
-      <main className="min-h-screen bg-[#EBE9E0] p-4 sm:p-6 lg:p-8">
+      <main className="min-h-screen bg-[#EBE9E0] p-3 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
           <Breadcrumbs
             items={[
@@ -72,89 +122,110 @@ export default async function EventPage({
             className="mb-4"
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Event Title and Image (1/3 width) */}
-            <div className="lg:col-span-1 bg-[#EBE9E0] rounded-xl shadow-lg overflow-hidden border border-gray-200">
-              {/* Event Title Section */}
-              <div className="p-6 bg-white border-b border-gray-100">
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-                  {eventDetails.name}
-                </h1>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {eventDetails.description}
-                </p>
-              </div>
+          <div className="p-2 sm:p-4 border-4 border-dashed border-gray-300/50 rounded-3xl">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden relative">
+              {/* Dots for ticket effect */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-r-full"></div>
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-l-full"></div>
 
-              {/* Image Section with consistent background */}
-              <div className="relative w-full h-[500px] bg-[#EBE9E0]">
-                {eventDetails.img_url ? (
-                  <div className="absolute inset-0 bg-[#EBE9E0]">
-                    <picture>
-                      <img 
-                        className="object-contain w-full h-full"
-                        src={eventDetails.img_url} 
-                        alt={eventDetails.name}
-                        width={800}
-                        height={600}
-                        draggable="false"
-                      />
-                    </picture>
-                  </div>
-                ) : (
-                  <div className="absolute inset-0 bg-[#EBE9E0] flex items-center justify-center">
-                    <ImageIcon className="w-20 h-20 text-gray-400" strokeWidth={1} />
-                  </div>
-                )}
-              </div>
-            </div>
+              <div className="px-3 sm:px-8 lg:px-10 py-4 sm:py-8 lg:py-10">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Left Column */}
+                  <div className="lg:col-span-1">
+                    <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden">
+                      {/* Event Title Section */}
+                      <div className="p-6 bg-white/60 border-b border-gray-100">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                          {eventDetails.name}
+                        </h1>
+                        <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                          {eventDetails.description}
+                        </p>
+                      </div>
 
-            {/* Right Column - Registration Component (2/3 width) */}
-            <div className="lg:col-span-2 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 p-6">
-              <div className="space-y-4">
-                <div>
-                  <span className="inline-block px-2 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-medium tracking-wide uppercase mb-3">
-                    {eventDetails.max_registrations ? `${eventDetails.max_registrations} Spots Available` : 'Open Registration'}
-                  </span>
-                  <h1 className="text-3xl sm:text-4xl font-bold text-black mb-2">
-                    {eventDetails.name}
-                  </h1>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    {eventDetails.description}
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">Team Size</p>
-                      <p className="text-xs text-gray-500">
-                        {eventDetails.max_team_size === 1 
-                          ? "Individual Event"
-                          : `${eventDetails.min_team_size} - ${eventDetails.max_team_size} members`}
-                      </p>
+                      {/* Image Section */}
+                      <div className="relative w-full h-[300px] sm:h-[500px]">
+                        {eventDetails.img_url ? (
+                          <div className="absolute inset-0">
+                            <picture>
+                              <img 
+                                className="object-contain w-full h-full"
+                                src={eventDetails.img_url} 
+                                alt={eventDetails.name}
+                                width={800}
+                                height={600}
+                                draggable="false"
+                              />
+                            </picture>
+                          </div>
+                        ) : (
+                          <div className="absolute inset-0 bg-[#EBE9E0]/40 backdrop-blur-sm flex items-center justify-center">
+                            <ImageIcon className="w-20 h-20 text-gray-400" strokeWidth={1} />
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">Registration Period</p>
-                      <p className="text-xs text-gray-500">
-                        {new Date(eventDetails.registration_start).toLocaleDateString()} - {new Date(eventDetails.registration_end).toLocaleDateString()}
-                      </p>
+
+                  {/* Right Column */}
+                  <div className="lg:col-span-2">
+                    <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl p-6">
+                      <div className="space-y-6">
+                        <div>
+                          <Badge 
+                            variant="secondary" 
+                            className="bg-[#EBE9E0]/50 mb-3"
+                          >
+                            {eventDetails.max_registrations ? `${eventDetails.max_registrations} Spots Available` : 'Open Registration'}
+                          </Badge>
+                          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                            {eventDetails.name}
+                          </h1>
+                          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                            {eventDetails.description}
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 flex items-center gap-3">
+                            <Users className="w-5 h-5 text-primary/70" />
+                            <div>
+                              <p className="text-sm font-semibold text-gray-900">Team Size</p>
+                              <p className="text-xs text-gray-500">
+                                {eventDetails.max_team_size === 1 
+                                  ? "Individual Event"
+                                  : `${eventDetails.min_team_size} - ${eventDetails.max_team_size} members`}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 flex items-center gap-3">
+                            <CalendarIcon className="w-5 h-5 text-primary/70" />
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-sm font-semibold text-gray-900">
+                                  Registration Period
+                                </span>
+                                <Badge variant="outline" className="font-normal">
+                                  {getFormattedDateRange(eventDetails.registration_start, eventDetails.registration_end).status}
+                                </Badge>
+                              </div>
+                              <span className="text-xs text-gray-500 block">
+                                {getFormattedDateRange(eventDetails.registration_start, eventDetails.registration_end).dateRange}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="border-t-2 border-dashed border-gray-300/50 my-6"></div>
+                        
+                        <Suspense fallback={<Button disabled className="w-full">Loading...</Button>}>
+                          <RegisterComponent eventDetails={eventDetails} />
+                        </Suspense>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="border-t-2 border-dashed border-gray-300 my-6"></div>
-                
-                <Suspense fallback={<Button disabled className="w-full">Loading...</Button>}>
-                  <RegisterComponent eventDetails={eventDetails} />
-                </Suspense>
               </div>
             </div>
           </div>
