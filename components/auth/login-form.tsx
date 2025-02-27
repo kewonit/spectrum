@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/app/utils/supabase/client";
 import { Toaster, toast } from "sonner";
 import { Krona_One } from 'next/font/google';
 import {
@@ -10,6 +9,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp"
+import { supabase } from "@/app/utils/supabase/client";
 
 const krona = Krona_One({
   subsets: ['latin'],
@@ -90,28 +90,22 @@ export function LoginForm() {
     setError(null);
 
     try {
-      // Removed account existence check to allow login without an account
-      /*
-      const { data: user, error: userError } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('email', email.toLowerCase().trim())
-        .single();
-
-      if (userError || !user) {
-        toast.error("No account found with this email. Please sign up first!");
-        return;
-      }
-      */
-
-      const { error: otpError } = await supabase.auth.signInWithOtp({ 
-        email: email.toLowerCase().trim(),
-        options: {
-          emailRedirectTo: window.location.origin
-        }
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.toLowerCase().trim(),
+          action: 'sendOtp'
+        }),
       });
-
-      if (otpError) throw otpError;
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send verification code');
+      }
       
       setShowVerification(true);
       setCooldown(COOLDOWN_TIME);
@@ -144,41 +138,27 @@ export function LoginForm() {
     setError(null);
 
     try {
-      const { data, error } = await supabase.auth.verifyOtp({
-        email: email.toLowerCase().trim(),
-        token: token.trim(),
-        type: 'email',
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.toLowerCase().trim(),
+          token: token.trim(),
+          action: 'verifyOtp'
+        }),
       });
-
-      if (error) throw error;
-
-      if (data?.session) {
-        try {
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .upsert({
-              id: data.session.user.id,
-              email: data.session.user.email,
-              updated_at: new Date().toISOString(),
-            }, {
-              onConflict: 'id'
-            });
-          
-          if (profileError) throw profileError;
-          
-          toast.success("Successfully logged in!");
-          router.push('/dashboard');
-          router.refresh();
-        } catch (profileError) {
-          console.error("Profile update failed:", profileError);
-          toast.error("Login successful but profile update failed");
-          router.push('/dashboard');
-          router.refresh();
-        }
-        return;
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Verification failed');
       }
-
-      throw new Error('Verification failed');
+      
+      toast.success("Successfully logged in!");
+      router.push('/dashboard');
+      router.refresh();
     } catch (err: any) {
       console.error("Verification error:", err);
       setAttempts(prev => prev + 1);
