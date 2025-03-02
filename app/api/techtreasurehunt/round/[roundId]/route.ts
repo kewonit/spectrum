@@ -1,13 +1,15 @@
 import { createClient } from '@/app/utils/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { roundId: string } }
-) {
+export async function GET(request: Request) {
+  // Retrieve roundId from URL:
+  const url = new URL(request.url);
+  const segments = url.pathname.split('/');
+  const roundIndex = segments.indexOf('round');
+  const roundId = segments[roundIndex + 1];
+
   try {
     const supabase = await createClient();
-    const roundId = params.roundId;
 
     if (!roundId) {
       return NextResponse.json(

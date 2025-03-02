@@ -217,12 +217,18 @@ function RoundContent({ roundId }: { roundId: string }) {
   );
 }
 
+// Define params as a Promise type
+export type RoundParamsType = Promise<{ roundId: string }>;
+
 // Main page component that wraps the content with the provider
-export default function RoundPage({ params }: { params: { roundId: string } }) {
+export default async function RoundPage({ params }: { params: RoundParamsType }) {
+  // Await the params Promise to get the actual roundId
+  const { roundId } = await params;
+  
   return (
     <GameStateProvider>
       <div className="container max-w-6xl mx-auto p-4">
-        <RoundContent roundId={params.roundId} />
+        <RoundContent roundId={roundId} />
       </div>
     </GameStateProvider>
   );
