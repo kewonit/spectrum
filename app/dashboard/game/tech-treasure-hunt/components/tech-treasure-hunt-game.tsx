@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import { CodeHuntRound } from '@/app/dashboard/game/tech-treasure-hunt/components/code-hunt-round';
 
 type GameStatus = 'loading' | 'not_started' | 'in_progress' | 'completed';
 type RoundStatus = 'not_started' | 'starting' | 'in_progress' | 'evaluating' | 'completed';
@@ -32,6 +33,7 @@ export function TechTreasureHuntGame() {
   const [progressId, setProgressId] = useState<string | null>(null);
   const [attempts, setAttempts] = useState(1);
   const [maxAttempts, setMaxAttempts] = useState(3);
+  const [roundType, setRoundType] = useState<string>('math_quiz');
 
   useEffect(() => {
     async function fetchGameStatus() {
@@ -48,6 +50,9 @@ export function TechTreasureHuntGame() {
         
         if (data.currentRound) {
           setCurrentRound(data.currentRound);
+          
+          // Store the round type
+          setRoundType(data.currentRound.round_type || 'math_quiz');
         }
         
         if (data.progressId) {
@@ -90,7 +95,7 @@ export function TechTreasureHuntGame() {
     setError(null);
     
     try {
-      console.log("Starting round:", currentRound.id);
+      console.log("Starting round:", currentRound.id, "of type:", currentRound.round_type);
       
       const response = await fetch('/api/techtreasurehunt/start-round', {
         method: 'POST',
@@ -249,15 +254,41 @@ export function TechTreasureHuntGame() {
       );
     }
 
-    if (roundStatus === 'in_progress' && currentRound.round_type === 'math_quiz') {
-      return <MathQuizRound 
-        roundId={currentRound.id} 
-        progressId={progressId!} 
-        timeLimit={currentRound.time_limit}
-        onComplete={completeRound}
-        attempts={attempts}
-        maxAttempts={maxAttempts}
-      />;
+    if (roundStatus === 'in_progress') {
+      // BUGFIX: Handle different round types properly
+      if (currentRound.round_type === 'math_quiz') {
+        return <MathQuizRound 
+          roundId={currentRound.id} 
+          progressId={progressId!} 
+          timeLimit={currentRound.time_limit}
+          onComplete={completeRound}
+          attempts={attempts}
+          maxAttempts={maxAttempts}
+        />;
+      } else if (currentRound.round_type === 'code_hunt') {
+        // For now, we'll use a placeholder component
+        // You'll need to create this component
+        return (
+          <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Code Hunt Challenge</h3>
+            <p className="text-gray-600 mb-6">
+              This round type is under development. Please check back later!
+            </p>
+            <Button onClick={retryRound}>Go Back</Button>
+          </div>
+        );
+      } else {
+        // Unknown round type
+        return (
+          <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Unsupported Round Type</h3>
+            <p className="text-gray-600 mb-6">
+              The round type &quot;{currentRound.round_type}&quot; is not currently supported.
+            </p>
+            <Button onClick={retryRound}>Go Back</Button>
+          </div>
+        );
+      }
     }
 
     if (roundStatus === 'evaluating') {

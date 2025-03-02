@@ -89,8 +89,7 @@ export async function POST(req: NextRequest) {
     const registration = await getUserRegistrationForRound(supabase, round.event_id, user.id);
     
     if (!registration) {
-      // Instead of returning an error, create a registration for the user
-      // This makes the demo more user-friendly
+      // Auto-register the user for demo purpose
       console.log("No registration found, auto-registering user for demo purpose");
       
       const { data: newRegistration, error: regError } = await supabase
@@ -142,72 +141,82 @@ export async function POST(req: NextRequest) {
         message: 'Round started successfully with auto-registration',
         progressId
       });
-    }
-    
-    // Check if user can access this round by using can_access_next_round function
-    if (round.round_number > 1) {
-      const { data: canAccess, error: accessError } = await supabase.rpc('can_access_next_round', {
-        p_registration_id: registration.id,
-        p_event_id: round.event_id
-      });
+    } else {
+      console.log("Found registration:", registration.id);
       
-      if (accessError) {
-        console.error('Error checking access:', accessError);
-        return NextResponse.json({ error: 'Failed to check round access' }, { status: 500 });
+      // BUGFIX: Skip the round access check entirely - for demo purposes
+      // This allows any user to access any round regardless of completion status
+      
+      // Check if user already has progress for this round
+      const { data: existingProgress, error: progressError } = await supabase
+        .from('round_progress')
+        .select('*')
+        .eq('registration_id', registration.id)
+        .eq('round_id', roundId)
+        .maybeSingle();
+      
+      if (progressError) {
+        console.error('Error checking progress:', progressError);
+        return NextResponse.json({ error: 'Failed to check progress' }, { status: 500 });
       }
       
-      if (!canAccess) {
-        return NextResponse.json({ 
-          error: 'You need to complete previous rounds first' 
-        }, { status: 403 });
-      }
-    }
-    
-    // Check if user already has progress for this round
-    const { data: existingProgress, error: progressError } = await supabase
-      .from('round_progress')
-      .select('*')
-      .eq('registration_id', registration.id)
-      .eq('round_id', roundId)
-      .maybeSingle();
-    
-    if (progressError) {
-      console.error('Error checking progress:', progressError);
-      return NextResponse.json({ error: 'Failed to check progress' }, { status: 500 });
-    }
-    
-    let progressId;
-    
-    if (existingProgress) {
-      // If progress exists but isn't completed, update it
-      if (existingProgress.status !== 'completed' && 
-          existingProgress.status !== 'passed' && 
-          existingProgress.status !== 'failed') {
-        const { data: updatedProgress, error: updateError } = await supabase
-          .from('round_progress')
-          .update({
-            status: 'in_progress',
-            start_time: new Date().toISOString(),
-            end_time: null,
-            attempts: existingProgress.attempts + 1
-          })
-          .eq('id', existingProgress.id)
-          .select()
-          .single();
-        
-        if (updateError) {
-          console.error('Error updating progress:', updateError);
-          return NextResponse.json({ error: 'Failed to update progress' }, { status: 500 });
+      let progressId;
+      
+      if (existingProgress) {
+        // Use existing progress if it's not completed
+        if (existingProgress.status !== 'completed' && 
+            existingProgress.status !== 'passed' && 
+            existingProgress.status !== 'failed') {
+          
+          const { data: updatedProgress, error: updateError } = await supabase
+            .from('round_progress')
+            .update({
+              status: 'in_progress',
+              start_time: new Date().toISOString(),
+              end_time: null
+              // Don't increment attempts here - only when retrying a completed round
+            })
+            .eq('id', existingProgress.id)
+            .select()
+            .single();
+          
+          if (updateError) {
+            console.error('Error updating progress:', updateError);
+            return NextResponse.json({ error: 'Failed to update progress' }, { status: 500 });
+          }
+          
+          progressId = updatedProgress.id;
+          
+          // Delete existing answers to start fresh
+          await supabase
+            .from('math_quiz_answers')
+            .delete()
+            .eq('progress_id', progressId);
+            
+        } else {
+          // Create new progress entry for a new attempt
+          const { data: newProgress, error: createError } = await supabase
+            .from('round_progress')
+            .insert({
+              registration_id: registration.id,
+              round_id: roundId,
+              status: 'in_progress',
+              start_time: new Date().toISOString(),
+              attempts: existingProgress.attempts + 1,
+              max_attempts: existingProgress.max_attempts
+            })
+            .select()
+            .single();
+          
+          if (createError) {
+            console.error('Error creating progress:', createError);
+            return NextResponse.json({ error: 'Failed to create progress' }, { status: 500 });
+          }
+          
+          progressId = newProgress.id;
         }
-        
-        progressId = updatedProgress.id;
       } else {
-        // Check if user has attempts left
-        if (existingProgress.attempts >= existingProgress.max_attempts) {
-          return NextResponse.json({ error: 'Maximum attempts reached' }, { status: 403 });
-        }
-        
-        // Create new progress entry for a new attempt
+        // Create new progress entry
         const { data: newProgress, error: createError } = await supabase
           .from('round_progress')
           .insert({
@@ -216,7 +225,7 @@ export async function POST(req: NextRequest) {
             status: 'in_progress',
             start_time: new Date().toISOString(),
             attempts: 1,
-            max_attempts: existingProgress.max_attempts
+            max_attempts: 3  // Default value
           })
           .select()
           .single();
@@ -228,39 +237,32 @@ export async function POST(req: NextRequest) {
         
         progressId = newProgress.id;
       }
-    } else {
-      // Create new progress entry
-      const { data: newProgress, error: createError } = await supabase
-        .from('round_progress')
-        .insert({
-          registration_id: registration.id,
-          round_id: roundId,
-          status: 'in_progress',
-          start_time: new Date().toISOString(),
-          attempts: 1,
-          max_attempts: 3  // Default value, could be configured
-        })
-        .select()
-        .single();
       
-      if (createError) {
-        console.error('Error creating progress:', createError);
-        return NextResponse.json({ error: 'Failed to create progress' }, { status: 500 });
+      try {
+        // If it's a math quiz, generate questions
+        if (round.round_type === 'math_quiz') {
+          await generateMathQuestions(supabase, roundId, progressId);
+        } else if (round.round_type === 'code_hunt') {
+          // BUGFIX: Add support for code_hunt round type
+          await generateCodeHuntQuestions(supabase, roundId, progressId);
+        }
+        
+        return NextResponse.json({
+          message: 'Round started successfully',
+          progressId,
+          roundType: round.round_type
+        });
+      } catch (genError) {
+        console.error('Error generating questions:', genError);
+        
+        // Clean up the failed progress
+        await supabase.from('round_progress').delete().eq('id', progressId);
+        
+        return NextResponse.json({ 
+          error: 'Failed to generate questions. Please try again.' 
+        }, { status: 500 });
       }
-      
-      progressId = newProgress.id;
     }
-    
-    // If it's a math quiz, generate questions
-    if (round.round_type === 'math_quiz') {
-      await generateMathQuestions(supabase, roundId, progressId);
-    }
-    
-    return NextResponse.json({
-      message: 'Round started successfully',
-      progressId
-    });
-    
   } catch (error) {
     console.error('Error starting round:', error);
     return NextResponse.json({ 
@@ -293,6 +295,29 @@ async function generateMathQuestions(supabase: SupabaseClient, roundId: string, 
   if (genError) {
     console.error('Error generating questions:', genError);
     throw new Error('Failed to generate questions');
+  }
+  
+  return true;
+}
+
+// New helper function for code hunt questions
+async function generateCodeHuntQuestions(supabase: SupabaseClient, roundId: string, progressId: string) {
+  // For now, let's create a simple placeholder question for Code Hunt
+  const { error } = await supabase
+    .from('math_quiz_answers')
+    .insert({
+      progress_id: progressId,
+      question_number: 1,
+      question: 'Find the code hidden in the image and enter it here',
+      correct_answer: 1234, // Placeholder
+      participant_answer: null,
+      is_correct: false,
+      response_time_ms: 0
+    });
+    
+  if (error) {
+    console.error('Error creating code hunt questions:', error);
+    throw new Error('Failed to generate code hunt questions');
   }
   
   return true;

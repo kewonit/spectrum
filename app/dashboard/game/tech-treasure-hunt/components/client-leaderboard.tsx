@@ -46,7 +46,7 @@ function EmptyState() {
 function LeaderItem({ leader, rank }: { leader: Leader; rank: number }) {
   // Define medal colors and styles
   const medalColors = {
-    1: "text-yellow-500",
+    1: "text-amber-500",
     2: "text-gray-400",
     3: "text-amber-700"
   };
@@ -58,7 +58,7 @@ function LeaderItem({ leader, rank }: { leader: Leader; rank: number }) {
       transition={{ delay: rank * 0.05 }}
       className={cn(
         "flex items-center p-3 border-b last:border-0",
-        rank <= 3 ? "bg-gradient-to-r from-blue-50/50 to-transparent" : "",
+        rank <= 3 ? "bg-gradient-to-r from-amber-50/50 to-transparent" : "",
       )}
     >
       <div className="w-8 flex justify-center">
@@ -75,7 +75,7 @@ function LeaderItem({ leader, rank }: { leader: Leader; rank: number }) {
             {leader.display_name || "Anonymous"}
           </span>
           {leader.is_team && (
-            <span className="ml-2 px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded text-xs">Team</span>
+            <span className="ml-2 px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded text-xs">Team</span>
           )}
         </div>
         
@@ -88,7 +88,7 @@ function LeaderItem({ leader, rank }: { leader: Leader; rank: number }) {
       </div>
       
       <div className="text-right">
-        <div className="font-semibold text-indigo-600">{leader.total_points} pts</div>
+        <div className="font-semibold text-amber-700">{leader.total_points} pts</div>
         <div className="flex items-center text-xs text-gray-500 justify-end">
           <Clock className="h-3 w-3 mr-1" />
           {formatTime(leader.fastest_time)}
@@ -150,7 +150,7 @@ export function ClientLeaderboard({ className }: { className?: string }) {
   
   return (
     <div className={cn("bg-white rounded-2xl shadow-md overflow-hidden", className)}>
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 flex justify-between items-center">
+      <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white p-4 flex justify-between items-center">
         <div className="flex items-center">
           <Trophy className="h-5 w-5 mr-2" />
           <h3 className="font-bold text-lg">Leaderboard</h3>
@@ -173,10 +173,10 @@ export function ClientLeaderboard({ className }: { className?: string }) {
         value={selectedTab}
       >
         <div className="px-4 pt-3">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="all">All Rounds</TabsTrigger>
-            <TabsTrigger value="1">Round 1</TabsTrigger>
-            <TabsTrigger value="2">Round 2</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 bg-amber-50">
+            <TabsTrigger value="all" className="data-[state=active]:bg-amber-600 data-[state=active]:text-white">All Rounds</TabsTrigger>
+            <TabsTrigger value="1" className="data-[state=active]:bg-amber-600 data-[state=active]:text-white">Round 1</TabsTrigger>
+            <TabsTrigger value="2" className="data-[state=active]:bg-amber-600 data-[state=active]:text-white">Round 2</TabsTrigger>
           </TabsList>
         </div>
         
@@ -189,7 +189,7 @@ export function ClientLeaderboard({ className }: { className?: string }) {
               exit={{ opacity: 0 }}
               className="flex justify-center items-center p-8"
             >
-              <Loader2 className="h-6 w-6 animate-spin text-indigo-600" />
+              <Loader2 className="h-6 w-6 animate-spin text-amber-600" />
             </motion.div>
           ) : error ? (
             <motion.div
@@ -234,7 +234,7 @@ export function ClientLeaderboard({ className }: { className?: string }) {
           )}
         </AnimatePresence>
         
-        <div className="p-3 bg-gray-50 text-center text-xs text-gray-500">
+        <div className="p-3 bg-amber-50 text-center text-xs text-amber-800">
           Updated every minute
         </div>
       </Tabs>
@@ -244,14 +244,14 @@ export function ClientLeaderboard({ className }: { className?: string }) {
           width: 6px;
         }
         .styled-scrollbar::-webkit-scrollbar-track {
-          background: #f1f1f1;
+          background: #f5f5f4;
         }
         .styled-scrollbar::-webkit-scrollbar-thumb {
-          background: #d1d5db;
+          background: #d6d3d1;
           border-radius: 3px;
         }
         .styled-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #9ca3af;
+          background: #a8a29e;
         }
       `}</style>
     </div>

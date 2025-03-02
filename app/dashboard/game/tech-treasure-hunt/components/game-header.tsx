@@ -20,13 +20,13 @@ export function GameHeader({ currentRound, attempts = 1, maxAttempts = 3 }: Game
   const getRoundIcon = (type?: string) => {
     switch(type) {
       case 'math_quiz':
-        return <Calculator className="h-6 w-6 text-indigo-600" />;
+        return <Calculator className="h-6 w-6 text-amber-700" />;
       case 'image_code':
-        return <Code className="h-6 w-6 text-indigo-600" />;
+        return <Code className="h-6 w-6 text-amber-700" />;
       case 'advanced_problems':
-        return <Brain className="h-6 w-6 text-indigo-600" />;
+        return <Brain className="h-6 w-6 text-amber-700" />;
       default:
-        return <Layers className="h-6 w-6 text-indigo-600" />;
+        return <Layers className="h-6 w-6 text-amber-700" />;
     }
   };
   
@@ -34,11 +34,11 @@ export function GameHeader({ currentRound, attempts = 1, maxAttempts = 3 }: Game
     <motion.div 
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-indigo-100"
+      className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-amber-100"
     >
       <div className="flex items-center mb-4 sm:mb-0">
-        <div className="bg-indigo-100 p-2 rounded-lg">
-          {currentRound ? getRoundIcon(currentRound.round_type) : <Trophy className="h-6 w-6 text-indigo-600" />}
+        <div className="bg-amber-100 p-2 rounded-lg">
+          {currentRound ? getRoundIcon(currentRound.round_type) : <Trophy className="h-6 w-6 text-amber-700" />}
         </div>
         <div className="ml-3">
           <h2 className="text-2xl font-bold text-gray-900">
@@ -55,7 +55,7 @@ export function GameHeader({ currentRound, attempts = 1, maxAttempts = 3 }: Game
             
             {/* Attempts badge */}
             {currentRound?.round_number && (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
                 Attempt {attempts} of {maxAttempts}
               </span>
             )}
@@ -65,7 +65,7 @@ export function GameHeader({ currentRound, attempts = 1, maxAttempts = 3 }: Game
       
       {/* Progress tracker */}
       {currentRound?.round_number && (
-        <div className="flex items-center py-1 px-3 bg-indigo-50 rounded-full text-sm text-indigo-700 font-medium">
+        <div className="flex items-center py-1 px-3 bg-amber-50 rounded-full text-sm text-amber-700 font-medium">
           <Trophy className="h-4 w-4 mr-1.5" />
           <span>Tech Treasure Hunt</span>
         </div>

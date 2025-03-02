@@ -15,7 +15,7 @@ export function LoadingState({ message = 'Loading...' }: LoadingStateProps) {
       animate={{ opacity: 1 }}
       className="flex flex-col items-center justify-center py-12"
     >
-      <Loader2 className="h-8 w-8 animate-spin text-indigo-600 mb-4" />
+      <Loader2 className="h-8 w-8 animate-spin text-amber-600 mb-4" />
       <p className="text-gray-600">{message}</p>
     </motion.div>
   );
@@ -69,12 +69,20 @@ export function ProcessingState({ title, message, progress = 50 }: ProcessingSta
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-white to-indigo-50/30 border border-indigo-100 rounded-2xl p-6 text-center"
+      className="bg-gradient-to-br from-white to-amber-50/30 border border-amber-100 rounded-2xl p-6 text-center"
     >
-      <Loader2 className="h-6 w-6 animate-spin text-indigo-600 mx-auto mb-4" />
+      <Loader2 className="h-6 w-6 animate-spin text-amber-600 mx-auto mb-4" />
       <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
       <p className="text-gray-600">{message}</p>
-      <Progress value={progress} className="mt-4 h-2" />
+      <Progress 
+        value={progress} 
+        className="mt-4 h-2 bg-amber-100" 
+      />
+      <style jsx global>{`
+        .Progress-indicator {
+          background-color: #d97706; /* amber-600 */
+        }
+      `}</style>
     </motion.div>
   );
 }
