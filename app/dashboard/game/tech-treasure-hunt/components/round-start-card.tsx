@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, Clock, Award, Zap, RotateCw } from 'lucide-react';
+import { PlayCircle, Clock, Award, Zap, RotateCw, ArrowRight, Activity, Code, Calculator } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface Round {
@@ -20,45 +20,68 @@ interface RoundStartCardProps {
 }
 
 export function RoundStartCard({ round, onStart, attempts = 1, maxAttempts = 3 }: RoundStartCardProps) {
+  const [isStarting, setIsStarting] = useState(false);
+
   const formatTimeLimit = (seconds: number) => {
-    if (seconds >= 60) {
-      const minutes = Math.floor(seconds / 60);
-      return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
-    }
-    return `${seconds} seconds`;
+    if (!seconds) return "No time limit";
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
-  
+
   const getRoundTypeInfo = (type: string) => {
-    switch (type) {
+    switch (type?.toLowerCase()) {
       case 'math_quiz':
         return {
-          name: 'Math Challenge',
-          description: 'Solve mathematical problems under time pressure',
-          icon: <Zap className="h-6 w-6 text-yellow-500" />
+          name: 'Math Quiz',
+          description: 'Test your mathematical skills with operations like addition, subtraction, multiplication, and division.',
+          icon: <Calculator className="h-6 w-6 text-blue-500" />
         };
       case 'image_code':
         return {
-          name: 'Image Code Challenge',
-          description: 'Find and enter hidden codes from images',
-          icon: <Award className="h-6 w-6 text-emerald-500" />
+          name: 'Image Code Hunt',
+          description: 'Find hidden codes in images and submit them to progress.',
+          icon: <Code className="h-6 w-6 text-emerald-500" />
         };
-      case 'advanced_problems':
+      case 'code_hunt':
         return {
-          name: 'Advanced Problems',
-          description: 'Tackle complex mathematical problems',
-          icon: <RotateCw className="h-6 w-6 text-purple-500" />
+          name: 'Code Hunt',
+          description: 'Solve coding challenges to move forward.',
+          icon: <Code className="h-6 w-6 text-purple-500" />
         };
       default:
         return {
           name: 'Challenge',
           description: 'Complete this round to advance',
-          icon: <Award className="h-6 w-6 text-blue-500" />
+          icon: <Activity className="h-6 w-6 text-blue-500" />
         };
     }
   };
-  
+
   const typeInfo = getRoundTypeInfo(round.round_type);
-  
+
+  const handleStartClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (isStarting) return;
+
+    setIsStarting(true);
+    console.log("Start button clicked, calling onStart handler");
+    
+    // Add a message to users that the page will reload
+    const startButton = e.currentTarget as HTMLButtonElement;
+    if (startButton) {
+      startButton.innerHTML = 'Starting and reloading page...';
+    }
+
+    // Call the onStart handler, which will trigger the API request
+    onStart();
+    
+    // Keep the button disabled - the page will reload anyway
+  };
+
+  const attemptsRemaining = maxAttempts - attempts + 1;
+
   return (
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
@@ -75,50 +98,64 @@ export function RoundStartCard({ round, onStart, attempts = 1, maxAttempts = 3 }
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
               Round {round.round_number}
             </span>
-            {/* Attempts badge */}
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
               Attempt {attempts} of {maxAttempts}
             </span>
           </div>
         </div>
       </div>
       
-      <p className="text-gray-600 mb-8 leading-relaxed">
-        {round.description || typeInfo.description}
-      </p>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        <div className="bg-white p-4 rounded-xl flex items-center border border-gray-100 shadow-sm">
-          <Clock className="text-indigo-600 h-5 w-5 mr-3" />
-          <div>
-            <p className="text-sm text-gray-500">Time Limit</p>
-            <p className="font-medium">{formatTimeLimit(round.time_limit)}</p>
-          </div>
-        </div>
-        
-        <div className="bg-white p-4 rounded-xl flex items-center border border-gray-100 shadow-sm">
-          <Award className="text-indigo-600 h-5 w-5 mr-3" />
-          <div>
-            <p className="text-sm text-gray-500">Round Type</p>
-            <p className="font-medium">{typeInfo.name}</p>
-          </div>
-        </div>
+      <div className="mb-6">
+        <p className="text-gray-600">{round.description || typeInfo.description}</p>
       </div>
       
-      <div className="space-y-4">
+      <div className="mb-6 p-4 bg-indigo-50 rounded-lg">
+        <h4 className="text-sm font-semibold text-indigo-800 mb-2">Round Info</h4>
+        <ul className="space-y-2 text-sm">
+          <li className="flex justify-between">
+            <span className="text-gray-600">Type:</span>
+            <span className="font-medium">{typeInfo.name}</span>
+          </li>
+          <li className="flex justify-between">
+            <span className="text-gray-600">Time Limit:</span>
+            <span className="font-medium">{formatTimeLimit(round.time_limit)}</span>
+          </li>
+          <li className="flex justify-between">
+            <span className="text-gray-600">Attempts:</span>
+            <span className="font-medium">{attemptsRemaining} remaining</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between border-t border-indigo-100 pt-6">
+        <div className="text-sm text-gray-500">
+          {round.time_limit ? 
+            `You have ${formatTimeLimit(round.time_limit)} to complete this round.` : 
+            'Complete this round to advance.'}
+        </div>
+        
         <Button 
-          onClick={onStart} 
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
-          size="lg"
+          onClick={handleStartClick} 
+          className="bg-indigo-600 hover:bg-indigo-700 text-white"
+          disabled={isStarting || attemptsRemaining <= 0}
         >
-          <PlayCircle className="mr-2 h-5 w-5" />
-          Start Round
+          {isStarting ? (
+            <span>Starting & Reloading...</span>
+          ) : attemptsRemaining > 0 ? (
+            <>
+              Start Round <ArrowRight className="ml-2 h-4 w-4" />
+            </>
+          ) : (
+            'No attempts remaining'
+          )}
         </Button>
-        
-        <p className="text-center text-sm text-gray-500 mt-2">
-          Ready when you are! Click the button above to begin.
-        </p>
       </div>
+      
+      {attemptsRemaining <= 0 && (
+        <div className="mt-4 text-sm text-red-500 text-center">
+          You have used all your attempts for this round.
+        </div>
+      )}
     </motion.div>
   );
 }

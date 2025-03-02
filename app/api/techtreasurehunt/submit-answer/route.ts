@@ -17,10 +17,15 @@ export async function POST(req: NextRequest) {
     }
     
     const body = await req.json();
-    const { progressId, questionId, answer, responseTimeMs } = body;
+    console.log("Received body:", body); // Log the received body for debugging
     
-    if (!progressId || !questionId || answer === undefined) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    const { progressId, questionNumber, answer, responseTimeMs } = body;
+    
+    if (!progressId || questionNumber === undefined || answer === undefined) {
+      return NextResponse.json({ 
+        error: 'Missing required fields',
+        receivedFields: Object.keys(body)
+      }, { status: 400 });
     }
     
     // Verify ownership using our utility function
@@ -30,16 +35,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized access to this progress' }, { status: 403 });
     }
     
-    // Fetch question more efficiently - only get the data we need
+    // Find the question by question number instead of ID
     const { data: question, error: questionError } = await supabase
       .from('math_quiz_answers')
-      .select('correct_answer')
-      .eq('id', questionId)
+      .select('id, correct_answer')
       .eq('progress_id', progressId)
+      .eq('question_number', questionNumber)
       .single();
     
     if (questionError || !question) {
-      return NextResponse.json({ error: 'Question not found' }, { status: 404 });
+      console.error('Error finding question:', questionError);
+      return NextResponse.json({ 
+        error: 'Question not found',
+        details: `Question number ${questionNumber} for progress ${progressId} not found`
+      }, { status: 404 });
     }
     
     // Verify answer locally for performance
@@ -52,9 +61,9 @@ export async function POST(req: NextRequest) {
         participant_answer: answer,
         is_correct: isCorrect,
         response_time_ms: responseTimeMs || null
+        // Removed updated_at field that doesn't exist in the schema
       })
-      .eq('id', questionId)
-      .eq('progress_id', progressId);
+      .eq('id', question.id);
     
     // Immediately return response to client
     const response = NextResponse.json({

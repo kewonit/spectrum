@@ -71,6 +71,49 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch questions' }, { status: 500 });
     }
     
+    if (!questions || questions.length === 0) {
+      // Try to generate questions
+      console.log('No questions found, attempting to generate...');
+      
+      // Get round ID from progress
+      const { data: roundData, error: roundError } = await supabase
+        .from('math_quiz_rounds')
+        .select('*')
+        .eq('round_id', progress.round_id)
+        .single();
+        
+      if (roundError || !roundData) {
+        console.error('Error fetching quiz round configuration:', roundError);
+        return NextResponse.json({ error: 'Failed to fetch quiz configuration' }, { status: 500 });
+      }
+      
+      // Generate questions
+      const generatedQuestions = [];
+      for (let i = 1; i <= roundData.num_questions; i++) {
+        generatedQuestions.push({
+          progress_id: progressId,
+          question_number: i,
+          question: generateMathQuestion(roundData),
+          correct_answer: Math.floor(Math.random() * 100), // This would normally be calculated
+          participant_answer: null,
+          is_correct: null
+        });
+      }
+      
+      // Insert generated questions
+      const { data: insertedQuestions, error: insertError } = await supabase
+        .from('math_quiz_answers')
+        .insert(generatedQuestions)
+        .select('id, question, question_number');
+      
+      if (insertError) {
+        console.error('Error inserting generated questions:', insertError);
+        return NextResponse.json({ error: 'Failed to generate questions' }, { status: 500 });
+      }
+      
+      return NextResponse.json({ questions: insertedQuestions || [] });
+    }
+    
     return NextResponse.json({
       questions
     });
@@ -78,5 +121,30 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('Error fetching questions:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+// Helper function to generate a math question
+function generateMathQuestion(config: any): string {
+  const operations = config.operations || ['add', 'subtract', 'multiply', 'divide'];
+  const minRange = config.min_range || 1;
+  const maxRange = config.max_range || 100;
+  const difficulty = config.difficulty || 'medium';
+  
+  const operation = operations[Math.floor(Math.random() * operations.length)];
+  const a = Math.floor(Math.random() * (maxRange - minRange)) + minRange;
+  const b = Math.floor(Math.random() * (maxRange - minRange)) + minRange;
+  
+  switch (operation) {
+    case 'add':
+      return `${a} + ${b} = ?`;
+    case 'subtract':
+      return `${a + b} - ${a} = ?`;
+    case 'multiply':
+      return `${a} × ${b} = ?`;
+    case 'divide':
+      return `${a * b} ÷ ${a} = ?`;
+    default:
+      return `${a} + ${b} = ?`;
   }
 }

@@ -4,6 +4,15 @@ import { verifyProgressOwnership } from '@/app/utils/tech-treasure-hunt';
 
 export async function POST(req: NextRequest) {
   try {
+    const body = await req.json();
+    const { progressId, roundId } = body;
+    
+    if (!progressId || !roundId) {
+      return NextResponse.json({ 
+        error: 'Progress ID and Round ID are required' 
+      }, { status: 400 });
+    }
+    
     const supabase = await createClient();
     
     const { data: { user } } = await supabase.auth.getUser();
@@ -11,11 +20,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    const body = await req.json();
-    const { progressId, roundId } = body;
+    // Check if round progress exists
+    const { data: progressData, error: progressError } = await supabase
+      .from('round_progress')
+      .select('*, event_rounds(round_type)')
+      .eq('id', progressId)
+      .eq('round_id', roundId)
+      .single();
     
-    if (!progressId || !roundId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    if (progressError || !progressData) {
+      console.error('Error fetching round progress:', progressError);
+      return NextResponse.json({ error: 'Round progress not found' }, { status: 404 });
     }
     
     // Verify ownership using our utility function
@@ -25,67 +40,65 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized access to this progress' }, { status: 403 });
     }
     
-    // Get current progress to check attempts
-    const { data: currentProgress, error: currentProgressError } = await supabase
-      .from('round_progress')
-      .select('*')
-      .eq('id', progressId)
-      .single();
-    
-    if (currentProgressError || !currentProgress) {
-      console.error('Error fetching current progress:', currentProgressError);
-      return NextResponse.json({ error: 'Failed to fetch current progress' }, { status: 500 });
-    }
-    
-    // Check if max attempts reached
-    if (currentProgress.attempts >= currentProgress.max_attempts && 
-        currentProgress.status !== 'passed') {
+    // Check attempts limit
+    if (progressData.attempts >= progressData.max_attempts) {
       return NextResponse.json({ 
-        error: 'Maximum attempts reached',
-        attemptsUsed: currentProgress.attempts,
-        maxAttempts: currentProgress.max_attempts
-      }, { status: 403 });
+        error: 'Maximum attempts reached' 
+      }, { status: 400 });
     }
-
-    // Instead of creating a new entry, UPDATE the existing one
-    const { data: updatedProgress, error: updateError } = await supabase
+    
+    // Increment attempt counter
+    const { error: updateError } = await supabase
       .from('round_progress')
       .update({
         status: 'not_started',
-        attempts: currentProgress.attempts + 1,
         start_time: null,
         end_time: null,
-        score: null
+        score: null,
+        attempts: progressData.attempts + 1,
+        updated_at: new Date().toISOString()
       })
-      .eq('id', progressId)
-      .select()
-      .single();
+      .eq('id', progressId);
     
     if (updateError) {
-      console.error('Error updating progress:', updateError);
+      console.error('Error resetting round progress:', updateError);
       return NextResponse.json({ error: 'Failed to reset round' }, { status: 500 });
     }
     
-    // Clear any existing answers to start fresh
-    const { error: deleteAnswersError } = await supabase
-      .from('math_quiz_answers')
-      .delete()
-      .eq('progress_id', progressId);
+    // Clear submissions if this is an image_code round
+    if (progressData.event_rounds.round_type === 'image_code') {
+      const { error: deleteError } = await supabase
+        .from('image_code_submissions')
+        .delete()
+        .eq('progress_id', progressId);
       
-    if (deleteAnswersError) {
-      console.error('Error deleting previous answers:', deleteAnswersError);
-      // Continue anyway, this is not fatal
+      if (deleteError) {
+        console.error('Error clearing submissions:', deleteError);
+        // Continue anyway, this isn't critical
+      }
+    }
+    
+    // Clear math quiz answers if this is a math_quiz round
+    if (progressData.event_rounds.round_type === 'math_quiz') {
+      const { error: deleteError } = await supabase
+        .from('math_quiz_answers')
+        .delete()
+        .eq('progress_id', progressId);
+      
+      if (deleteError) {
+        console.error('Error clearing math quiz answers:', deleteError);
+        // Continue anyway, this isn't critical
+      }
     }
     
     return NextResponse.json({
-      message: 'Round reset successfully',
-      progressId: updatedProgress.id,
-      attempts: updatedProgress.attempts,
-      maxAttempts: updatedProgress.max_attempts
+      success: true,
+      newAttempt: progressData.attempts + 1,
+      maxAttempts: progressData.max_attempts
     });
     
   } catch (error) {
-    console.error('Error resetting round:', error);
+    console.error('Unexpected error in reset-round route:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

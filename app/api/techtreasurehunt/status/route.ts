@@ -143,6 +143,9 @@ export async function GET(req: NextRequest) {
     let accessibleRound = eventRounds[0];
     let userProgress = null;
     
+    // Extract the round type from the accessible round
+    const roundType = accessibleRound.round_type;
+    
     // Check for user progress on first round
     const firstRoundProgress = await getUserProgress(supabase, registrationId, accessibleRound.id);
     
@@ -165,45 +168,124 @@ export async function GET(req: NextRequest) {
       }
     }
     
-    console.log("Selected round:", accessibleRound.name, "Progress:", userProgress?.status || "none");
+    console.log("Selected round:", accessibleRound.name, "Progress:", userProgress?.status || "none", "Type:", roundType);
     
     // If the user has already completed this round
     if (userProgress && (userProgress.status === 'completed' || userProgress.status === 'passed' || userProgress.status === 'failed')) {
       // Get the results for the completed round
-      const { data: results } = await supabase
-        .from('math_quiz_answers')
-        .select('*')
-        .eq('progress_id', userProgress.id);
-      
-      return NextResponse.json({
-        status: 'completed',
-        currentRound: accessibleRound,
-        progressId: userProgress.id,
-        roundResults: {
-          passed: userProgress.status === 'passed',
-          correctCount: (results || []).filter((a: any) => a.is_correct).length,
-          totalQuestions: results?.length || 0,
-          totalTime: userProgress.end_time 
-            ? (new Date(userProgress.end_time).getTime() - new Date(userProgress.start_time).getTime()) / 1000
-            : 0,
-          avgResponseTime: results?.reduce((acc: number, curr: any) => acc + (curr.response_time_ms || 0), 0) / (results?.length || 1) / 1000,
-          progressId: userProgress.id, // Make sure this is included
-          answers: results?.map((a: any) => ({
-            question: a.question,
-            answer: a.participant_answer,
-            correct_answer: a.correct_answer,
-            is_correct: a.is_correct
-          })) || []
+      if (roundType === 'math_quiz') {
+        const { data: results } = await supabase
+          .from('math_quiz_answers')
+          .select('*')
+          .eq('progress_id', userProgress.id);
+        
+        return NextResponse.json({
+          status: 'completed',
+          currentRound: accessibleRound,
+          progressId: userProgress.id,
+          roundResults: {
+            passed: userProgress.status === 'passed',
+            correctCount: (results || []).filter((a: any) => a.is_correct).length,
+            totalQuestions: results?.length || 0,
+            totalTime: userProgress.end_time 
+              ? (new Date(userProgress.end_time).getTime() - new Date(userProgress.start_time).getTime()) / 1000
+              : 0,
+            avgResponseTime: results?.reduce((acc: number, curr: any) => acc + (curr.response_time_ms || 0), 0) / (results?.length || 1) / 1000,
+            progressId: userProgress.id, // Make sure this is included
+            answers: results?.map((a: any) => ({
+              question: a.question,
+              answer: a.participant_answer,
+              correct_answer: a.correct_answer,
+              is_correct: a.is_correct
+            })) || []
+          }
+        });
+      } else if (roundType === 'image_code') {
+        // Handle image_code completion results
+        const { data: submissions } = await supabase
+          .from('image_code_submissions')
+          .select('*')
+          .eq('progress_id', userProgress.id);
+        
+        // Get image round metadata for correct info
+        const { data: imageRound } = await supabase
+          .from('image_code_rounds')
+          .select('*')
+          .eq('round_id', accessibleRound.id)
+          .single();
+        
+        // Check if we have the image round data
+        if (!imageRound || !imageRound.images) {
+          console.error("Missing image_code_rounds data for completed round:", accessibleRound.id);
+          // Return generic completion info if we can't find detailed data
+          return NextResponse.json({
+            status: 'completed',
+            currentRound: accessibleRound,
+            progressId: userProgress.id,
+            roundResults: {
+              passed: userProgress.status === 'passed',
+              score: userProgress.score || {},
+              totalTime: userProgress.end_time 
+                ? (new Date(userProgress.end_time).getTime() - new Date(userProgress.start_time).getTime()) / 1000
+                : 0
+            }
+          });
         }
-      });
+        
+        // Map submissions to images with correct code info
+        const imageResults = (imageRound?.images || []).map((img: any) => {
+          const submission = submissions?.find((s: any) => s.image_id === img.id);
+          return {
+            id: img.id,
+            url: img.url,
+            correctCode: img.code,
+            submittedCode: submission?.submitted_code || null,
+            isCorrect: submission?.is_correct || false,
+            attempts: submission?.attempts || 0
+          };
+        });
+        
+        return NextResponse.json({
+          status: 'completed',
+          currentRound: accessibleRound,
+          progressId: userProgress.id,
+          roundResults: {
+            passed: userProgress.status === 'passed',
+            correctCount: (submissions || []).filter((s: any) => s.is_correct).length,
+            totalImages: imageRound?.images?.length || 0,
+            totalTime: userProgress.end_time 
+              ? (new Date(userProgress.end_time).getTime() - new Date(userProgress.start_time).getTime()) / 1000
+              : 0,
+            progressId: userProgress.id,
+            images: imageResults
+          }
+        });
+      } else {
+        // Handle other round types with default format
+        return NextResponse.json({
+          status: 'completed',
+          currentRound: accessibleRound,
+          progressId: userProgress.id,
+          roundResults: {
+            passed: userProgress.status === 'passed',
+            score: userProgress.score || {},
+            totalTime: userProgress.end_time 
+              ? (new Date(userProgress.end_time).getTime() - new Date(userProgress.start_time).getTime()) / 1000
+              : 0
+          }
+        });
+      }
     }
     
     // If the user has started but not completed this round
     if (userProgress && userProgress.status === 'in_progress') {
+      // Make sure we return the actual round type from the round itself,
+      // not potentially incorrect data from elsewhere
       return NextResponse.json({
         status: 'in_progress',
         currentRound: accessibleRound,
-        progressId: userProgress.id
+        progressId: userProgress.id,
+        roundType: accessibleRound.round_type // Use accessibleRound.round_type instead of roundType variable
       });
     }
     

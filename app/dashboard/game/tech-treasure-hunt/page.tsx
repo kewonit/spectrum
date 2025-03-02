@@ -13,12 +13,12 @@ export const metadata: Metadata = {
 export default function TechTreasureHuntPage() {
   return (
     <div className="min-h-screen bg-[#EBE9E0]">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6 md:pt-8 pb-8 sm:pb-12">
-        {/* Header Image - responsive height with better mobile view */}
-        <div className="relative w-full h-[140px] xs:h-[180px] sm:h-[200px] md:h-[220px] lg:h-[250px] 
-          overflow-hidden rounded-lg shadow-md mb-4 sm:mb-6 transition-all duration-300">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-3 sm:pt-4 pb-6 sm:pb-8">
+        {/* Header Image - reduced height and removed bottom margin */}
+        <div className="relative w-full h-[100px] xs:h-[120px] sm:h-[140px] md:h-[160px] 
+          overflow-hidden transition-all duration-300">
           <Image 
-            src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1740917339/Tech-Treasure-Hunt_afycc3.webp"
+            src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1740922990/Spectrum/dywRpss_-_Imgur_uxvnrc.webp"
             alt="Tech Treasure Hunt Header" 
             fill
             priority
@@ -26,11 +26,10 @@ export default function TechTreasureHuntPage() {
             className="object-contain object-center w-full h-full"
             sizes="(max-width: 480px) 95vw, (max-width: 640px) 90vw, (max-width: 1024px) 85vw, 1000px"
           />
-          
         </div>
         
-        {/* Info box - improved for small screens */}
-        <div className="mb-4 sm:mb-6">
+        {/* Info box - removed top margin */}
+        <div className="mb-3">
           <div className="bg-amber-50 border-l-4 border-amber-400 p-3 sm:p-4 rounded-md shadow-sm">
             <div className="flex items-start sm:items-center">
               <div className="flex-shrink-0 mt-1 sm:mt-0">
@@ -47,25 +46,23 @@ export default function TechTreasureHuntPage() {
           </div>
         </div>
         
-        {/* Responsive grid layout with improved gap handling */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+        {/* Responsive grid layout with tighter gaps */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4">
           {/* Game area - takes full width on mobile, 8/12 on desktop */}
-          {/* Removed the parent card wrapper to let the game component breathe */}
           <div className="lg:col-span-8 order-2 lg:order-1">
             <TechTreasureHuntGame />
           </div>
           
           {/* Leaderboard - takes full width on mobile, 4/12 on desktop */}
-          {/* On mobile, show leaderboard first for better engagement */}
-          <div className="lg:col-span-4 order-1 lg:order-2 mb-4 lg:mb-0">
+          <div className="lg:col-span-4 order-1 lg:order-2 mb-3 lg:mb-0">
             <div className="sticky top-4">
               <LeaderboardContainer />
             </div>
           </div>
         </div>
         
-        {/* Footer area with better spacing */}
-        <div className="mt-6 sm:mt-8 mb-4 text-center">
+        {/* Footer area with less spacing */}
+        <div className="mt-4 sm:mt-6 text-center">
           <p className="text-xs sm:text-sm text-gray-600">
             Need help? Contact the event organizers at <a href="mailto:pccoe.spectrum.25@gmail.com" className="text-amber-700 hover:text-amber-800 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 rounded-sm">pccoe.spectrum.25@gmail.com</a>
           </p>

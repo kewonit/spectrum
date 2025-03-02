@@ -242,11 +242,16 @@ export async function POST(req: NextRequest) {
         // If it's a math quiz, generate questions
         if (round.round_type === 'math_quiz') {
           await generateMathQuestions(supabase, roundId, progressId);
+        } else if (round.round_type === 'image_code') {
+          // Make sure we log this explicitly for debugging
+          console.log("Setting up image code round:", roundId);
+          await setupImageCodeRound(supabase, roundId, progressId);
+          console.log("Image code round setup completed");
         } else if (round.round_type === 'code_hunt') {
-          // BUGFIX: Add support for code_hunt round type
           await generateCodeHuntQuestions(supabase, roundId, progressId);
         }
         
+        // Ensure round_type is included in the response
         return NextResponse.json({
           message: 'Round started successfully',
           progressId,
@@ -321,4 +326,80 @@ async function generateCodeHuntQuestions(supabase: SupabaseClient, roundId: stri
   }
   
   return true;
+}
+
+// New helper function for image code rounds
+async function setupImageCodeRound(supabase: SupabaseClient, roundId: string, progressId: string) {
+  try {
+    // Check if image code round exists
+    const { data: imageCodeRound, error: roundError } = await supabase
+      .from('image_code_rounds')
+      .select('*')
+      .eq('round_id', roundId)
+      .maybeSingle();
+    
+    if (roundError) {
+      console.error('Error checking image code round:', roundError);
+      throw new Error('Failed to check image code round configuration');
+    }
+    
+    // If the round configuration doesn't exist, create a default one
+    if (!imageCodeRound) {
+      console.log('Creating default image code round configuration');
+      
+      // Create sample image data - in production, this should be configured by admins
+      const sampleImages = [
+        {
+          id: crypto.randomUUID(),
+          url: 'https://i.imgur.com/kywHlA4.jpeg',
+          code: '1234',
+          hint: 'Look for numbers hidden in the image',
+          max_attempts: 3
+        },
+        {
+          id: crypto.randomUUID(),
+          url: 'https://i.imgur.com/6xHxbVj.jpeg',
+          code: '5678',
+          hint: 'The code is related to the building',
+          max_attempts: 3
+        },
+        {
+          id: crypto.randomUUID(),
+          url: 'https://i.imgur.com/RhS6cDU.jpeg',
+          code: '9012',
+          hint: 'Count the elements in the pattern',
+          max_attempts: 3
+        }
+      ];
+      
+      const { error: createError } = await supabase
+        .from('image_code_rounds')
+        .insert({
+          round_id: roundId,
+          images: sampleImages,
+          time_limit: 600 // 10 minutes
+        });
+      
+      if (createError) {
+        console.error('Error creating image code round:', createError);
+        throw new Error('Failed to create image code round configuration');
+      }
+    }
+    
+    // Clear any existing submissions for this progress
+    const { error: deleteError } = await supabase
+      .from('image_code_submissions')
+      .delete()
+      .eq('progress_id', progressId);
+    
+    if (deleteError) {
+      console.warn('Error cleaning up previous submissions:', deleteError);
+      // Non-fatal, continue anyway
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Error in setupImageCodeRound:', error);
+    throw error; // Re-throw to be caught by the caller
+  }
 }
