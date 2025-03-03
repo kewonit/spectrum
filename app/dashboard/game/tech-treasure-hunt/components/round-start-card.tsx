@@ -20,7 +20,7 @@ interface RoundStartCardProps {
   attempts?: number;
   maxAttempts?: number;
   isLoading?: boolean;
-  redirectUrl?: string; // New prop for redirect URL
+  redirectUrl?: string | null; // Updated to allow null
 }
 
 export function RoundStartCard({ 
@@ -76,7 +76,7 @@ export function RoundStartCard({
 
   const typeInfo = getRoundTypeInfo(round.round_type);
 
-  // Updated handler with error handling and retry logic
+  // Updated handler to handle null redirectUrl
   const handleStartClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -90,7 +90,7 @@ export function RoundStartCard({
       // Call the onStart handler which will make the API call
       await onStart();
       
-      // If redirectUrl is provided, navigate after a short delay
+      // If redirectUrl is provided and not null, navigate after a short delay
       if (redirectUrl) {
         setTimeout(() => {
           console.log("Redirecting to:", redirectUrl);
@@ -99,10 +99,8 @@ export function RoundStartCard({
           router.push(redirectUrl);
         }, 500);
       } else {
-        // Default fallback to refresh if no redirect URL
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        // Default fallback when redirectUrl is null or undefined
+        console.log("No redirect, staying on current page");
       }
     } catch (error) {
       console.error("Error starting round:", error);
@@ -118,7 +116,7 @@ export function RoundStartCard({
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="bg-gradient-to-br from-white to-indigo-50/30 border border-indigo-100 shadow-md rounded-2xl p-8"
+      className="bg-gradient-to-br from-white/95 to-indigo-50/90 backdrop-blur-md border border-indigo-100 shadow-lg rounded-2xl p-6 sm:p-8"
     >
       <div className="mb-6 flex items-center">
         <div className="rounded-full bg-indigo-100 p-3 mr-4">

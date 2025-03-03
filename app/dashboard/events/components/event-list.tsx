@@ -415,7 +415,7 @@ function EventCard({
           <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-black/30 to-transparent" />
           <div className="absolute bottom-4 right-4">
             <Badge className={`${registrationStatus.color} px-2.5 py-1 font-medium`}>
-              {isClosed ? 'Event Ended' : registrationStatus.text}
+              {isClosed ? 'Registration Ended' : registrationStatus.text}
             </Badge>
           </div>
         </div>
