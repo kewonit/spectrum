@@ -181,18 +181,20 @@ export const EventList: React.FC<{ events: Event[] }> = ({ events }) => {
     );
 
     // Combine the sorted arrays
-    // If we're viewing the closed filter, only show closed events
-    // Otherwise show active events first, then closed events only in the "all" filter
-    const result = [];
+    let result: Event[] = [];
     
-    // Add active events first (for all filters except "closed")
-    if (filter !== 'closed') {
-      result.push(...organizedActiveEvents.solo, ...organizedActiveEvents.team);
-    }
-    
-    // Add closed events based on filter
-    if (filter === 'closed' || filter === 'all') {
-      result.push(...organizedEvents.closed);
+    if (filter === 'registered') {
+      // For 'registered' filter, combine all registered events (active and closed)
+      result = [...organizedActiveEvents.solo, ...organizedActiveEvents.team, ...organizedEvents.closed];
+    } else if (filter === 'all') {
+      // Show active events first, then closed events for "all"
+      result = [...organizedActiveEvents.solo, ...organizedActiveEvents.team, ...organizedEvents.closed];
+    } else if (filter === 'solo') {
+      result = organizedActiveEvents.solo;
+    } else if (filter === 'team') {
+      result = organizedActiveEvents.team;
+    } else if (filter === 'closed') {
+      result = [...organizedEvents.closed];
     }
     
     setDisplayEvents(result);
