@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Add useRef
 import { MathQuizRound } from '@/app/dashboard/game/tech-treasure-hunt/components/math-quiz-round';
 import { RoundStartCard } from '@/app/dashboard/game/tech-treasure-hunt/components/round-start-card';
 import { RoundResults } from '@/app/dashboard/game/tech-treasure-hunt/components/round-results';
@@ -10,6 +10,9 @@ import { Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { CodeHuntRound } from '@/app/dashboard/game/tech-treasure-hunt/components/code-hunt-round';
+import { toast } from 'sonner';
+import { normalizeRoundType } from '../debug-utils';
+import { RefreshConfirmationDialog } from './refresh-confirmation-dialog';
 
 type GameStatus = 'loading' | 'not_started' | 'in_progress' | 'completed';
 type RoundStatus = 'not_started' | 'starting' | 'in_progress' | 'evaluating' | 'completed';
@@ -33,14 +36,31 @@ export function TechTreasureHuntGame() {
   const [progressId, setProgressId] = useState<string | null>(null);
   const [attempts, setAttempts] = useState(1);
   const [maxAttempts, setMaxAttempts] = useState(3);
-  const [roundType, setRoundType] = useState<string>('math_quiz');
+  const [roundType, setRoundType] = useState<string>('');
+  const [isFailedRedirect, setIsFailedRedirect] = useState(false);
+  const [showRefreshDialog, setShowRefreshDialog] = useState(false);
+
+  // Add a ref to track the safety timeout
+  const safetyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Clear safety timeout if component unmounts
+  useEffect(() => {
+    return () => {
+      if (safetyTimeoutRef.current) {
+        clearTimeout(safetyTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchGameStatus() {
       try {
         setIsLoading(true);
         const response = await fetch('/api/techtreasurehunt/status');
-        if (!response.ok) throw new Error('Failed to fetch game status');
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch game status');
+        }
         
         const data = await response.json();
         console.log("Game status response:", data);
@@ -51,21 +71,27 @@ export function TechTreasureHuntGame() {
         if (data.currentRound) {
           setCurrentRound(data.currentRound);
           
-          // Store the round type
-          setRoundType(data.currentRound.round_type || 'math_quiz');
+          // Normalize and store the round type
+          const normalizedType = normalizeRoundType(data.currentRound.round_type || '');
+          setRoundType(normalizedType);
         }
         
         if (data.progressId) {
           setProgressId(data.progressId);
           
           // Fetch progress details to get attempts information
-          const progressResponse = await fetch(`/api/techtreasurehunt/progress?progressId=${data.progressId}`);
-          if (progressResponse.ok) {
-            const progressData = await progressResponse.json();
-            if (progressData.progress) {
-              setAttempts(progressData.progress.attempts || 1);
-              setMaxAttempts(progressData.progress.max_attempts || 3);
+          try {
+            const progressResponse = await fetch(`/api/techtreasurehunt/progress?progressId=${data.progressId}`);
+            if (progressResponse.ok) {
+              const progressData = await progressResponse.json();
+              if (progressData.progress) {
+                setAttempts(progressData.progress.attempts || 1);
+                setMaxAttempts(progressData.progress.max_attempts || 3);
+              }
             }
+          } catch (progressError) {
+            console.warn("Could not fetch progress details:", progressError);
+            // Non-critical error, continue with default values
           }
         }
         
@@ -89,10 +115,21 @@ export function TechTreasureHuntGame() {
   }, []);
 
   const startRound = async () => {
-    if (!currentRound) return;
+    if (!currentRound) return Promise.reject(new Error("No current round"));
+    
+    // Clear any existing safety timeout
+    if (safetyTimeoutRef.current) {
+      clearTimeout(safetyTimeoutRef.current);
+    }
     
     setRoundStatus('starting');
     setError(null);
+    
+    // Set up a safety timeout that will force the round to start if the API call hangs
+    safetyTimeoutRef.current = setTimeout(() => {
+      console.log("[SAFETY TIMEOUT] Force transitioning to in_progress state");
+      setRoundStatus('in_progress');
+    }, 5000); // 5 seconds timeout
     
     try {
       console.log("Starting round:", currentRound.id, "of type:", currentRound.round_type);
@@ -103,12 +140,19 @@ export function TechTreasureHuntGame() {
         body: JSON.stringify({ roundId: currentRound.id }),
       });
       
-      const responseData = await response.json();
-      console.log("Start round response:", responseData);
+      // Clear the safety timeout since we got a response
+      if (safetyTimeoutRef.current) {
+        clearTimeout(safetyTimeoutRef.current);
+        safetyTimeoutRef.current = null;
+      }
       
       if (!response.ok) {
+        const responseData = await response.json().catch(() => ({}));
         throw new Error(responseData.error || 'Failed to start round');
       }
+      
+      const responseData = await response.json().catch(() => ({}));
+      console.log("Start round response:", responseData);
       
       // Store the progress ID immediately
       if (responseData.progressId) {
@@ -126,16 +170,26 @@ export function TechTreasureHuntGame() {
           }
         } catch (progressErr) {
           console.error("Error fetching progress info:", progressErr);
-          // Continue anyway as this is not critical
         }
       }
       
-      // Ensure that we don't change the state if the component has unmounted
+      // Important: Make sure to update the state at the end
+      console.log("Setting round status to in_progress");
       setRoundStatus('in_progress');
+      return Promise.resolve();
     } catch (err) {
       console.error("Error in startRound:", err);
+      
+      // Clear safety timeout if there was an error
+      if (safetyTimeoutRef.current) {
+        clearTimeout(safetyTimeoutRef.current);
+        safetyTimeoutRef.current = null;
+      }
+      
+      toast.error('Failed to start round. Please try again.');
       setError('Failed to start round. Please try again.');
       setRoundStatus('not_started');
+      return Promise.reject(err);
     }
   };
 
@@ -191,10 +245,63 @@ export function TechTreasureHuntGame() {
     }
   };
 
+  // Add a function to navigate to next round
+  const handleNextRound = async (nextRoundId: string): Promise<void> => {
+    setRoundStatus('starting');
+    setError(null);
+    setIsLoading(true);
+    
+    try {
+      // Fetch info about the next round
+      const response = await fetch(`/api/techtreasurehunt/round-info?roundId=${nextRoundId}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch next round info');
+      }
+      
+      const { round: nextRound } = await response.json();
+      
+      // Update our current round state
+      setCurrentRound(nextRound);
+      
+      // Start the new round
+      const startResponse = await fetch('/api/techtreasurehunt/start-round', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ roundId: nextRoundId }),
+      });
+      
+      if (!startResponse.ok) {
+        throw new Error('Failed to start next round');
+      }
+      
+      const startData = await startResponse.json();
+      
+      // Update progress ID and attempts
+      setProgressId(startData.progressId);
+      setAttempts(startData.attempts || 1);
+      setMaxAttempts(startData.maxAttempts || 3);
+      
+      // Reset states
+      setRoundResults(null);
+      setRoundStatus('in_progress');
+      
+      return Promise.resolve();
+    } catch (error) {
+      console.error("Error navigating to next round:", error);
+      toast.error("Failed to load next round");
+      setError('Failed to navigate to next round');
+      setRoundStatus('completed'); // Stay on results screen
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="flex flex-col items-center justify-center py-12">
+        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center py-8">
           <Loader2 className="h-8 w-8 animate-spin text-indigo-600 mb-4" />
           <p className="text-gray-600">Loading Tech Treasure Hunt...</p>
         </div>
@@ -225,12 +332,18 @@ export function TechTreasureHuntGame() {
     if (gameStatus === 'not_started' || !currentRound) {
       // If there's a current round but status is not_started, show the start card
       if (currentRound) {
-        return <RoundStartCard round={currentRound} onStart={startRound} attempts={attempts} maxAttempts={maxAttempts} />;
+        return <RoundStartCard 
+          round={currentRound} 
+          onStart={startRound} 
+          attempts={attempts} 
+          maxAttempts={maxAttempts}
+          redirectUrl="" // Use empty string instead of null
+        />;
       }
       
       // Only show no active rounds message when there's actually no round data
       return (
-        <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
+        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
           <h3 className="text-xl font-bold text-gray-900 mb-4">No Active Rounds</h3>
           <p className="text-gray-600 mb-6">There are no active rounds in the Tech Treasure Hunt right now.</p>
           <p className="text-sm text-gray-500">Please check back later or contact the event organizers.</p>
@@ -240,16 +353,56 @@ export function TechTreasureHuntGame() {
 
     // Handle the different round states - always show start card for not_started
     if (roundStatus === 'not_started') {
-      return <RoundStartCard round={currentRound} onStart={startRound} attempts={attempts} maxAttempts={maxAttempts} />;
+      return <RoundStartCard 
+        round={currentRound} 
+        onStart={startRound} 
+        attempts={attempts} 
+        maxAttempts={maxAttempts}
+        redirectUrl="" // Use empty string instead of null
+        isLoading={isLoading} // Pass loading state
+      />;
     }
 
     if (roundStatus === 'starting') {
       return (
-        <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
+        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
           <Loader2 className="h-6 w-6 animate-spin text-primary mx-auto mb-4" />
           <h3 className="text-xl font-bold text-gray-900 mb-2">Preparing Round</h3>
           <p className="text-gray-600">Setting up your challenge...</p>
           <Progress value={50} className="mt-4 h-2" />
+          
+          <div className="mt-6 space-y-3">
+            <div className="text-xs text-gray-500">
+              If you see this message for more than a few seconds, please use one of the options below:
+            </div>
+            
+            <Button 
+              onClick={() => {
+                setRoundStatus('in_progress');
+                console.log("[MANUAL OVERRIDE] User forced round to start");
+              }} 
+              variant="outline" 
+              size="sm"
+              className="text-xs text-indigo-600 border-indigo-200"
+            >
+              Continue to Round
+            </Button>
+            
+            <div className="pt-1">
+              <Button 
+                onClick={() => {
+                  setRoundStatus('not_started');
+                  toast.error('Round preparation was canceled');
+                  console.log("[MANUAL CANCEL] User canceled round preparation");
+                }}
+                variant="ghost" 
+                size="sm" 
+                className="text-xs text-red-500 hover:text-red-700"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
         </div>
       );
     }
@@ -266,21 +419,16 @@ export function TechTreasureHuntGame() {
           maxAttempts={maxAttempts}
         />;
       } else if (currentRound.round_type === 'code_hunt') {
-        // For now, we'll use a placeholder component
-        // You'll need to create this component
-        return (
-          <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Code Hunt Challenge</h3>
-            <p className="text-gray-600 mb-6">
-              This round type is under development. Please check back later!
-            </p>
-            <Button onClick={retryRound}>Go Back</Button>
-          </div>
-        );
+        return <CodeHuntRound
+          roundId={currentRound.id}
+          progressId={progressId!}
+          timeLimit={currentRound.time_limit}
+          onComplete={completeRound}
+        />;
       } else {
         // Unknown round type
         return (
-          <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
+          <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Unsupported Round Type</h3>
             <p className="text-gray-600 mb-6">
               The round type &quot;{currentRound.round_type}&quot; is not currently supported.
@@ -293,7 +441,7 @@ export function TechTreasureHuntGame() {
 
     if (roundStatus === 'evaluating') {
       return (
-        <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
+        <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
           <Loader2 className="h-6 w-6 animate-spin text-primary mx-auto mb-4" />
           <h3 className="text-xl font-bold text-gray-900 mb-2">Evaluating Results</h3>
           <p className="text-gray-600">Checking your answers...</p>
@@ -304,38 +452,67 @@ export function TechTreasureHuntGame() {
 
     if (roundStatus === 'completed' && roundResults) {
       console.log("Rendering round results with:", roundResults); // Add this debug log
-      return <RoundResults 
-        results={roundResults} 
-        round={currentRound} 
-        onRetry={retryRound}
-        attempts={attempts}
-        maxAttempts={maxAttempts}
-      />;
+      return (
+        <>
+          <RoundResults 
+            results={roundResults} 
+            round={currentRound} 
+            onRetry={async () => {
+              setShowRefreshDialog(true);
+              return Promise.resolve();
+            }} // Fix: Return a Promise
+            onNextRound={async (nextRoundId: string) => {
+              setShowRefreshDialog(true);
+              // Store the next round ID in case we want to use it after refresh
+              sessionStorage.setItem('nextRoundId', nextRoundId);
+              return Promise.resolve();
+            }} // Fix: Accept ID parameter and return a Promise
+            attempts={attempts}
+            maxAttempts={maxAttempts}
+          />
+          
+          {/* Add the refresh confirmation dialog */}
+          <RefreshConfirmationDialog
+            open={showRefreshDialog}
+            onOpenChange={setShowRefreshDialog}
+            isRetry={true}
+          />
+        </>
+      );
     }
 
     return (
-      <div className="bg-[#EBE9E0]/40 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
+      <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 text-center">
         <p className="text-gray-600">Something went wrong. Please refresh the page.</p>
         <Button onClick={() => window.location.reload()} className="mt-4" variant="outline">Refresh</Button>
       </div>
     );
   };
 
+  // Determine if we should show the header separately
+  // Don't show for not_started rounds to avoid duplication with RoundStartCard
+  const shouldShowDetailedHeader = currentRound && roundStatus !== 'not_started';
+
   return (
-    <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden relative">
-      {/* Dots for ticket effect */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-indigo-100 rounded-l-full"></div>
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-indigo-100 rounded-r-full"></div>
-      
-      <div className="px-4 sm:px-8 lg:px-10 py-6 sm:py-8 lg:py-10">
-        <GameHeader 
-          currentRound={currentRound}
-          attempts={attempts}
-          maxAttempts={maxAttempts}
-        />
-        <div className="mt-8">
-          {renderContent()}
+    <div className="space-y-6">
+      {/* Only show the detailed game header when not displaying the start card */}
+      {shouldShowDetailedHeader ? (
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-4 sm:p-6 ">
+          <GameHeader 
+            currentRound={currentRound}
+            attempts={attempts}
+            maxAttempts={maxAttempts}
+          />
         </div>
+      ) : (
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-4 sm:p-6 mb-4">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900">Tech Treasure Hunt</h2>
+        </div>
+      )}
+      
+      {/* Main content area with proper spacing */}
+      <div className='bg-white/80 backdrop-blur-sm rounded-xl'>
+        {renderContent()}
       </div>
     </div>
   );
