@@ -10,7 +10,8 @@ export default async function EventsPage() {
   const supabase = await createClient();
   
   try {
-    const { data: events, error } = await supabase
+    // First, fetch active events (for backward compatibility)
+    const { data: activeEvents, error: activeError } = await supabase
       .from("events")
       .select(`
         id,
@@ -34,9 +35,42 @@ export default async function EventsPage() {
       .gte('registration_end', new Date().toISOString())
       .order('event_start', { ascending: true });
     
-    if (error) throw error;
+    if (activeError) throw activeError;
 
-    if (!events?.length) {
+    // Now, fetch closed/inactive events
+    const { data: closedEvents, error: closedError } = await supabase
+      .from("events")
+      .select(`
+        id,
+        name,
+        description,
+        event_type,
+        min_team_size,
+        max_team_size,
+        registration_start,
+        registration_end,
+        event_start,
+        event_end,
+        max_registrations,
+        is_active,
+        img_url,
+        whatsapp_url,
+        created_at,
+        updated_at
+      `)
+      .or(`is_active.eq.false,event_end.lt.${new Date().toISOString()}`);
+    
+    if (closedError) throw closedError;
+
+    // Combine both queries
+    const allEvents = [...(activeEvents || []), ...(closedEvents || [])];
+    
+    // Deduplicate events in case there's any overlap
+    const uniqueEvents = Array.from(
+      new Map(allEvents.map(event => [event.id, event])).values()
+    );
+
+    if (!uniqueEvents.length) {
       return <EmptyState />;
     }
 
@@ -51,11 +85,12 @@ export default async function EventsPage() {
             ]}
             className="mb-6"
           />
-          <EventList events={events} />
+          <EventList events={uniqueEvents} />
         </div>
       </main>
     );
   } catch (error) {
+    console.error("Error fetching events:", error);
     return <LoadingState />;
   }
 }

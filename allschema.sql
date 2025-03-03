@@ -241,3 +241,182 @@ or DELETE
 or
 update on teams for EACH row
 execute FUNCTION log_changes ();
+
+-- Add these new tables to the schema
+
+-- Table for event rounds
+create table if not exists public.event_rounds (
+  id uuid not null default gen_random_uuid(),
+  event_id uuid not null references public.events(id) on delete cascade,
+  name text not null,
+  description text null,
+  round_number integer not null,
+  round_type text not null,
+  time_limit integer null default 300, -- in seconds
+  passing_criteria jsonb null,
+  created_at timestamp with time zone null default timezone('utc'::text, now()),
+  updated_at timestamp with time zone null default timezone('utc'::text, now()),
+  constraint event_rounds_pkey primary key (id),
+  constraint event_rounds_event_id_round_number_key unique (event_id, round_number),
+  constraint valid_round_type check (round_type in ('math_quiz', 'coding', 'image_code', 'code_hunt', 'puzzle'))
+);
+
+-- Table for round progress
+create table if not exists public.round_progress (
+  id uuid not null default gen_random_uuid(),
+  registration_id uuid not null references public.registrations(id) on delete cascade,
+  round_id uuid not null references public.event_rounds(id) on delete cascade,
+  status text not null default 'not_started',
+  start_time timestamp with time zone null,
+  end_time timestamp with time zone null,
+  score jsonb null,
+  attempts integer not null default 1,
+  max_attempts integer not null default 3,
+  created_at timestamp with time zone null default timezone('utc'::text, now()),
+  updated_at timestamp with time zone null default timezone('utc'::text, now()),
+  constraint round_progress_pkey primary key (id),
+  constraint valid_progress_status check (status in ('not_started', 'in_progress', 'completed', 'passed', 'failed'))
+);
+
+-- Table for math quiz questions/answers
+create table if not exists public.math_quiz_answers (
+  id uuid not null default gen_random_uuid(),
+  progress_id uuid not null references public.round_progress(id) on delete cascade,
+  question_number integer not null,
+  question text not null,
+  correct_answer numeric not null,
+  participant_answer numeric null,
+  is_correct boolean null,
+  response_time_ms integer null,
+  created_at timestamp with time zone null default timezone('utc'::text, now()),
+  updated_at timestamp with time zone null default timezone('utc'::text, now()),
+  constraint math_quiz_answers_pkey primary key (id),
+  constraint math_quiz_answers_progress_id_question_number_key unique (progress_id, question_number)
+);
+
+-- Table for math quiz round configuration
+create table if not exists public.math_quiz_rounds (
+  id uuid not null default gen_random_uuid(),
+  round_id uuid not null references public.event_rounds(id) on delete cascade,
+  num_questions integer not null default 10,
+  difficulty level not null default 'medium',
+  min_range integer not null default 1,
+  max_range integer not null default 100,
+  operations text[] not null default array['add', 'subtract', 'multiply', 'divide'],
+  time_limit_per_question integer not null default 30, -- in seconds
+  passing_score numeric not null default 0.6, -- 60%
+  created_at timestamp with time zone null default timezone('utc'::text, now()),
+  updated_at timestamp with time zone null default timezone('utc'::text, now()),
+  constraint math_quiz_rounds_pkey primary key (id),
+  constraint math_quiz_rounds_round_id_key unique (round_id)
+);
+
+-- Table for image code round configuration
+create table if not exists public.image_code_rounds (
+  id uuid not null default gen_random_uuid(),
+  round_id uuid not null references public.event_rounds(id) on delete cascade,
+  images jsonb not null default '[]'::jsonb,
+  time_limit integer not null default 600, -- in seconds
+  passing_score numeric not null default 1.0, -- 100%
+  created_at timestamp with time zone null default timezone('utc'::text, now()),
+  updated_at timestamp with time zone null default timezone('utc'::text, now()),
+  constraint image_code_rounds_pkey primary key (id),
+  constraint image_code_rounds_round_id_key unique (round_id)
+);
+
+-- Table for image code submissions
+create table if not exists public.image_code_submissions (
+  id uuid not null default gen_random_uuid(),
+  progress_id uuid not null references public.round_progress(id) on delete cascade,
+  image_id uuid not null,
+  submitted_code text not null,
+  is_correct boolean not null,
+  attempts integer not null default 1,
+  created_at timestamp with time zone null default timezone('utc'::text, now()),
+  updated_at timestamp with time zone null default timezone('utc'::text, now()),
+  constraint image_code_submissions_pkey primary key (id),
+  constraint image_code_submissions_progress_id_image_id_key unique (progress_id, image_id)
+);
+
+-- Create stored procedure to evaluate round completion
+create or replace function public.evaluate_round_completion(p_progress_id uuid)
+returns boolean as $$
+declare
+  v_round_type text;
+  v_passing_score numeric;
+  v_correct_count int;
+  v_total_count int;
+  v_actual_score numeric;
+  v_passed boolean;
+begin
+  -- Get the round type and passing score
+  select 
+    er.round_type,
+    case
+      when er.round_type = 'math_quiz' then coalesce((select mqr.passing_score from public.math_quiz_rounds mqr where mqr.round_id = er.id), 0.6)
+      when er.round_type = 'image_code' then coalesce((select icr.passing_score from public.image_code_rounds icr where icr.round_id = er.id), 1.0)
+      else 0.7 -- default passing score for other types
+    end as passing_score
+  into v_round_type, v_passing_score
+  from public.round_progress rp
+  join public.event_rounds er on rp.round_id = er.id
+  where rp.id = p_progress_id;
+  
+  -- Handle math quiz rounds
+  if v_round_type = 'math_quiz' then
+    select count(*), count(*) filter (where is_correct = true)
+    into v_total_count, v_correct_count
+    from public.math_quiz_answers
+    where progress_id = p_progress_id;
+    
+    v_actual_score := case when v_total_count > 0 then v_correct_count::numeric / v_total_count else 0 end;
+    
+  -- Handle image code rounds
+  elsif v_round_type = 'image_code' then
+    -- Count image code submissions
+    select count(*), count(*) filter (where is_correct = true)
+    into v_total_count, v_correct_count
+    from public.image_code_submissions
+    where progress_id = p_progress_id;
+    
+    -- For image code, also check against total expected images
+    declare
+      v_round_id uuid;
+      v_total_expected int;
+    begin
+      select round_id into v_round_id from public.round_progress where id = p_progress_id;
+      
+      select coalesce(jsonb_array_length(images), 0)
+      into v_total_expected
+      from public.image_code_rounds
+      where round_id = v_round_id;
+      
+      if v_total_expected > v_total_count then
+        v_total_count := v_total_expected;
+      end if;
+    end;
+    
+    v_actual_score := case when v_total_count > 0 then v_correct_count::numeric / v_total_count else 0 end;
+  
+  -- Default for other round types
+  else
+    -- Use the score directly from the progress if available
+    select 
+      coalesce((rp.score->>'score')::numeric, 0)
+    into v_actual_score
+    from public.round_progress rp
+    where rp.id = p_progress_id;
+  end if;
+  
+  -- Determine if passed
+  v_passed := v_actual_score >= v_passing_score;
+  
+  -- Update the progress status
+  update public.round_progress
+  set 
+    status = case when v_passed then 'passed' else 'failed' end
+  where id = p_progress_id;
+  
+  return v_passed;
+end;
+$$ language plpgsql;

@@ -3,7 +3,6 @@ import { Metadata } from 'next';
 import { TechTreasureHuntGame } from './components/tech-treasure-hunt-game';
 import LeaderboardContainer from './components/leaderboard-container';
 import Image from 'next/image';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 export const metadata: Metadata = {
   title: 'Tech Treasure Hunt | Spectrum',

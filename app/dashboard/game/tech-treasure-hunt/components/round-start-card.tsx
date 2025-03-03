@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, Clock, Award, Zap, RotateCw, ArrowRight, Activity, Code, Calculator } from 'lucide-react';
+import { ArrowRight, Activity, Code, Calculator } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface Round {
   id: string;
@@ -17,10 +19,24 @@ interface RoundStartCardProps {
   onStart: () => void;
   attempts?: number;
   maxAttempts?: number;
+  isLoading?: boolean;
+  redirectUrl?: string; // New prop for redirect URL
 }
 
-export function RoundStartCard({ round, onStart, attempts = 1, maxAttempts = 3 }: RoundStartCardProps) {
+export function RoundStartCard({ 
+  round, 
+  onStart, 
+  attempts = 1, 
+  maxAttempts = 3,
+  isLoading = false,
+  redirectUrl = `/dashboard/game/tech-treasure-hunt/round/${round.id}` // Default redirect URL
+}: RoundStartCardProps) {
+  const [buttonText, setButtonText] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
+  const router = useRouter();
+  
+  const isButtonDisabled = isLoading || isStarting;
+  const attemptsRemaining = maxAttempts - attempts + 1;
 
   const formatTimeLimit = (seconds: number) => {
     if (!seconds) return "No time limit";
@@ -60,27 +76,43 @@ export function RoundStartCard({ round, onStart, attempts = 1, maxAttempts = 3 }
 
   const typeInfo = getRoundTypeInfo(round.round_type);
 
+  // Updated handler with error handling and retry logic
   const handleStartClick = async (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
 
-    if (isStarting) return;
-
+    if (isButtonDisabled) return;
+    
     setIsStarting(true);
-    console.log("Start button clicked, calling onStart handler");
+    setButtonText('Starting round...');
     
-    // Add a message to users that the page will reload
-    const startButton = e.currentTarget as HTMLButtonElement;
-    if (startButton) {
-      startButton.innerHTML = 'Starting and reloading page...';
+    try {
+      // Call the onStart handler which will make the API call
+      await onStart();
+      
+      // If redirectUrl is provided, navigate after a short delay
+      if (redirectUrl) {
+        setTimeout(() => {
+          console.log("Redirecting to:", redirectUrl);
+          
+          // Use router for smoother transitions
+          router.push(redirectUrl);
+        }, 500);
+      } else {
+        // Default fallback to refresh if no redirect URL
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }
+    } catch (error) {
+      console.error("Error starting round:", error);
+      setIsStarting(false);
+      setButtonText(null);
+      
+      // Show user-friendly error message
+      toast.error("Failed to start round. Please try again.");
     }
-
-    // Call the onStart handler, which will trigger the API request
-    onStart();
-    
-    // Keep the button disabled - the page will reload anyway
   };
-
-  const attemptsRemaining = maxAttempts - attempts + 1;
 
   return (
     <motion.div 
@@ -137,13 +169,16 @@ export function RoundStartCard({ round, onStart, attempts = 1, maxAttempts = 3 }
         <Button 
           onClick={handleStartClick} 
           className="bg-indigo-600 hover:bg-indigo-700 text-white"
-          disabled={isStarting || attemptsRemaining <= 0}
+          disabled={isButtonDisabled || attemptsRemaining <= 0}
         >
-          {isStarting ? (
-            <span>Starting & Reloading...</span>
+          {isButtonDisabled ? (
+            <div className="flex items-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
+              <span>{buttonText || 'Starting...'}</span>
+            </div>
           ) : attemptsRemaining > 0 ? (
             <>
-              Start Round <ArrowRight className="ml-2 h-4 w-4" />
+              {attempts > 1 ? 'Retry Round' : 'Start Round'} <ArrowRight className="ml-2 h-4 w-4" />
             </>
           ) : (
             'No attempts remaining'
