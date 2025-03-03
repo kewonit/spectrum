@@ -3,10 +3,12 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const { fontFamily } = require("tailwindcss/defaultTheme")
 
 const config: Config = {
+  darkMode: ["class"],
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   theme: {
     container: {
@@ -18,6 +20,9 @@ const config: Config = {
       },
     },
     extend: {
+      screens: {
+        'xs': '480px', // Add an extra-small breakpoint
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

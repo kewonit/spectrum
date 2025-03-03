@@ -76,7 +76,7 @@ function FilterOption({ label, count, isActive, onClick }: {
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-all rounded-lg",
+        "flex items-center justify-between w-full sm:w-auto px-3 py-1.5 text-sm font-medium transition-all rounded-lg",
         isActive 
           ? "bg-[#EBE9E0] text-gray-800 font-medium" 
           : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -84,7 +84,7 @@ function FilterOption({ label, count, isActive, onClick }: {
     >
       <span>{label}</span>
       <Badge variant="outline" className={cn(
-        "text-xs px-1.5 py-0 border",
+        "text-xs px-1.5 py-0 border ml-2",
         isActive ? "bg-white/70 text-gray-700" : "bg-white/80 text-gray-600 border-gray-200"
       )}>
         {count}
@@ -248,14 +248,14 @@ export const EventList: React.FC<{ events: Event[] }> = ({ events }) => {
             </div>
           </div>
 
-          {/* Filter controls matching original design */}
-          <div className="flex flex-wrap gap-2 items-center mb-8 pb-4 border-b border-gray-100">
-            <div className="flex items-center mr-2">
+          {/* Filter controls - updated for responsiveness */}
+          <div className="flex flex-col mb-8 pb-4 border-b border-gray-100">
+            <div className="flex items-center mb-3">
               <Filter className="w-4 h-4 text-gray-500 mr-2" />
               <span className="text-sm text-gray-600 font-medium">Filter:</span>
             </div>
             
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
               <FilterOption 
                 label="All Events" 
                 count={events.length} 
