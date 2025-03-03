@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Medal, 
   Clock, 
@@ -103,12 +103,52 @@ export function ClientLeaderboard({ className }: { className?: string }) {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
-  const fetchLeaderboard = async () => {
+  // Use refs to track state without causing re-renders
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const selectedTabRef = useRef(selectedTab);
+  const fetchingRef = useRef(false);
+  const lastFetchTimeRef = useRef<number>(0);
+  
+  // Update the ref when the state changes
+  useEffect(() => {
+    selectedTabRef.current = selectedTab;
+  }, [selectedTab]);
+  
+  // Memoized fetch function with debouncing
+  const fetchLeaderboard = useCallback(async (forceRefresh = false) => {
+    // Prevent concurrent fetches and limit API calls
+    if (fetchingRef.current) return;
+    
+    // Debounce API calls to at most once per 10 seconds unless forced
+    const now = Date.now();
+    if (!forceRefresh && (now - lastFetchTimeRef.current < 10000)) {
+      console.log('Fetch throttled. Try again later.');
+      return;
+    }
+    
     try {
-      setIsLoading(true);
-      const roundParam = selectedTab !== 'all' ? `?round=${selectedTab}` : '';
-      const response = await fetch(`/api/techtreasurehunt/leaderboard${roundParam}`);
+      fetchingRef.current = true;
+      
+      if (forceRefresh) {
+        setIsRefreshing(true);
+      } else if (!leaders.length) {
+        setIsLoading(true);
+      }
+      
+      const roundParam = selectedTabRef.current !== 'all' ? `?round=${selectedTabRef.current}` : '';
+      const url = `/api/techtreasurehunt/leaderboard${roundParam}`;
+      
+      console.log(`Fetching leaderboard data from ${url} at ${new Date().toLocaleTimeString()}`);
+      
+      const response = await fetch(url, {
+        cache: 'no-store',
+        headers: {
+          'x-client-timestamp': Date.now().toString()  // Add timestamp to prevent caching
+        }
+      });
       
       if (!response.ok) {
         const errorData = await response.json();
@@ -116,6 +156,7 @@ export function ClientLeaderboard({ className }: { className?: string }) {
       }
       
       const data = await response.json();
+      lastFetchTimeRef.current = now;
       
       // Check if the response has the expected format
       if (!data || !Array.isArray(data.leaders)) {
@@ -125,31 +166,56 @@ export function ClientLeaderboard({ className }: { className?: string }) {
         setLeaders(data.leaders || []);
       }
       
+      setLastUpdated(new Date());
       setError(null);
     } catch (err) {
       console.error('Error fetching leaderboard:', err);
       setError(err instanceof Error ? err : new Error('Unknown error'));
-      setLeaders([]); // Clear leaders on error
     } finally {
+      fetchingRef.current = false;
       setIsLoading(false);
+      setIsRefreshing(false);
     }
-  };
-
+  }, []); // Empty dependency array since we use refs
+  
+  // Setup the initial fetch and interval
   useEffect(() => {
+    // Immediate fetch on mount (only once)
     fetchLeaderboard();
     
-    // Set up periodic refresh
-    const intervalId = setInterval(fetchLeaderboard, 60000); // Refresh every minute
+    // Set up interval for periodic fetches
+    intervalRef.current = setInterval(() => {
+      fetchLeaderboard();
+    }, 60000); // Refresh every minute
     
-    return () => clearInterval(intervalId);
-  }, [selectedTab]);
+    // Clean up on unmount
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [fetchLeaderboard]); // Only the stable fetchLeaderboard callback
   
+  // Handle tab change without triggering multiple fetches
   const handleTabChange = (tab: string) => {
-    setSelectedTab(tab);
+    // Only fetch if the tab actually changed
+    if (tab !== selectedTab) {
+      setSelectedTab(tab);
+      // Use a small timeout to prevent too many fetches
+      setTimeout(() => {
+        fetchLeaderboard(true);
+      }, 100);
+    }
+  };
+  
+  // Manual refresh handler
+  const handleRefresh = () => {
+    fetchLeaderboard(true);
   };
   
   return (
-    <div className={cn("bg-white rounded-2xl shadow-md overflow-hidden", className)}>
+    <div className={cn("bg-white/95 backdrop-blur-md border border-white/20 rounded-xl shadow-lg overflow-hidden", className)}>
       <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white p-4">
         <div className="flex justify-between items-center">
           <div className="flex-1 flex justify-center relative">
@@ -167,16 +233,17 @@ export function ClientLeaderboard({ className }: { className?: string }) {
           <Button 
             variant="ghost" 
             size="icon"
-            onClick={fetchLeaderboard}
+            onClick={handleRefresh}
+            disabled={isRefreshing || fetchingRef.current}
             className="h-8 w-8 rounded-full bg-white/20 hover:bg-white/30 absolute right-4"
           >
-            <RefreshCw className="h-4 w-4" />
+            <RefreshCw className={cn("h-4 w-4", { "animate-spin": isRefreshing })} />
           </Button>
         </div>
       </div>
       
       <Tabs 
-        defaultValue="all" 
+        defaultValue={selectedTab} 
         className="w-full"
         onValueChange={handleTabChange}
         value={selectedTab}
@@ -244,7 +311,8 @@ export function ClientLeaderboard({ className }: { className?: string }) {
         </AnimatePresence>
         
         <div className="p-3 bg-amber-50 text-center text-xs text-amber-800">
-          Updated every minute
+          {isRefreshing ? 'Updating...' : 
+           lastUpdated ? `Last updated: ${lastUpdated.toLocaleTimeString()}` : 'Loading...'}
         </div>
       </Tabs>
       

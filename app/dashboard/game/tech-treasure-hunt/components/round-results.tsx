@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, Clock, BarChart, RefreshCw, Award } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, BarChart, RefreshCw, Award, ArrowRight, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner'; // Fixed import
 
 interface Round {
   id: string;
@@ -30,6 +31,7 @@ interface RoundResultsProps {
   results: RoundResults;
   round: Round;
   onRetry: () => Promise<void>;
+  onNextRound?: (nextRoundId: string) => Promise<void>; // Add this new prop
   attempts?: number;
   maxAttempts?: number;
 }
@@ -37,12 +39,15 @@ interface RoundResultsProps {
 export function RoundResults({ 
   results, 
   round, 
-  onRetry, 
+  onRetry,
+  onNextRound, // New prop
   attempts = 1,
   maxAttempts = 3
 }: RoundResultsProps) {
   const percentage = Math.round((results.correctCount / results.totalQuestions) * 100);
   const [isRetrying, setIsRetrying] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [nextRoundInfo, setNextRoundInfo] = useState<{ hasNextRound: boolean, nextRound: any } | null>(null);
   
   // Calculate if user can retry based on attempts
   const canRetry = attempts < maxAttempts || results.passed;
@@ -86,6 +91,46 @@ export function RoundResults({
       alert("Failed to retry round. Please reload the page and try again.");
     } finally {
       setIsRetrying(false);
+    }
+  };
+
+  // Load next round information
+  useEffect(() => {
+    async function checkNextRound() {
+      try {
+        const response = await fetch(`/api/techtreasurehunt/next-round?currentRoundId=${round.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setNextRoundInfo(data);
+        }
+      } catch (error) {
+        console.error("Error checking for next round:", error);
+      }
+    }
+    
+    checkNextRound();
+  }, [round.id]);
+  
+  // Handle next round click
+  const handleNextRound = async () => {
+    if (!nextRoundInfo?.hasNextRound || !nextRoundInfo.nextRound) {
+      toast.error("There's no next round available");
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      if (onNextRound) {
+        await onNextRound(nextRoundInfo.nextRound.id);
+      } else {
+        // Fallback if no handler provided
+        window.location.href = `/dashboard/game/tech-treasure-hunt/round/${nextRoundInfo.nextRound.id}`;
+      }
+    } catch (error) {
+      console.error("Error navigating to next round:", error);
+      toast.error("Failed to navigate to next round");
+      setIsLoading(false);
     }
   };
   
@@ -197,27 +242,48 @@ export function RoundResults({
           </div>
         )}
         
-        <Button 
-          onClick={handleRetry} 
-          disabled={isRetrying || !canRetry}
-          variant={results.passed ? "outline" : "default"}
-          className={results.passed 
-            ? "border-indigo-300 hover:bg-indigo-50 text-indigo-700" 
-            : "bg-indigo-600 hover:bg-indigo-700 text-white"
-          }
-        >
-          {isRetrying ? (
-            <>
-              <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-              Retrying...
-            </>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button
+            onClick={handleRetry}
+            variant="outline"
+            disabled={isRetrying || !canRetry}
+          >
+            {isRetrying ? (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                Retrying...
+              </>
+            ) : (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4" />
+                {results.passed ? 'Try Next Round' : 'Try Again'}
+              </>
+            )}
+          </Button>
+          
+          {nextRoundInfo?.hasNextRound ? (
+            <Button 
+              onClick={handleNextRound}
+              disabled={isLoading}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                  Loading...
+                </>
+              ) : (
+                <>
+                  Try Next Round <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
           ) : (
-            <>
-              <RefreshCw className="mr-2 h-4 w-4" />
-              {results.passed ? 'Try Next Round' : 'Try Again'}
-            </>
+            <Button disabled className="text-gray-500 cursor-not-allowed">
+              No Next Round Available
+            </Button>
           )}
-        </Button>
+        </div>
       </div>
       
       {/* Additional styling for scroll area */}
