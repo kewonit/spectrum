@@ -11,9 +11,10 @@ import {
   Users
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import cn from 'classnames';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import Image from 'next/image';
 
 interface Leader {
   user_id: string;
@@ -59,8 +60,7 @@ function LeaderItem({ leader, rank }: { leader: Leader; rank: number }) {
       className={cn(
         "flex items-center p-3 border-b last:border-0",
         rank <= 3 ? "bg-gradient-to-r from-amber-50/50 to-transparent" : "",
-      )}
-    >
+      )}>
       <div className="w-8 flex justify-center">
         {rank <= 3 ? (
           <Medal className={cn("h-5 w-5", medalColors[rank as keyof typeof medalColors] || "text-gray-400")} />
@@ -150,20 +150,29 @@ export function ClientLeaderboard({ className }: { className?: string }) {
   
   return (
     <div className={cn("bg-white rounded-2xl shadow-md overflow-hidden", className)}>
-      <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white p-4 flex justify-between items-center">
-        <div className="flex items-center">
-          <Trophy className="h-5 w-5 mr-2" />
-          <h3 className="font-bold text-lg">Leaderboard</h3>
+      <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white p-4">
+        <div className="flex justify-between items-center">
+          <div className="flex-1 flex justify-center relative">
+            <Image
+              width={240}
+              height={80}
+              src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1741027209/Spectrum/leaderboard_1_gsmnp7.webp"
+              alt="Leaderboard"
+              className="w-auto object-contain"
+              draggable="false"
+              style={{ userSelect: 'none' }}
+              priority
+            />
+          </div>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={fetchLeaderboard}
+            className="h-8 w-8 rounded-full bg-white/20 hover:bg-white/30 absolute right-4"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </Button>
         </div>
-        
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={fetchLeaderboard}
-          className="h-8 w-8 rounded-full bg-white/20 hover:bg-white/30"
-        >
-          <RefreshCw className="h-4 w-4" />
-        </Button>
       </div>
       
       <Tabs 
