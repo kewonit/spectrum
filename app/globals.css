@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {
-
   --background-start-rgb: 0, 0, 0;
   --background-end-rgb: 0, 0, 0;
 
@@ -43,13 +42,11 @@
   --sidebar-ring: 217.2 91.2% 59.8%;
 }
 
-
-
 @layer base {
   .text-edge-outline {
-    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
   }
-} 
+}
 
 body {
   color: rgb(var(--foreground-rgb));
@@ -102,7 +99,7 @@ body {
 }
 
 .grid-background::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -110,11 +107,15 @@ body {
   height: 100%;
   --size: 45px;
   --line: rgba(255, 255, 255, 0.4);
-  background: 
-    linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size),
-    linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
-  mask: 
-    radial-gradient(ellipse at top left, white 20%, transparent 40%),
+  background: linear-gradient(
+        90deg,
+        var(--line) 1px,
+        transparent 1px var(--size)
+      )
+      50% 50% / var(--size) var(--size),
+    linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% /
+      var(--size) var(--size);
+  mask: radial-gradient(ellipse at top left, white 20%, transparent 40%),
     radial-gradient(ellipse at top right, white 20%, transparent 40%),
     radial-gradient(circle at center, transparent 70%, white 90%);
   mask-composite: add;
@@ -128,16 +129,13 @@ body {
   z-index: 1;
 }
 
-
-
-
 .grid-background-flip {
   position: relative;
   overflow: hidden;
 }
 
 .grid-background-flip::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -145,13 +143,17 @@ body {
   height: 100%;
   --size: 45px;
   --line: rgba(255, 255, 255, 0.4);
-  background: 
-    linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size),
-    linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
-  mask: 
-    radial-gradient(ellipse at top left, white 2%, transparent 10%),
+  background: linear-gradient(
+        90deg,
+        var(--line) 1px,
+        transparent 1px var(--size)
+      )
+      50% 50% / var(--size) var(--size),
+    linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% /
+      var(--size) var(--size);
+  mask: radial-gradient(ellipse at top left, white 2%, transparent 10%),
     radial-gradient(ellipse at top right, white 2%, transparent 10%);
-    /* radial-gradient(circle at center, white 60%, transparent 20%); */
+  /* radial-gradient(circle at center, white 60%, transparent 20%); */
   mask-composite: add;
   pointer-events: none;
   z-index: 0;
@@ -163,10 +165,7 @@ body {
   z-index: 1;
 }
 
-
-
-.new-footer{
-  
+.new-footer {
 }
 
 @layer utilities {

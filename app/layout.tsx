@@ -7,6 +7,7 @@ import './globals.css'
 import Script from 'next/script'
 import Link from 'next/link'  // Add this import
 import { cn } from "@/app/libs/utils"
+import { Providers } from './providers';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -64,7 +65,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={[inter.variable, calSans.variable].join(" ")}>
+    <html lang="en" className={[inter.variable, calSans.variable].join(" ")} suppressHydrationWarning>
       <head>
         <Script
           strategy="afterInteractive"
@@ -84,15 +85,17 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <main>
-          <div style={{ backgroundColor: '#e6ffe6', color: '#2e7d32', padding: '12px', textAlign: 'center', fontWeight: 'bold' }}>
-            📱 Join Event WhatsApp Groups: <Link href="/dashboard/events/registrations" style={{ textDecoration: 'underline', color: '#1a5f1a', marginLeft: '4px' }}>View My Registrations</Link>
-          </div>
-          <Navigation />
-          <Script src='https://www.cssscript.com/demo/cat-follow-cursor-oneko/oneko.js' />
-          {children}
-          <Footer />
-        </main>
+        <Providers>
+          <main>
+            <div style={{ backgroundColor: '#e6ffe6', color: '#2e7d32', padding: '12px', textAlign: 'center', fontWeight: 'bold' }}>
+              📱 Join Event WhatsApp Groups: <Link href="/dashboard/events/registrations" style={{ textDecoration: 'underline', color: '#1a5f1a', marginLeft: '4px' }}>View My Registrations</Link>
+            </div>
+            <Navigation />
+            <Script src='https://www.cssscript.com/demo/cat-follow-cursor-oneko/oneko.js' />
+            {children}
+            <Footer />
+          </main>
+        </Providers>
       </body>
     </html> 
   )
