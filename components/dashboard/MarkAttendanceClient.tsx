@@ -15,7 +15,6 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-// Import CustomBadge instead of Badge and cn
 import { CustomBadge } from "@/components/ui/custom-badge";
 import { format } from "date-fns";
 import { 
@@ -34,11 +33,6 @@ import {
   TooltipTrigger 
 } from "@/components/ui/tooltip";
 import { useRouter } from "next/navigation";
-// Remove the cn import
-// import { cn } from '@/lib/utils';
-
-// Remove the custom badge code that uses cn
-// const CustomBadge = ({...}) => {...};
 
 // At the top of the file, update the global interface declaration
 declare global {

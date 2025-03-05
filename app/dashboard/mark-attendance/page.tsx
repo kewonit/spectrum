@@ -1,5 +1,3 @@
-"use client";
-
 import MarkAttendanceClient from '@/components/dashboard/MarkAttendanceClient';
 import { Suspense } from 'react';
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
