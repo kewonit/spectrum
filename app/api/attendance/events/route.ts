@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/app/utils/supabase/server";
+import { checkAttendancePermission } from "@/app/utils/permissions";
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,20 +16,18 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Check if the user is authenticated (skip role check)
-    const { data: currentUserProfile, error: profileError } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("id", user.id)
-      .single();
-      
-    if (profileError) {
-      console.log('Error fetching user profile:', profileError);
-      // Continue anyway - all authenticated users can access events
-    }
+    // Check if user has permission to access attendance data
+    const { isAllowed, error: permissionError } = await checkAttendancePermission(
+      supabase,
+      user.email
+    );
     
-    // Skip role-based permission check - all authenticated users can access
-    // Removed allowedRoles check
+    if (!isAllowed) {
+      return NextResponse.json(
+        { error: permissionError || "You don't have permission to access attendance events." },
+        { status: 403 }
+      );
+    }
     
     // Get all active events
     const now = new Date().toISOString();

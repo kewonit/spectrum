@@ -5,7 +5,7 @@ import { QrScanner } from "@/components/QrScanner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner"; // Import Toaster component here
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
 import { 
   Table, 
@@ -106,15 +106,17 @@ export default function MarkAttendancePage() {
     };
   }, []);
 
-  // Fetch attendance history on component mount and page change
-  useEffect(() => {
-    fetchAttendanceHistory();
-    fetchAttendanceStats();
-  }, [currentPage]);
-
-  const fetchAttendanceStats = async () => {
+  // Wrap in useCallback to avoid regenerating on every render
+  const fetchAttendanceStats = useCallback(async () => {
     try {
       const response = await fetch('/api/attendance/stats');
+      
+      // Check specifically for permission denied status
+      if (response.status === 403) {
+        const data = await response.json();
+        setUserAccessError(data.error || "You don't have permission to access the attendance system.");
+        return;
+      }
       
       // Still process the response even if it's not OK
       const data = await response.json();
@@ -132,22 +134,24 @@ export default function MarkAttendancePage() {
         total: 0
       });
     }
-  };
+  }, []); // No dependencies since it's just using fetch and setState
 
-  const fetchAttendanceHistory = async () => {
+  // Wrap in useCallback to avoid regenerating on every render
+  const fetchAttendanceHistory = useCallback(async () => {
     try {
       setHistoryLoading(true);
       const response = await fetch(`/api/attendance/history?page=${currentPage}&limit=10`);
       
-      // Continue even if response isn't OK
-      const data = await response.json();
-      
-      // Check for specific error status that should prevent operation
+      // Check specifically for permission denied status
       if (response.status === 403) {
-        setUserAccessError(data.error || "You don't have permission to mark attendance");
+        const data = await response.json();
+        setUserAccessError(data.error || "You don't have permission to use the attendance system.");
         setHistoryLoading(false);
         return;
       }
+      
+      // Continue even if response isn't OK
+      const data = await response.json();
       
       // Use any data we got, or empty array if none
       setAttendanceHistory(data.data || []);
@@ -163,13 +167,25 @@ export default function MarkAttendancePage() {
     } finally {
       setHistoryLoading(false);
     }
-  };
+  }, [currentPage]); // Only depends on currentPage
 
+  // Update useEffect to use the memoized functions
+  useEffect(() => {
+    fetchAttendanceHistory();
+    fetchAttendanceStats();
+  }, [currentPage, fetchAttendanceHistory, fetchAttendanceStats]);
+
+  // Fix handleScan with proper dependencies
   const handleScan = useCallback(async (scanData: string) => {
     if (!scanData) return;
     
     // Prevent multiple scans of the same QR code within a short period
     if (recentlyScanned.includes(scanData)) {
+      toast.info("Already scanned", {
+        description: "This code was recently scanned",
+        duration: 2000,
+        id: `info-${Date.now()}` // Force unique ID
+      });
       return;
     }
     
@@ -183,6 +199,7 @@ export default function MarkAttendancePage() {
       // Show loading toast with ID to dismiss it later
       const loadingToastId = toast.loading("Processing attendance...", {
         description: "Scanning QR code and marking attendance",
+        id: `loading-${Date.now()}`, // Force unique ID
         duration: 10000 // Longer timeout just in case
       });
       
@@ -212,7 +229,31 @@ export default function MarkAttendancePage() {
       
       const data = await response.json();
       
-      // Check response status
+      // Special handling for already marked attendance - use error toast instead of info
+      if (response.status === 409 && data.alreadyMarked) {
+        // Get attendee name and prepare description
+        const attendeeName = data.attendee?.full_name || 'This person';
+        let description = 'Already marked present for today';
+        
+        if (data.events && data.events.length > 0) {
+          if (data.events.length === 1) {
+            description = `Already marked present for ${data.events[0]}`;
+          } else {
+            description = `Already marked present for ${data.events.length} events`;
+          }
+        }
+        
+        // Show as error toast (red) instead of info (blue)
+        toast.error(`${attendeeName} already marked`, {
+          description: description,
+          id: `already-marked-${Date.now()}`,
+          duration: 4000,
+        });
+        
+        return; // Exit early, don't treat this as an error
+      }
+      
+      // Check for other errors
       if (!response.ok) {
         console.error('Error marking attendance:', data);
         throw new Error(data.error || 'Failed to mark attendance');
@@ -226,53 +267,48 @@ export default function MarkAttendancePage() {
       // Create specific success toast based on data
       const attendeeName = data.attendee?.full_name || 'Unknown';
       
-      // Force rendering a new toast with the Sonner library
-      setTimeout(() => {
-        if (data.isDefaultAttendance) {
-          toast.success(`Attendance marked for ${attendeeName}`, {
-            description: `Marked present for ${data.eventNames[0]} (not registered)`,
-            id: `success-${Date.now()}`, // Force unique ID
-            duration: 5000,
-          });
-        } else if (data.eventCount > 1) {
-          toast.success(`Attendance marked for ${attendeeName}`, {
-            description: `Successfully checked in to ${data.eventCount} events`,
-            id: `success-${Date.now()}`,
-            duration: 5000,
-          });
-        } else if (data.eventCount === 1) {
-          toast.success(`Attendance marked for ${attendeeName}`, {
-            description: `Successfully checked in to ${data.eventNames[0]}`,
-            id: `success-${Date.now()}`,
-            duration: 5000,
-          });
-        } else {
-          toast.success(`Attendance marked for ${attendeeName}`, {
-            id: `success-${Date.now()}`,
-            duration: 5000,
-          });
-        }
-      }, 100);
+      // Improve toast triggering to ensure it shows up
+      // Using a more reliable approach with unique IDs and no setTimeout
+      if (data.isDefaultAttendance) {
+        toast.success(`Attendance marked for ${attendeeName}`, {
+          description: `Marked present for ${data.eventNames[0]} (not registered)`,
+          id: `success-${Date.now()}`, // Force unique ID
+          duration: 5000,
+        });
+      } else if (data.eventCount > 1) {
+        toast.success(`Attendance marked for ${attendeeName}`, {
+          description: `Successfully checked in to ${data.eventCount} events`,
+          id: `success-${Date.now()}`,
+          duration: 5000,
+        });
+      } else if (data.eventCount === 1) {
+        toast.success(`Attendance marked for ${attendeeName}`, {
+          description: `Successfully checked in to ${data.eventNames[0]}`,
+          id: `success-${Date.now()}`,
+          duration: 5000,
+        });
+      } else {
+        toast.success(`Attendance marked for ${attendeeName}`, {
+          id: `success-${Date.now()}`,
+          duration: 5000,
+        });
+      }
       
-      // Refresh attendance history and stats with small delay to allow the database to update
-      setTimeout(() => {
-        fetchAttendanceHistory();
-        fetchAttendanceStats();
-      }, 500);
+      // Refresh attendance history and stats
+      fetchAttendanceHistory();
+      fetchAttendanceStats();
       
     } catch (err: any) {
       console.error('Error marking attendance:', err);
       
-      // Force a new error toast to render
-      setTimeout(() => {
-        toast.error("Failed to mark attendance", {
-          description: err.message || "Please try again",
-          id: `error-${Date.now()}`,
-          duration: 5000,
-        });
-      }, 100);
+      // Improved error toast with unique ID
+      toast.error("Failed to mark attendance", {
+        description: err.message || "Please try again",
+        id: `error-${Date.now()}`,
+        duration: 5000,
+      });
     }
-  }, [recentlyScanned]);
+  }, [recentlyScanned, fetchAttendanceHistory, fetchAttendanceStats]); // Now with proper dependencies
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -309,7 +345,7 @@ export default function MarkAttendancePage() {
             { label: 'Dashboard', href: '/dashboard' },
             { label: 'Mark Attendance' },
           ]}
-          className="mb-6"
+          className="mb-6 text-black"
         />
         
         <div className="bg-red-50 border border-red-200 p-6 rounded-lg text-center">
@@ -329,6 +365,9 @@ export default function MarkAttendancePage() {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      {/* Add Toaster component directly to this page */}
+      <Toaster richColors position="top-right" />
+      
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },

@@ -8,6 +8,7 @@ import Script from 'next/script'
 import Link from 'next/link'  // Add this import
 import { cn } from "@/app/libs/utils"
 import { Providers } from './providers';
+import { Toaster } from 'sonner';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -94,6 +95,7 @@ export default function RootLayout({
             <Script src='https://www.cssscript.com/demo/cat-follow-cursor-oneko/oneko.js' />
             {children}
             <Footer />
+            <Toaster richColors position="top-right" />
           </main>
         </Providers>
       </body>
