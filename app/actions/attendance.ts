@@ -20,6 +20,7 @@ export async function markAttendanceAction(userId: string, notes: string = 'Mark
         verificationMethod: 'qr_code',
         notes
       }),
+      cache: 'no-store',
     });
 
     // Return the response directly to be handled by the client
@@ -46,7 +47,9 @@ export async function markAttendanceAction(userId: string, notes: string = 'Mark
  */
 export async function getAttendanceStatsAction() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/attendance/stats`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/attendance/stats`, {
+      cache: 'no-store',
+    });
     const data = await response.json();
     
     return {
@@ -73,7 +76,8 @@ export async function getAttendanceStatsAction() {
 export async function getAttendanceHistoryAction(page: number = 0, limit: number = 10) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/attendance/history?page=${page}&limit=${limit}`
+      `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/attendance/history?page=${page}&limit=${limit}`,
+      { cache: 'no-store' }
     );
     const data = await response.json();
     
