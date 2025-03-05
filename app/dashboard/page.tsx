@@ -102,6 +102,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
+      <>
       <div className="min-h-screen bg-[#EBE9E0] p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumb skeleton */}
@@ -145,11 +146,13 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      </>
     );
   }
 
   if (error || !userData) {
     return (
+      <>
       <div className="min-h-screen bg-[#EBE9E0] flex items-center justify-center p-4">
         <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg text-center">
           <h1 className="text-2xl font-bold mb-4">Welcome to Dashboard</h1>
@@ -161,6 +164,7 @@ export default function DashboardPage() {
           </Link>
         </div>
       </div>
+      </>
     );
   }
 
@@ -188,6 +192,7 @@ export default function DashboardPage() {
   };
 
   return (
+    <>
     <main className="min-h-screen bg-[#EBE9E0]">
       <TooltipProvider>
         <div className="w-full max-w-screen-xl mx-auto p-4 sm:px-6 lg:p-8">
@@ -536,5 +541,6 @@ export default function DashboardPage() {
         </div>
       </TooltipProvider>
     </main>
+    </>
   );
 }

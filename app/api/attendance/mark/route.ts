@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/app/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { checkAttendancePermission } from "@/app/utils/permissions";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,6 +14,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Unauthorized. Please log in." },
         { status: 401 }
+      );
+    }
+    
+    // Check if user has permission to mark attendance
+    const { isAllowed, error: permissionError } = await checkAttendancePermission(
+      supabase,
+      user.email
+    );
+    
+    if (!isAllowed) {
+      return NextResponse.json(
+        { error: permissionError || "You don't have permission to mark attendance." },
+        { status: 403 }
       );
     }
     
@@ -134,6 +148,55 @@ export async function POST(request: NextRequest) {
     
     // Use the validated attendee profile ID for all subsequent operations
     const validatedUserId = attendeeProfile.id;
+
+    // Check if the user already has attendance marked for any of their events today
+    
+    // Get today's date in UTC format (start of day)
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    const todayStr = today.toISOString();
+    
+    // Check for existing attendance records that are already marked present
+    const { data: existingAttendance, error: checkError } = await supabase
+      .from("event_attendance")
+      .select("id, event_id, events:event_id(name)")
+      .eq("user_id", validatedUserId)
+      .eq("is_present", true)
+      .gte("marked_at", todayStr);
+      
+    if (checkError) {
+      console.error('Error checking for existing attendance:', checkError);
+      // Continue anyway, just log the error
+    }
+    
+    // If we found existing attendance records, prevent remarking
+    if (existingAttendance && existingAttendance.length > 0) {
+      // Get list of event names they're already marked for
+      const eventNames = existingAttendance.map(record => {
+        const event = record.events as any;
+        return event?.name || "Unknown event";
+      });
+      
+      // Get attendee name for the error message
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("full_name, email")
+        .eq("id", validatedUserId)
+        .single();
+        
+      const attendeeName = profileData?.full_name || "This person";
+      
+      return NextResponse.json(
+        { 
+          error: "Already marked present",
+          message: `${attendeeName} is already marked present for today`,
+          events: eventNames,
+          attendee: { full_name: profileData?.full_name, email: profileData?.email },
+          alreadyMarked: true
+        },
+        { status: 409 } // 409 Conflict is appropriate for this case
+      );
+    }
 
     // Find all events the user is registered for
     // First, get individual registrations

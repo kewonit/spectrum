@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/app/utils/supabase/server";
+import { checkAttendancePermission } from "@/app/utils/permissions";
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,6 +13,19 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         { error: "Unauthorized. Please log in." },
         { status: 401 }
+      );
+    }
+    
+    // Check if user has permission to access attendance data
+    const { isAllowed, error: permissionError } = await checkAttendancePermission(
+      supabase,
+      user.email
+    );
+    
+    if (!isAllowed) {
+      return NextResponse.json(
+        { error: permissionError || "You don't have permission to view attendance stats." },
+        { status: 403 }
       );
     }
     
