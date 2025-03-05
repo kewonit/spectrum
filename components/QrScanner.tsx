@@ -34,6 +34,9 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
   const [error, setError] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
   
+  // Add browser check right at the beginning
+  const isBrowser = typeof window !== 'undefined';
+  
   // Camera management states
   const [cameras, setCameras] = useState<CameraDevice[]>([]);
   const [currentCameraIndex, setCurrentCameraIndex] = useState(0);
@@ -51,53 +54,57 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
     setIsScanning(newState);
   };
   
-  // Initialize on client-side only
+  // Initialize on client-side only with better browser detection
   useEffect(() => {
-    setIsMounted(true);
-    
-    // Check for camera permissions and available cameras
-    const initializeCamera = async () => {
-      try {
-        const permissionStatus = await navigator.permissions.query({ name: 'camera' as any });
-        if (permissionStatus.state === 'denied') {
-          setCameraPermissionDenied(true);
-          setError('Camera permission denied. Please check browser settings.');
-          return;
-        }
-        
-        // Request access to camera with environment facing first (for better QR scanning)
+    if (isBrowser) {
+      setIsMounted(true);
+      
+      // Only run camera initialization if we're in a browser
+      const initializeCamera = async () => {
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'environment' } 
-          });
-          setCameraFacingMode('environment');
-          stopMediaTracks(stream); // Clean up the stream after getting permission
+          const permissionStatus = await navigator.permissions.query({ name: 'camera' as any });
+          if (permissionStatus.state === 'denied') {
+            setCameraPermissionDenied(true);
+            setError('Camera permission denied. Please check browser settings.');
+            return;
+          }
+          
+          // Request access to camera with environment facing first (for better QR scanning)
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+              video: { facingMode: 'environment' } 
+            });
+            setCameraFacingMode('environment');
+            stopMediaTracks(stream); // Clean up the stream after getting permission
+          } catch (err) {
+            // If environment camera fails, try user camera (front)
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+              video: { facingMode: 'user' } 
+            });
+            setCameraFacingMode('user');
+            stopMediaTracks(stream); // Clean up the stream after getting permission
+          }
+          
+          // Get list of available video devices
+          await enumerateVideoDevices();
         } catch (err) {
-          // If environment camera fails, try user camera (front)
-          const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'user' } 
-          });
-          setCameraFacingMode('user');
-          stopMediaTracks(stream); // Clean up the stream after getting permission
+          // Handle errors
+          console.log('Camera initialization error:', err);
+          // We'll try to handle later in the requestCameraPermission function
         }
-        
-        // Get list of available video devices
-        await enumerateVideoDevices();
-      } catch (err) {
-        // Handle errors
-        console.log('Camera initialization error:', err);
-        // We'll try to handle later in the requestCameraPermission function
-      }
-    };
+      };
 
-    initializeCamera().catch(console.error);
+      initializeCamera().catch(console.error);
+    }
     
     return () => {
       // Cleanup
-      setIsMounted(false);
-      stopCurrentStream();
+      if (isBrowser) {
+        setIsMounted(false);
+        stopCurrentStream();
+      }
     };
-  }, []);
+  }, [isBrowser]); // Add isBrowser as dependency
 
   // Helper function to stop all tracks in a media stream
   const stopMediaTracks = (stream?: MediaStream | null) => {
@@ -221,17 +228,24 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
     }
   };
 
+  // Updated handleError function with better OverconstrainedError handling
   const handleError = (err: any) => {
-    console.error('QR Scanner error:', err);
+    console.log('QR Scanner error:', err); // Changed from console.error to console.log
     
     const errorMsg = typeof err === 'string' ? err : err?.message || 'Unknown scanner error';
     
-    // Special case for OverconstrainedError - this means the deviceId constraint failed
+    // OverconstrainedError - Specifically suppress this error message and just handle it
     if (errorMsg.includes('OverconstrainedError') || err.name === 'OverconstrainedError') {
       console.log('Camera constraint error - trying fallback...');
-      // Don't show error to user, just try fallback
+      
+      // Try the opposite camera mode - if environment fails, try user facing and vice versa
       setCameraFacingMode(cameraFacingMode === 'environment' ? 'user' : 'environment');
-      forceReloadScanner();
+      
+      // Force scanner to remount with new constraints
+      setTimeout(() => {
+        forceReloadScanner();
+      }, 500);
+      
       return;
     }
     
@@ -246,10 +260,13 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
       forceReloadScanner();
       return; // Don't show this error
     } else {
-      setError(`Camera error: ${errorMsg}`);
+      // Don't show common QR scanning errors to the user
+      if (!errorMsg.includes('QR code not found') && !errorMsg.includes('No QR code found')) {
+        setError(`Camera error: ${errorMsg}`);
+      }
     }
     
-    if (onError && !errorMsg.includes('QR code not found')) {
+    if (onError && !errorMsg.includes('QR code not found') && !errorMsg.includes('No QR code found')) {
       onError(errorMsg);
     }
   };
@@ -291,8 +308,8 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
     }
   }, [error]);
 
-  // Only render the scanner component on client-side
-  if (!isMounted) {
+  // If we're not in a browser or not mounted, show loading state
+  if (!isBrowser || !isMounted) {
     return (
       <Card className={`overflow-hidden ${className || ''}`}>
         <div className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-200">
@@ -315,24 +332,25 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
     const currentCamera = cameras[currentCameraIndex];
     
     // Create constraints based on available information
-    let constraints;
+    let constraints: any;
     
     if (cameras.length === 0) {
-      // No specific cameras detected, use facing mode as fallback
+      // No specific cameras detected, use facing mode as fallback but don't enforce "exact"
+      // This makes it less likely to get OverconstrainedError
       constraints = {
-        facingMode: cameraFacingMode
+        facingMode: { ideal: cameraFacingMode } // Using ideal instead of exact
       };
     } 
     else if (currentCamera?.deviceId) {
-      // We have a specific camera device ID
+      // We have a specific camera device ID, use ideal rather than exact
       constraints = {
-        deviceId: { exact: currentCamera.deviceId }
+        deviceId: { ideal: currentCamera.deviceId }
       };
     } 
     else {
-      // Fallback to facing mode
+      // Fallback to facing mode without exact requirement
       constraints = {
-        facingMode: cameraFacingMode
+        facingMode: { ideal: cameraFacingMode }
       };
     }
     

@@ -2,13 +2,7 @@
 
 import { Suspense } from 'react';
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
-import dynamic from 'next/dynamic';
-
-// Import the component dynamically with SSR disabled
-const MarkAttendanceClient = dynamic(
-  () => import('@/components/dashboard/MarkAttendanceClient'),
-  { ssr: false } // This prevents the component from being rendered during server-side rendering
-);
+import MarkAttendanceClient from '@/components/dashboard/MarkAttendanceClient';
 
 export default function MarkAttendancePage() {
   return (
