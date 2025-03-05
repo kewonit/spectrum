@@ -202,7 +202,7 @@ export default function DashboardPage() {
               { label: 'Home', href: '/' },
               { label: 'Dashboard' },
             ]}
-            className="mb-6"
+            className="mb-10"
           />
 
           {/* Enhanced User Profile Header with improved styling */}
