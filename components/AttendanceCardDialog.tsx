@@ -70,7 +70,7 @@ export function AttendanceCardDialog({ profile, isOpen, onClose }: AttendanceCar
             
             <div className="text-center">
               <p className="text-xs text-gray-500">Scan for attendance verification</p>
-              <p className="text-xs font-semibold text-purple-600 mt-1">SPECTRUM 2024</p>
+              <p className="text-xs font-semibold text-purple-600 mt-1">SPECTRUM 2025</p>
             </div>
             
             {profile?.college_name && (
