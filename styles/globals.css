@@ -126,3 +126,110 @@
     }
   }
 }
+
+/* Add these mobile-friendly dialog adjustments to your existing CSS */
+@media (max-width: 640px) {
+  /* Improve touch scrolling for dialogs */
+  [data-state="open"] > .fixed.z-50 {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Custom scrollbars for dialog content */
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+  }
+
+  /* Responsive card adjustments */
+  .attendance-card-wrapper > div {
+    transform: scale(0.95);
+    transform-origin: top center;
+  }
+}
+
+/* For extremely small devices */
+@media (max-width: 360px) {
+  .attendance-card-wrapper > div {
+    transform: scale(0.9);
+  }
+}
+
+/* Add custom scrollbar styling for attendance card */
+.attendance-card-wrapper .overflow-y-auto::-webkit-scrollbar,
+[data-state="open"] .overflow-y-auto::-webkit-scrollbar {
+  width: 3px;
+}
+
+.attendance-card-wrapper .overflow-y-auto::-webkit-scrollbar-track,
+[data-state="open"] .overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.attendance-card-wrapper .overflow-y-auto::-webkit-scrollbar-thumb,
+[data-state="open"] .overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
+
+.attendance-card-wrapper .overflow-y-auto::-webkit-scrollbar-thumb:hover,
+[data-state="open"] .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure proper iOS scrolling behavior */
+.attendance-card-wrapper .overflow-y-auto,
+[data-state="open"] .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Add these specific styles for the dialog scrolling */
+[data-state="open"] .max-h-\[90vh\] {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+[data-state="open"] .max-h-\[90vh\]::-webkit-scrollbar {
+  width: 4px;
+}
+
+[data-state="open"] .max-h-\[90vh\]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-state="open"] .max-h-\[90vh\]::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
+/* Enhanced event list scrolling inside the card */
+.attendance-card-wrapper .overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+.attendance-card-wrapper .overflow-y-auto::-webkit-scrollbar {
+  width: 3px;
+}
+
+.attendance-card-wrapper .overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.attendance-card-wrapper .overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+}
+
+/* Ensure proper iOS scrolling behavior */
+.attendance-card-wrapper .overflow-y-auto,
+[data-state="open"] .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}

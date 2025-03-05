@@ -337,7 +337,7 @@ export function TechTreasureHuntGame() {
           onStart={startRound} 
           attempts={attempts} 
           maxAttempts={maxAttempts}
-          redirectUrl="" // Use empty string instead of null
+          redirectUrl={null} // Use null explicitly to indicate no redirect
         />;
       }
       
@@ -358,7 +358,7 @@ export function TechTreasureHuntGame() {
         onStart={startRound} 
         attempts={attempts} 
         maxAttempts={maxAttempts}
-        redirectUrl="" // Use empty string instead of null
+        redirectUrl={null} // Use null explicitly to indicate no redirect
         isLoading={isLoading} // Pass loading state
       />;
     }

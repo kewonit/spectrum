@@ -6,10 +6,13 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
 import { toast } from "sonner";
-import { Pencil, Mail, Phone, GraduationCap, LogOut, ChevronRight } from "lucide-react";
+import { Pencil, Mail, Phone, GraduationCap, LogOut, ChevronRight, QrCode, Download } from "lucide-react";
 import { CompleteProfilePopup } from '@/components/CompleteProfilePopup';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { AlertCircle } from "lucide-react";
+import { QRCodeSVG } from 'qrcode.react';
+import { Card } from "@/components/ui/card";
+import { AttendanceCardDialog } from '@/components/AttendanceCardDialog';
 
 // Add COLLEGE_OPTIONS constant
 const COLLEGE_OPTIONS = {
@@ -41,6 +44,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showAttendanceCard, setShowAttendanceCard] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -211,9 +215,9 @@ export default function DashboardPage() {
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-l-full" />
                 
                 <div className="p-5 sm:p-7">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                  <div className="flex flex-col lg:flex-row lg:items-start gap-4">
                     {/* Profile Info */}
-                    <div className="space-y-3">
+                    <div className="space-y-3 flex-1">
                       <div className="flex items-center gap-2">
                         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
                           {profile?.full_name || 'Anonymous User'}
@@ -277,41 +281,150 @@ export default function DashboardPage() {
                           </span>
                         )}
                       </div>
-                    </div>
 
-                    {/* Actions */}
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => router.push('/dashboard/profile/edit')}
-                        className={`h-9 transition-colors duration-200 group w-full sm:w-auto
-                          ${!isProfileComplete(profile) 
-                            ? 'bg-amber-50 hover:bg-amber-100 text-amber-600 hover:text-amber-700 border-amber-200 hover:border-amber-300'
-                            : 'bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300'
-                          }`}
-                      >
-                        <Pencil className="h-4 w-4 mr-2 shrink-0" />
-                        <span>{!isProfileComplete(profile) ? 'Complete Profile' : 'Edit Profile'}</span>
-                        <ChevronRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" />
-                      </Button>
-                      <form onSubmit={handleSignOut} className="flex-1 sm:flex-initial">
-                        <Button 
-                          type="submit" 
+                      {/* Actions */}
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 pt-2">
+                        <Button
                           variant="outline"
                           size="sm"
-                          className="h-9 px-4 bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 border border-red-200 hover:border-red-300 transition-colors duration-200 w-full sm:w-auto"
+                          onClick={() => router.push('/dashboard/profile/edit')}
+                          className={`h-9 transition-colors duration-200 group w-full sm:w-auto
+                            ${!isProfileComplete(profile) 
+                              ? 'bg-amber-50 hover:bg-amber-100 text-amber-600 hover:text-amber-700 border-amber-200 hover:border-amber-300'
+                              : 'bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300'
+                            }`}
                         >
-                          <LogOut className="h-4 w-4 mr-2" />
-                          <span>Sign out</span>
+                          <Pencil className="h-4 w-4 mr-2 shrink-0" />
+                          <span>{!isProfileComplete(profile) ? 'Complete Profile' : 'Edit Profile'}</span>
+                          <ChevronRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" />
                         </Button>
-                      </form>
+
+                        {/* Add Download Attendance Card button when profile is complete */}
+                        {isProfileComplete(profile) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setShowAttendanceCard(true)}
+                            className="h-9 transition-colors duration-200 group w-full sm:w-auto bg-purple-50 hover:bg-purple-100 text-purple-600 hover:text-purple-700 border-purple-200 hover:border-purple-300"
+                          >
+                            <Download className="h-4 w-4 mr-2 shrink-0" />
+                            <span>Attendance Card</span>
+                          </Button>
+                        )}
+                        
+                        <form onSubmit={handleSignOut} className="flex-1 sm:flex-initial">
+                          <Button 
+                            type="submit" 
+                            variant="outline"
+                            size="sm"
+                            className="h-9 px-4 bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 border border-red-200 hover:border-red-300 transition-colors duration-200 w-full sm:w-auto"
+                          >
+                            <LogOut className="h-4 w-4 mr-2" />
+                            <span>Sign out</span>
+                          </Button>
+                        </form>
+                      </div>
+                    </div>
+
+                    {/* QR Code - Hidden on mobile, visible on desktop */}
+                    <div className="hidden lg:flex flex-col items-center justify-center border-l border-gray-200 pl-6 min-w-[180px]">
+                      {profile?.id ? (
+                        <>
+                          <div className="bg-white p-2 rounded-lg shadow-sm mb-2">
+                            <QRCodeSVG
+                              value={profile.id}
+                              size={140}
+                              level="H"
+                              bgColor="#ffffff"
+                              fgColor="#000000"
+                            />
+                          </div>
+                          <div className="text-center">
+                            <p className="text-sm font-medium text-gray-700">Attendance QR</p>
+                            <p className="text-xs text-gray-500 mt-1">Scan for event check-in</p>
+                          </div>
+                          <Button 
+                            variant="link" 
+                            size="sm" 
+                            onClick={() => setShowAttendanceCard(true)}
+                            className="text-blue-600 mt-1 h-auto p-1"
+                          >
+                            Download Card
+                          </Button>
+                        </>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-[140px]">
+                          <QrCode className="h-10 w-10 text-gray-300 mb-2" />
+                          <p className="text-xs text-gray-400 text-center">
+                            Complete profile to<br />generate attendance QR
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
+          </div>
+
+          {/* Mobile QR Code Card - Shown on mobile, hidden on desktop */}
+          <div className="lg:hidden mb-6">
+            <Card className="overflow-hidden">
+              <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-200 flex items-center gap-2">
+                <QrCode className="h-5 w-5 text-blue-500" />
+                <h3 className="font-medium text-blue-700">Attendance QR Code</h3>
+              </div>
+              
+              <div className="p-5 flex flex-col items-center">
+                {profile?.id ? (
+                  <>
+                    <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 mb-3">
+                      <QRCodeSVG
+                        value={profile.id}
+                        size={160}
+                        level="H"
+                        bgColor="#ffffff"
+                        fgColor="#000000"
+                      />
+                    </div>
+                    <p className="text-sm text-gray-700 text-center mt-1">
+                      Present this QR code for event check-in
+                    </p>
+                    <p className="text-xs text-gray-500 text-center mt-1">
+                      Keep this code private and only share at official event check-ins
+                    </p>
+                    
+                    {/* Add download button for mobile */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowAttendanceCard(true)}
+                      className="mt-4 bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Download Attendance Card
+                    </Button>
+                  </>
+                ) : (
+                  <div className="py-8 flex flex-col items-center">
+                    <div className="bg-gray-50 p-6 rounded-full mb-4">
+                      <QrCode className="h-12 w-12 text-gray-300" />
+                    </div>
+                    <p className="text-gray-600 text-center">
+                      Complete your profile to generate your attendance QR code
+                    </p>
+                    <Button
+                      variant="outline" 
+                      size="sm"
+                      className="mt-4 bg-amber-50 hover:bg-amber-100 text-amber-600 hover:text-amber-700 border-amber-200"
+                      onClick={() => router.push('/dashboard/profile/edit')}
+                    >
+                      Complete Profile
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </Card>
           </div>
 
           {/* Rest of the content */}
@@ -413,6 +526,13 @@ export default function DashboardPage() {
               }} 
             />
           )}
+
+          {/* Render attendance card dialog */}
+          <AttendanceCardDialog
+            profile={profile}
+            isOpen={showAttendanceCard}
+            onClose={() => setShowAttendanceCard(false)}
+          />
         </div>
       </TooltipProvider>
     </main>

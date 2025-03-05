@@ -29,7 +29,7 @@ export function RoundStartCard({
   attempts = 1, 
   maxAttempts = 3,
   isLoading = false,
-  redirectUrl = `/dashboard/game/tech-treasure-hunt/round/${round.id}` // Default redirect URL
+  redirectUrl = `/dashboard/game/tech-treasure-hunt/round/${round.id}` // Default URL to redirect to after starting
 }: RoundStartCardProps) {
   const [buttonText, setButtonText] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
@@ -76,7 +76,7 @@ export function RoundStartCard({
 
   const typeInfo = getRoundTypeInfo(round.round_type);
 
-  // Updated handler to handle null redirectUrl
+  // Update the handler to use proper redirection logic
   const handleStartClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -87,20 +87,23 @@ export function RoundStartCard({
     setButtonText('Starting round...');
     
     try {
+      console.log("Starting round process, will redirect to:", redirectUrl);
+      
       // Call the onStart handler which will make the API call
       await onStart();
       
-      // If redirectUrl is provided and not null, navigate after a short delay
-      if (redirectUrl) {
-        setTimeout(() => {
-          console.log("Redirecting to:", redirectUrl);
-          
-          // Use router for smoother transitions
-          router.push(redirectUrl);
-        }, 500);
+      // Only redirect if redirectUrl is explicitly provided (not null)
+      if (redirectUrl !== null) {
+        setButtonText('Redirecting...');
+        console.log("onStart succeeded, redirecting to:", redirectUrl);
+        
+        // Force redirect immediately instead of using setTimeout
+        router.push(redirectUrl);
       } else {
-        // Default fallback when redirectUrl is null or undefined
-        console.log("No redirect, staying on current page");
+        // When redirectUrl is null, stay on current page
+        console.log("onStart succeeded, no redirect requested (staying on page)");
+        setButtonText(null);
+        setIsStarting(false);
       }
     } catch (error) {
       console.error("Error starting round:", error);
