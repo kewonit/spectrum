@@ -15,7 +15,7 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-// Remove CustomBadge import
+import { StatusIndicator } from "@/components/ui/status-indicator";
 import { format } from "date-fns";
 import { 
   RefreshCw, 
@@ -459,11 +459,9 @@ export default function MarkAttendanceClient() {
                                   </div>
                                 </TableCell>
                                 <TableCell>
-                                  {record.is_present ? (
-                                    <span className="text-green-600 font-medium">Present</span>
-                                  ) : (
-                                    <span className="text-gray-500">Absent</span>
-                                  )}
+                                  <StatusIndicator status={record.is_present}>
+                                    {record.is_present ? "Present" : "Absent"}
+                                  </StatusIndicator>
                                 </TableCell>
                                 <TableCell>
                                   <TooltipProvider>
