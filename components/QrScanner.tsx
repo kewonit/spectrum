@@ -54,6 +54,10 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
     setIsScanning(newState);
   };
   
+  // Add a constraints fallback mechanism
+  const [constraintAttempts, setConstraintAttempts] = useState(0);
+  const maxConstraintAttempts = 3;
+  
   // Initialize on client-side only with better browser detection
   useEffect(() => {
     if (isBrowser) {
@@ -228,25 +232,113 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
     }
   };
 
-  // Updated handleError function with better OverconstrainedError handling
+  // Enhanced renderScanner with progressive constraint fallbacks
+  const renderScanner = () => {
+    if (!isScanning) return null;
+    
+    // Get current camera - may be null if no cameras detected yet
+    const currentCamera = cameras[currentCameraIndex];
+    
+    // Create constraints based on available information and current attempt level
+    let constraints: any;
+    
+    // Progressive fallback strategy based on previous failures
+    switch (constraintAttempts) {
+      case 0:
+        // First attempt: Try with ideal constraints
+        if (cameras.length === 0) {
+          constraints = {
+            facingMode: { ideal: cameraFacingMode }
+          };
+        } else if (currentCamera?.deviceId) {
+          constraints = {
+            deviceId: { ideal: currentCamera.deviceId }
+          };
+        } else {
+          constraints = {
+            facingMode: { ideal: cameraFacingMode }
+          };
+        }
+        break;
+        
+      case 1:
+        // Second attempt: Try with minimal constraints
+        constraints = {
+          // Just width and height, no facing mode or device ID
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        };
+        break;
+        
+      case 2:
+      default:
+        // Last attempt: No constraints at all
+        constraints = true; // This lets the browser pick whatever camera/settings it wants
+        break;
+    }
+    
+    console.log(`Using camera constraints (attempt ${constraintAttempts + 1}/${maxConstraintAttempts + 1}):`, constraints);
+    
+    return (
+      <Scanner
+        key={`scanner-${scannerKey.current}-attempt-${constraintAttempts}`}
+        onScan={handleScan}
+        onError={handleError}
+        formats={['qr_code']}
+        scanDelay={750}
+        allowMultiple={false}
+        constraints={constraints}
+        styles={{ 
+          container: { width: '100%', height: '100%' },
+          video: { width: '100%', height: '100%', objectFit: 'cover' }
+        }}
+        components={{
+          audio: false,
+          torch: false, // Disable torch as it can cause issues on some devices
+          finder: true
+        }}
+      />
+    );
+  };
+
+  // Significantly enhanced handleError function with better OverconstrainedError handling
   const handleError = (err: any) => {
-    console.log('QR Scanner error:', err); // Changed from console.error to console.log
+    console.log('QR Scanner error:', err);
     
     const errorMsg = typeof err === 'string' ? err : err?.message || 'Unknown scanner error';
     
-    // OverconstrainedError - Specifically suppress this error message and just handle it
+    // Special handling for OverconstrainedError
     if (errorMsg.includes('OverconstrainedError') || err.name === 'OverconstrainedError') {
-      console.log('Camera constraint error - trying fallback...');
+      console.log(`Camera constraint error (attempt ${constraintAttempts + 1}/${maxConstraintAttempts + 1}) - trying fallback...`);
       
-      // Try the opposite camera mode - if environment fails, try user facing and vice versa
-      setCameraFacingMode(cameraFacingMode === 'environment' ? 'user' : 'environment');
-      
-      // Force scanner to remount with new constraints
-      setTimeout(() => {
-        forceReloadScanner();
-      }, 500);
-      
-      return;
+      // If we still have attempts left, try with more relaxed constraints
+      if (constraintAttempts < maxConstraintAttempts) {
+        setConstraintAttempts(curr => curr + 1);
+        
+        // Force scanner to remount with new constraints
+        setTimeout(() => {
+          forceReloadScanner();
+        }, 300);
+        
+        return; // Don't show error to user, we're handling it
+      } 
+      // If we've exhausted all constraint options, try switching camera facing mode
+      else {
+        console.log('All constraint attempts failed, trying opposite camera...');
+        
+        // Reset constraint attempts
+        setConstraintAttempts(0);
+        
+        // Try the opposite camera mode
+        setCameraFacingMode(cameraFacingMode === 'environment' ? 'user' : 'environment');
+        
+        // Force scanner to remount
+        setTimeout(() => {
+          forceReloadScanner();
+        }, 300);
+        
+        return; // Don't show error
+      }
     }
     
     // Set user-friendly error message
@@ -308,6 +400,32 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
     }
   }, [error]);
 
+  // Add reset function to try again from scratch
+  const resetScanner = () => {
+    setConstraintAttempts(0);
+    setCameraFacingMode('environment'); // Start with back camera
+    forceReloadScanner();
+    updateScanningState(true);
+  };
+
+  // Add retry button to the UI when we have errors
+  const renderRetryButton = () => {
+    if (!error) return null;
+    
+    return (
+      <div className="mt-4 text-center">
+        <Button 
+          onClick={resetScanner} 
+          variant="default"
+          size="sm"
+        >
+          <RefreshCw className="h-4 w-4 mr-2" />
+          Retry with Different Settings
+        </Button>
+      </div>
+    );
+  };
+
   // If we're not in a browser or not mounted, show loading state
   if (!isBrowser || !isMounted) {
     return (
@@ -324,57 +442,6 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
     );
   }
 
-  // Create scanner element conditionally - fix for setState in render error
-  const renderScanner = () => {
-    if (!isScanning) return null;
-    
-    // Get current camera - may be null if no cameras detected yet
-    const currentCamera = cameras[currentCameraIndex];
-    
-    // Create constraints based on available information
-    let constraints: any;
-    
-    if (cameras.length === 0) {
-      // No specific cameras detected, use facing mode as fallback but don't enforce "exact"
-      // This makes it less likely to get OverconstrainedError
-      constraints = {
-        facingMode: { ideal: cameraFacingMode } // Using ideal instead of exact
-      };
-    } 
-    else if (currentCamera?.deviceId) {
-      // We have a specific camera device ID, use ideal rather than exact
-      constraints = {
-        deviceId: { ideal: currentCamera.deviceId }
-      };
-    } 
-    else {
-      // Fallback to facing mode without exact requirement
-      constraints = {
-        facingMode: { ideal: cameraFacingMode }
-      };
-    }
-    
-    return (
-      <Scanner
-        key={`scanner-${scannerKey.current}`}
-        onScan={handleScan}
-        onError={handleError}
-        formats={['qr_code']}
-        scanDelay={750}
-        allowMultiple={false}
-        constraints={constraints}
-        styles={{ 
-          container: { width: '100%', height: '100%' },
-          video: { width: '100%', height: '100%', objectFit: 'cover' }
-        }}
-        components={{
-          audio: false,
-          torch: true,
-          finder: true
-        }}
-      />
-    );
-  };
 
   // Render camera selection dropdown when multiple cameras available
   const renderCameraSelector = () => {
@@ -444,6 +511,7 @@ export function QrScanner({ onScan, onError, className, autoStart = true }: QrSc
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
+            {renderRetryButton()}
           </Alert>
         )}
 
