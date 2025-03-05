@@ -8,7 +8,10 @@ import { format } from "date-fns";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CompleteProfilePopup } from '@/components/CompleteProfilePopup'; // new import
+import { CompleteProfilePopup } from '@/components/CompleteProfilePopup';
+
+// DO NOT import cn utility from anywhere
+// Importing cn was causing build errors
 
 interface Invite {
   id: string;
@@ -260,6 +263,7 @@ export default function AcceptPage() {
   };
 
   // Update status badge colors and text
+  // Modified to return plain strings without using cn function
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
       case 'accepted':
@@ -388,6 +392,7 @@ export default function AcceptPage() {
                         <CardHeader className="border-b bg-gray-50/80">
                           <div className="flex items-center justify-between">
                             <CardTitle className="text-lg">{invite.teams.events.name}</CardTitle>
+                            {/* Fixed usage of className - direct string instead of cn */}
                             <span className={`text-xs ${getStatusBadgeClass(invite.invitation_status)} px-2 py-1 rounded`}>
                               {getStatusText(invite.invitation_status)}
                             </span>

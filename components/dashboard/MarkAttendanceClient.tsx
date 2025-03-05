@@ -15,7 +15,8 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
+// Import CustomBadge instead of Badge and cn
+import { CustomBadge } from "@/components/ui/custom-badge";
 import { format } from "date-fns";
 import { 
   RefreshCw, 
@@ -33,34 +34,11 @@ import {
   TooltipTrigger 
 } from "@/components/ui/tooltip";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+// Remove the cn import
+// import { cn } from '@/lib/utils';
 
-// Custom badge variant
-const CustomBadge = ({
-  variant,
-  children,
-  className,
-  ...props
-}: {
-  variant?: "outline" | "default" | "secondary" | "destructive" | "success";
-  children: React.ReactNode;
-  className?: string;
-  [key: string]: any;
-}) => {
-  const baseClassName = variant === "success" ? 
-    "bg-green-100 text-green-800 hover:bg-green-200 border border-green-200" : 
-    undefined;
-
-  return (
-    <Badge 
-      variant={variant === "success" ? "default" : variant} 
-      className={cn(baseClassName, className)} 
-      {...props}
-    >
-      {children}
-    </Badge>
-  );
-};
+// Remove the custom badge code that uses cn
+// const CustomBadge = ({...}) => {...};
 
 // At the top of the file, update the global interface declaration
 declare global {

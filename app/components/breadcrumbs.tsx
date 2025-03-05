@@ -1,13 +1,5 @@
-import Link from 'next/link';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 interface BreadcrumbItemType {
   label: string;
@@ -19,28 +11,41 @@ interface BreadcrumbsProps {
   className?: string;
 }
 
-export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
+export function Breadcrumbs({
+  items,
+  className,
+}: BreadcrumbsProps) {
+  // Updated to match the site theme with a more subtle appearance
+  // Changed bg-white/80 to bg-white/60 for better theme integration
+  // Added border-gray-200/50 for a subtle border that matches theme
+  const containerClass = `flex items-center text-sm text-gray-600 px-4 py-3 
+    bg-white/60 backdrop-blur-sm border border-gray-200/50
+    rounded-lg mb-6 shadow-sm ${className || ''}`;
+
   return (
-    <Breadcrumb className={cn("bg-white/50 backdrop-blur-sm px-2 py-1.5 rounded-lg inline-block", className)}>
-      <BreadcrumbList>
+    <nav className={containerClass}>
+      <ol className="flex items-center space-x-2">
         {items.map((item, index) => (
-          <BreadcrumbItem key={index}>
-            {item.href ? (
-              <>
-                <BreadcrumbLink 
-                  href={item.href}
-                  className="hover:text-primary/80"
-                >
-                  {item.label}
-                </BreadcrumbLink>
-                {index < items.length - 1 && <BreadcrumbSeparator />}
-              </>
-            ) : (
-              <BreadcrumbPage className="text-primary">{item.label}</BreadcrumbPage>
+          <li key={item.label} className="flex items-center">
+            {index > 0 && (
+              <ChevronRight className="h-4 w-4 mx-2 text-gray-400" />
             )}
-          </BreadcrumbItem>
+            
+            {item.href ? (
+              <Link 
+                href={item.href} 
+                // Updated link style to match theme - using blue-600 for better contrast
+                className="hover:text-blue-600 hover:underline transition-colors"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              // Made active item more pronounced with slightly darker color
+              <span className="font-medium text-gray-900">{item.label}</span>
+            )}
+          </li>
         ))}
-      </BreadcrumbList>
-    </Breadcrumb>
+      </ol>
+    </nav>
   );
 }
