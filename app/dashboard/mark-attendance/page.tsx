@@ -1,8 +1,8 @@
+"use client";
+
 import MarkAttendanceClient from '@/components/dashboard/MarkAttendanceClient';
 import { Suspense } from 'react';
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
 export default function MarkAttendancePage() {
   return (
