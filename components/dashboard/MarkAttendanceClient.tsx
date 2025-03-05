@@ -15,6 +15,7 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CustomBadge } from "@/components/ui/custom-badge";
 import { format } from "date-fns";
 import { 
   RefreshCw, 
@@ -32,12 +33,6 @@ import {
   TooltipTrigger 
 } from "@/components/ui/tooltip";
 import { useRouter } from "next/navigation";
-// Import Server Actions
-import { 
-  markAttendanceAction,
-  getAttendanceStatsAction, 
-  getAttendanceHistoryAction 
-} from "@/app/actions/attendance";
 
 // At the top of the file, update the global interface declaration
 declare global {
@@ -82,43 +77,58 @@ export default function MarkAttendanceClient() {
     };
   }, []);
 
-  // Updated to use Server Action
+  // Wrap in useCallback to avoid regenerating on every render
   const fetchAttendanceStats = useCallback(async () => {
     try {
-      const result = await getAttendanceStatsAction();
+      const response = await fetch('/api/attendance/stats');
       
-      if (!result.success && result.status === 403) {
-        setUserAccessError(result.error || "You don't have permission to access the attendance system.");
+      // Check specifically for permission denied status
+      if (response.status === 403) {
+        const data = await response.json();
+        setUserAccessError(data.error || "You don't have permission to access the attendance system.");
         return;
       }
       
+      // Still process the response even if it's not OK
+      const data = await response.json();
+      
+      // Use the data if we got it, otherwise initialize with zeros
       setAttendanceStats({
-        today: result.today,
-        total: result.total
+        today: data?.today || 0,
+        total: data?.total || 0
       });
     } catch (err) {
       console.error('Error fetching attendance stats:', err);
+      // Set default stats on error
       setAttendanceStats({
         today: 0,
         total: 0
       });
     }
-  }, []);
+  }, []); // No dependencies since it's just using fetch and setState
 
-  // Updated to use Server Action
+  // Wrap in useCallback to avoid regenerating on every render
   const fetchAttendanceHistory = useCallback(async () => {
     try {
       setHistoryLoading(true);
-      const result = await getAttendanceHistoryAction(currentPage, 10);
+      const response = await fetch(`/api/attendance/history?page=${currentPage}&limit=10`);
       
-      if (!result.success && result.status === 403) {
-        setUserAccessError(result.error || "You don't have permission to use the attendance system.");
+      // Check specifically for permission denied status
+      if (response.status === 403) {
+        const data = await response.json();
+        setUserAccessError(data.error || "You don't have permission to use the attendance system.");
         setHistoryLoading(false);
         return;
       }
       
-      setAttendanceHistory(result.data);
-      setHasMoreHistory(result.hasMore);
+      // Continue even if response isn't OK
+      const data = await response.json();
+      
+      // Use any data we got, or empty array if none
+      setAttendanceHistory(data.data || []);
+      setHasMoreHistory(data.hasMore || false);
+      
+      // Clear any previous errors
       setError(null);
     } catch (err: any) {
       console.error('Error fetching attendance history:', err);
@@ -128,7 +138,7 @@ export default function MarkAttendanceClient() {
     } finally {
       setHistoryLoading(false);
     }
-  }, [currentPage]);
+  }, [currentPage]); // Only depends on currentPage
 
   // Update useEffect to use the memoized functions
   useEffect(() => {
@@ -136,7 +146,7 @@ export default function MarkAttendanceClient() {
     fetchAttendanceStats();
   }, [currentPage, fetchAttendanceHistory, fetchAttendanceStats]);
 
-  // Updated to use Server Action
+  // Fix handleScan with proper dependencies
   const handleScan = useCallback(async (scanData: string) => {
     if (!scanData) return;
     
@@ -166,16 +176,32 @@ export default function MarkAttendanceClient() {
       
       // Trim any whitespace from the QR data
       const cleanedData = scanData.trim();
+      
       console.log('Scanning QR code data:', cleanedData);
       
-      // Use the Server Action to mark attendance
-      const data = await markAttendanceAction(cleanedData);
+      // Use URLSearchParams for more reliable data transmission
+      const params = new URLSearchParams();
+      params.append('userId', cleanedData);
+      
+      const response = await fetch('/api/attendance/mark?' + params.toString(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: cleanedData,
+          verificationMethod: 'qr_code',
+          notes: 'Marked via QR scan'
+        }),
+      });
       
       // Always dismiss loading toast regardless of success/failure
       toast.dismiss(loadingToastId);
       
+      const data = await response.json();
+      
       // Special handling for already marked attendance - use error toast instead of info
-      if (data.alreadyMarked) {
+      if (response.status === 409 && data.alreadyMarked) {
         // Get attendee name and prepare description
         const attendeeName = data.attendee?.full_name || 'This person';
         let description = 'Already marked present for today';
@@ -199,7 +225,7 @@ export default function MarkAttendanceClient() {
       }
       
       // Check for other errors
-      if (!data.success) {
+      if (!response.ok) {
         console.error('Error marking attendance:', data);
         throw new Error(data.error || 'Failed to mark attendance');
       }
@@ -253,7 +279,7 @@ export default function MarkAttendanceClient() {
         duration: 5000,
       });
     }
-  }, [recentlyScanned, fetchAttendanceHistory, fetchAttendanceStats]);
+  }, [recentlyScanned, fetchAttendanceHistory, fetchAttendanceStats]); // Now with proper dependencies
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -433,11 +459,9 @@ export default function MarkAttendanceClient() {
                                   </div>
                                 </TableCell>
                                 <TableCell>
-                                  {record.is_present ? (
-                                    <span className="text-green-600 font-medium">Present</span>
-                                  ) : (
-                                    <span className="text-gray-500">Absent</span>
-                                  )}
+                                  <CustomBadge variant={record.is_present ? "success" : "outline"}>
+                                    {record.is_present ? "Present" : "Absent"}
+                                  </CustomBadge>
                                 </TableCell>
                                 <TableCell>
                                   <TooltipProvider>

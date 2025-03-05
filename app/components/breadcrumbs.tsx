@@ -17,7 +17,7 @@ export function Breadcrumbs({
 }: BreadcrumbsProps) {
   const containerClass = `flex items-center text-sm text-gray-600 px-4 py-3 
     bg-white/60 backdrop-blur-sm border border-gray-200/50
-    rounded-lg mb-6 shadow-sm ${className || ''}`;
+    rounded-lg mb-6 shadow-sm mb-6 ${className || ''}`;
 
   return (
     <nav className={containerClass}>
