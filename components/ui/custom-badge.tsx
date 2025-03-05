@@ -3,6 +3,11 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
+// Simple utility to join class names safely without the cn utility
+function joinClasses(...classes: (string | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
+
 const badgeVariants = cva(
   "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
@@ -31,11 +36,8 @@ export interface BadgeProps
     VariantProps<typeof badgeVariants> {}
 
 export function CustomBadge({ className, variant, ...props }: BadgeProps) {
-  // Replace the cn function with direct concatenation
-  const variantClasses = badgeVariants({ variant });
-  const combinedClasses = className ? `${variantClasses} ${className}` : variantClasses;
-  
+  // Use our simple joinClasses utility instead
   return (
-    <div className={combinedClasses} {...props} />
+    <div className={joinClasses(badgeVariants({ variant }), className)} {...props} />
   );
 }

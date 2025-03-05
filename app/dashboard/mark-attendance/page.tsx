@@ -1,6 +1,14 @@
-import MarkAttendanceClient from '@/components/dashboard/MarkAttendanceClient';
+"use client";
+
 import { Suspense } from 'react';
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
+import dynamic from 'next/dynamic';
+
+// Import the component dynamically with SSR disabled
+const MarkAttendanceClient = dynamic(
+  () => import('@/components/dashboard/MarkAttendanceClient'),
+  { ssr: false } // This prevents the component from being rendered during server-side rendering
+);
 
 export default function MarkAttendancePage() {
   return (
@@ -14,7 +22,7 @@ export default function MarkAttendancePage() {
         className="mb-6"
       />
       
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div className="py-12 text-center">Loading attendance system...</div>}>
         <MarkAttendanceClient />
       </Suspense>
     </div>
