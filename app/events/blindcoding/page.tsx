@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     siteName: "spectrumpccoe25.tech",
     images: [
       {
-        url: "https://i.postimg.cc/XYC9cM6f/5.png",
+        url: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248527/biksyo37gijd85euushu.png",
         width: 548,
         height: 253,
         alt: 'Image',
@@ -72,7 +72,7 @@ export default function Home() {
             </div>
             <div className="w-full md:w-1/2 flex justify-center">
               <Image 
-                src="https://i.postimg.cc/XYC9cM6f/5.png" 
+                src="https://res.cloudinary.com/dr38lv00a/image/upload/v1741248527/biksyo37gijd85euushu.png" 
                 alt="Event Image" 
                 width={400} 
                 height={400} 

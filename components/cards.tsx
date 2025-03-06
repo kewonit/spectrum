@@ -12,7 +12,7 @@ export default function Cards() {
   const cardsData = [
     {
       href: "/events/e-paradox",
-      image: "https://i.postimg.cc/yYWmxgfr/2.png",
+      image: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248712/xpy3ka9znai4rimep844.png",
       alt: "image",
       title: "E-Paradox '25",
       description: "A code-breaking challenge that tests logic and problem-solving skills.",
@@ -24,7 +24,7 @@ export default function Cards() {
     },
     {
       href: "/events/blindcoding",
-      image: "https://i.postimg.cc/XYC9cM6f/5.png",
+      image: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248527/biksyo37gijd85euushu.png",
       alt: "image",
       title: "Blind Coding '25",
       description: "A programming contest where coding is done without real-time visibility.",
@@ -36,7 +36,7 @@ export default function Cards() {
     },
     {
       href: "/events/brain-dasher",
-      image: "https://i.postimg.cc/wxw59ckm/1.png",
+      image: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248719/bdc8kfsn6bfsqptq0ywh.png",
       alt: "image",
       title: "Brain Dasher '25",
       description: "A logic and reasoning event that challenges critical thinking skills.",
@@ -48,7 +48,7 @@ export default function Cards() {
     },
     {
       href: "/events/treasure-hunt",
-      image: "https://i.postimg.cc/9MJ9FCyh/9.png",
+      image: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248796/b09hpew6ntjabdbiopri.png",
       alt: "image",
       title: "Tech Treasure Hunt '25",
       description: "An adventurous quest to solve clues and uncover hidden treasures.",
@@ -60,7 +60,7 @@ export default function Cards() {
     },
     {
       href: "/events/chem-prastuti",
-      image: "https://i.postimg.cc/QCdppHjC/10.png",
+      image: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248530/cwyztjxzrfs0v6liufgo.png",
       alt: "image",
       title: "Chem Prastuti '25",
       description: "A chemistry-based presentation event to showcase scientific ideas.",
@@ -91,7 +91,7 @@ export default function Cards() {
     },
     {
       href: "/events/debate",
-      image: "https://i.postimg.cc/qqD2Q47L/3.png",
+      image: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248681/zjq03oicea8nwykqs7qh.png",
       alt: "image",
       title: "War of Words '25",
       description: "A competitive debate event that tests persuasion and argumentation skills.",
@@ -103,7 +103,7 @@ export default function Cards() {
     },
     {
       href: "/events/video-games",
-      image: "https://i.postimg.cc/ZqzpwfJ1/7.png",
+      image: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248527/f1l59ehpbzbv3n3jvkex.png",
       alt: "image",
       title: "High Ping '25",
       description: "A thrilling e-sports tournament showcasing gaming skills and strategy.",
@@ -115,7 +115,7 @@ export default function Cards() {
     },
     {
       href: "/events/sharktank",
-      image: "https://i.postimg.cc/gk5vZzQc/4.png",
+      image: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248707/yobgkxnxtbn64ylifkew.png",
       alt: "image",
       title: "Shark Tank '25",
       description: "A business pitch competition to present innovative startup ideas.",
@@ -127,7 +127,7 @@ export default function Cards() {
     },
     {
       href: "/events/3d-modelling",
-      image: "https://i.postimg.cc/PxtZjPpy/8.png",
+      image: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248530/xuzvstbpybs3s0ly47ew.png",
       alt: "image",
       title: "Model Making '25",
       description: "A design competition to create cutting-edge 3D architectural models.",
