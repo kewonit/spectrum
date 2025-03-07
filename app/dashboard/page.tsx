@@ -15,6 +15,7 @@ import { Card } from "@/components/ui/card";
 import { AttendanceCardDialog } from '@/components/AttendanceCardDialog';
 import { format } from 'date-fns';
 import { EventAttendanceWrapper } from "@/app/components/EventAttendanceWrapper";
+import { FeedbackSection } from "@/app/components/feedback/FeedbackSection";
 
 // Add COLLEGE_OPTIONS constant
 const COLLEGE_OPTIONS = {
@@ -282,6 +283,16 @@ export default function DashboardPage() {
               userPhone={profile?.phone} 
               onShowQr={() => setShowAttendanceCard(true)} 
             />
+          </div>
+
+          {/* Feedback section - added below attendance section */}
+          <div className="mb-8">
+            {profile?.id && (
+              <FeedbackSection
+                profileId={profile.id}
+                userName={profile.full_name || 'User'}
+              />
+            )}
           </div>
 
           {/* Enhanced User Profile Header with improved styling */}
