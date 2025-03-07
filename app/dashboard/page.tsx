@@ -1,18 +1,24 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
 import { toast } from "sonner";
-import { Pencil, Mail, Phone, GraduationCap, LogOut, ChevronRight, QrCode, Download } from "lucide-react";
+import { Pencil, Mail, Phone, GraduationCap, LogOut, ChevronRight, QrCode, Download, Calendar, Clock, CheckCircle, XCircle, MapPin } from "lucide-react";
 import { CompleteProfilePopup } from '@/components/CompleteProfilePopup';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { AlertCircle } from "lucide-react";
 import { QRCodeSVG } from 'qrcode.react';
 import { Card } from "@/components/ui/card";
 import { AttendanceCardDialog } from '@/components/AttendanceCardDialog';
+import { format } from 'date-fns';
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import { slugify } from "@/app/utils/slugify";
+import { AttendanceSection } from "@/app/components/AttendanceSection";
 
 // Add COLLEGE_OPTIONS constant
 const COLLEGE_OPTIONS = {
@@ -39,12 +45,41 @@ const COLLEGE_OPTIONS = {
   vit: "Vishwakarma Institute of Technology",
 } as const;
 
+// New Attendance interface
+interface AttendanceRecord {
+  id: string;
+  is_present: boolean;
+  marked_at: string;
+  verification_method: string | null;
+  events: {
+    id: string;
+    name: string;
+    description: string | null;
+    event_type: 'solo' | 'fixed_team' | 'variable_team';
+    event_start: string | null;
+    event_end: string | null;
+    img_url: string | null;
+    whatsapp_url: string | null;
+  };
+  registrations: {
+    id: string;
+    event_id: string;
+    registration_status: string;
+  };
+  staff: {
+    id: string;
+    full_name: string;
+  } | null;
+}
+
 export default function DashboardPage() {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showAttendanceCard, setShowAttendanceCard] = useState(false);
+  const [attendanceData, setAttendanceData] = useState<AttendanceRecord[]>([]);
+  const [attendanceLoading, setAttendanceLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -74,6 +109,31 @@ export default function DashboardPage() {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    const fetchAttendanceData = async () => {
+      try {
+        setAttendanceLoading(true);
+        const response = await fetch('/api/user/attendance');
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to fetch attendance data');
+        }
+        
+        setAttendanceData(data.attendance || []);
+      } catch (err: any) {
+        console.error('Error fetching attendance data:', err);
+        // We don't set error state or show toast here to avoid disrupting the main UI
+      } finally {
+        setAttendanceLoading(false);
+      }
+    };
+
+    if (userData?.profile?.id) {
+      fetchAttendanceData();
+    }
+  }, [userData?.profile?.id]);
+
   const refreshUserData = async () => {
     try {
       const response = await fetch('/api/user');
@@ -98,6 +158,19 @@ export default function DashboardPage() {
     return profile && profile.full_name && profile.email && profile.phone &&
       profile.college_name && profile.prn && profile.branch &&
       profile.class && profile.gender;
+  };
+
+  // Enhanced formatDate function with optional compact parameter
+  const formatDate = (dateString: string | null, compact = false) => {
+    if (!dateString) return 'N/A';
+    try {
+      return format(
+        new Date(dateString), 
+        compact ? 'dd MMM, h:mm a' : 'dd MMM yyyy, h:mm a'
+      );
+    } catch (e) {
+      return dateString;
+    }
   };
 
   if (loading) {
@@ -196,7 +269,6 @@ export default function DashboardPage() {
     <main className="min-h-screen bg-[#EBE9E0]">
       <TooltipProvider>
         <div className="w-full max-w-screen-xl mx-auto p-4 sm:px-6 lg:p-8">
-          {/* Remove the extra padding/margin adjustments */}
           <Breadcrumbs
             items={[
               { label: 'Home', href: '/' },
@@ -204,6 +276,27 @@ export default function DashboardPage() {
             ]}
             className="mb-6"
           />
+
+          {/* Attendance display section - using suspense */}
+          <div className="mb-8">
+            <Suspense fallback={
+              <div className="p-12 flex justify-center items-center">
+                <div className="animate-pulse flex space-x-4">
+                  <div className="space-y-3">
+                    <div className="h-5 bg-gray-200 rounded w-32"></div>
+                    <div className="h-40 bg-gray-200 rounded w-full"></div>
+                  </div>
+                </div>
+              </div>
+            }>
+              <AttendanceSection 
+                profileId={profile?.id}
+                userName={profile?.full_name}
+                userPhone={profile?.phone} 
+                onShowQr={() => setShowAttendanceCard(true)} 
+              />
+            </Suspense>
+          </div>
 
           {/* Enhanced User Profile Header with improved styling */}
           <div className="relative mb-8 sm:mb-10 mt-2">
