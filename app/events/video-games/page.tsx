@@ -40,7 +40,7 @@ export default function Home() {
             </div>
             <div className="w-full md:w-1/2 flex justify-center">
               <Image 
-                src="https://i.postimg.cc/ZqzpwfJ1/7.png" 
+                src="https://res.cloudinary.com/dr38lv00a/image/upload/v1741248527/f1l59ehpbzbv3n3jvkex.png" 
                 alt="Event Image" 
                 width={400} 
                 height={400} 

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     siteName: "spectrumpccoe25.tech",
     images: [
       {
-        url: "https://i.postimg.cc/9MJ9FCyh/9.png",
+        url: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248796/b09hpew6ntjabdbiopri.png",
         width: 548,
         height: 253,
         alt: 'Image',

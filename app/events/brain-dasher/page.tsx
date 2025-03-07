@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     siteName: "spectrumpccoe25.tech",
     images: [
       {
-        url: "https://i.postimg.cc/wxw59ckm/1.png",
+        url: "https://res.cloudinary.com/dr38lv00a/image/upload/v1741248719/bdc8kfsn6bfsqptq0ywh.png",
         width: 548,
         height: 253,
         alt: 'Image',
@@ -62,7 +62,7 @@ export default function Home() {
             {/* Replace hero image */}
             <div className="w-full md:w-1/2 flex justify-center">
               <Image 
-                src="https://i.postimg.cc/wxw59ckm/1.png" 
+                src="https://res.cloudinary.com/dr38lv00a/image/upload/v1741248719/bdc8kfsn6bfsqptq0ywh.png" 
                 alt="Event Image" 
                 width={400} 
                 height={400}
