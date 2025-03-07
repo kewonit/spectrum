@@ -132,16 +132,27 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
             <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 12px; height: 24px; background: white; border-radius: 12px 0 0 12px;"></div>
             
             <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
-              <div style="display: flex; align-items: center; margin-bottom: 18px;">
-                <div style="background-color: white; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 16px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); border: 2px solid #d1d5db;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                <div style="display: flex; align-items: center;">
+                  <div style="background-color: white; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 16px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); border: 2px solid #d1d5db;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                  </div>
+                  <div>
+                    <h1 style="font-size: 26px; font-weight: 700; color: #111827; margin: 0;">Event Attendance Records</h1>
+                    <p style="font-size: 14px; color: #4b5563; margin: 4px 0 0 0;">Generated on ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                  </div>
                 </div>
-                <div>
-                  <h1 style="font-size: 26px; font-weight: 700; color: #111827; margin: 0;">Event Attendance Records</h1>
-                  <p style="font-size: 14px; color: #4b5563; margin: 4px 0 0 0;">Generated on ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <!-- Logo added here -->
+                <div style="height: 70px; width: 140px; display: flex; justify-content: flex-end;">
+                  <img 
+                    src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1741381764/Spectrum/logo_black.webp"
+                    alt="Spectrum Logo"
+                    style="height: 100%; max-width: 100%; object-fit: contain;"
+                    crossorigin="anonymous"
+                  />
                 </div>
               </div>
               

@@ -14,11 +14,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Card } from "@/components/ui/card";
 import { AttendanceCardDialog } from '@/components/AttendanceCardDialog';
 import { format } from 'date-fns';
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
-import { slugify } from "@/app/utils/slugify";
-import { AttendanceSection } from "@/app/components/AttendanceSection";
+import { EventAttendanceWrapper } from "@/app/components/EventAttendanceWrapper";
 
 // Add COLLEGE_OPTIONS constant
 const COLLEGE_OPTIONS = {
@@ -279,23 +275,13 @@ export default function DashboardPage() {
 
           {/* Attendance display section - using suspense */}
           <div className="mb-8">
-            <Suspense fallback={
-              <div className="p-12 flex justify-center items-center">
-                <div className="animate-pulse flex space-x-4">
-                  <div className="space-y-3">
-                    <div className="h-5 bg-gray-200 rounded w-32"></div>
-                    <div className="h-40 bg-gray-200 rounded w-full"></div>
-                  </div>
-                </div>
-              </div>
-            }>
-              <AttendanceSection 
-                profileId={profile?.id}
-                userName={profile?.full_name}
-                userPhone={profile?.phone} 
-                onShowQr={() => setShowAttendanceCard(true)} 
-              />
-            </Suspense>
+            {/* Replace Suspense and AttendanceSection with EventAttendanceWrapper */}
+            <EventAttendanceWrapper
+              profileId={profile?.id}
+              userName={profile?.full_name}
+              userPhone={profile?.phone} 
+              onShowQr={() => setShowAttendanceCard(true)} 
+            />
           </div>
 
           {/* Enhanced User Profile Header with improved styling */}
