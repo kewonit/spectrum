@@ -63,14 +63,18 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
       toast.success("Thank you for your website feedback! 🙌", {
         description: "Your insights help us improve Spectrum's web experience"
       });
+      return Promise.resolve();
     } catch (error) {
       console.error('Error submitting feedback:', error);
-      throw error;
+      toast.error("Failed to submit feedback", {
+        description: "Please try again later"
+      });
+      return Promise.reject(error);
     }
   };
   
   const handleUpdateFeedback = async (data: FeedbackFormData) => {
-    if (!data.id) return;
+    if (!data.id) return Promise.reject(new Error("Missing feedback ID"));
     
     try {
       const response = await fetch(`/api/user/feedback/${data.id}`, {
@@ -91,9 +95,13 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
       toast.success("Your website feedback has been updated", {
         description: "Thank you for keeping your review current"
       });
+      return Promise.resolve();
     } catch (error) {
       console.error('Error updating feedback:', error);
-      throw error;
+      toast.error("Failed to update feedback", {
+        description: "Please try again later"
+      });
+      return Promise.reject(error);
     }
   };
   
@@ -110,9 +118,13 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
       setMyFeedback(null);
       setIsEditing(false);
       toast.success("Your website feedback has been deleted");
+      return Promise.resolve();
     } catch (error) {
       console.error('Error deleting feedback:', error);
-      throw error;
+      toast.error("Failed to delete feedback", {
+        description: "Please try again later"
+      });
+      return Promise.reject(error);
     }
   };
 

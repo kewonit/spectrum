@@ -162,12 +162,7 @@ export function FeedbackForm({
           disabled={isSubmitting || isDeleting || rating === 0}
           className="ml-auto h-8 sm:h-10 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap flex-shrink-0"
           variant={isEditing ? "outline" : "default"}
-          // Match the button styling from other dashboard sections
-          style={{
-            backgroundColor: isEditing ? '#eff6ff' : '#7c3aed',
-            borderColor: isEditing ? '#bfdbfe' : 'transparent',
-            color: isEditing ? '#2563eb' : 'white'
-          }}
+          size="sm"
         >
           {isSubmitting ? (
             <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 animate-spin" />

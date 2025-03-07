@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createClient();
-  // Fix: Need to await params object before accessing properties in Next.js 15
+  // Use destructuring to get the ID from params and await it
   const { id: feedbackId } = await params;
 
   try {
@@ -87,10 +87,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createClient();
-  // Fix: Need to await params object before accessing properties in Next.js 15
+  // Use destructuring to get the ID from params and await it
   const { id: feedbackId } = await params;
 
   try {
