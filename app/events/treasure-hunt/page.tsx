@@ -1,5 +1,6 @@
 import { Rules } from "@/app/events/treasure-hunt/components/accordian";
 import { Treasurehunt_registarion } from "@/app/events/treasure-hunt/components/registration";
+import { ResultsTable } from "@/app/events/treasure-hunt/components/results-table";
 import { Krona_One } from 'next/font/google';
 import Image from "next/image";
 
@@ -44,6 +45,8 @@ const ruleList = [
   "Teams will be evaluated based on Bonus Challenges: Additional points may be awarded for completing optional tasks."
 ];
 
+// CSV data URL from Cloudinary
+const csvDataUrl = "https://res.cloudinary.com/dfyrk32ua/raw/upload/v1741337278/gdgc/Round_2_teams_Qualified_csv_kq7url.csv";
 
 export default function Home() {
   return (
@@ -52,37 +55,26 @@ export default function Home() {
     }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
-        <div className="relative rounded-2xl bg-white/10 backdrop-blur-lg p-8 mb-12">
-          <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8">
-            <div className="w-full md:w-1/2">
-              <div className={`${krona.className} space-y-4`}>
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#ece9e0]">
-                  Tech Treasure Hunt &apos;25
-                </h1>
-                <h2 className="text-xl md:text-2xl text-white/90">
-                  brought to you by AS&H, PCCOE
-                </h2>
-                <p className="text-lg text-white/80 font-light max-w-xl mt-6">
-                  The path is hidden, the clues are set-only the sharpest minds will find the treasure yet!
-                </p>
-              </div>
-            </div>
-            <div className="w-full md:w-1/2 flex justify-center">
-              <Image 
-                src="https://i.postimg.cc/9MJ9FCyh/9.png" 
-                alt="Event Image" 
-                width={400} 
-                height={400} 
-                className="rounded-lg" 
-                draggable={false}
-              />
-            </div>
-          </div>
+      <div className="relative w-full h-[100px] xs:h-[120px] sm:h-[140px] md:h-[160px] 
+        overflow-hidden transition-all duration-300 mb-4">
+        <Image 
+          src="https://res.cloudinary.com/dfyrk32ua/image/upload/v1740922990/Spectrum/dywRpss_-_Imgur_uxvnrc.webp"
+          alt="Tech Treasure Hunt Header" 
+          fill
+          priority
+          draggable={false}
+          className="object-contain object-center w-full h-full drop-shadow-xl"
+          sizes="(max-width: 480px) 95vw, (max-width: 640px) 90vw, (max-width: 1024px) 85vw, 1000px"
+        />
+      </div>
+
+        <div className="mb-12">
+          <ResultsTable 
+            csvUrl={csvDataUrl} 
+            title="Round 2 Qualified Teams" 
+          />
         </div>
 
-        <div className="mb-20">
-          <Treasurehunt_registarion />
-        </div>
 
         {/* Rules Section with Accordion */}
         <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-12">
@@ -107,6 +99,7 @@ export default function Home() {
             ))}
           </div>
         </div>
+
       </div>
     </main>
   );
