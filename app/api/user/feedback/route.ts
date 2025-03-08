@@ -34,8 +34,14 @@ export async function GET() {
       .eq('user_id', user.id)
       .single();
 
-    if (userFeedbackError && userFeedbackError.code !== 'PGSQL_NO_ROWS_RETURNED') {
-      console.error("Failed to fetch user feedback:", userFeedbackError);
+    // Handle the "no rows" case more gracefully
+    if (userFeedbackError) {
+      // If it's just a "no rows" error, don't treat it as an error
+      if (userFeedbackError.code === 'PGRST116') {
+        console.log("No feedback found for user, this is normal for new users");
+      } else {
+        console.error("Failed to fetch user feedback:", userFeedbackError);
+      }
     }
 
     // Get all feedback (including user's own)
@@ -110,7 +116,7 @@ export async function POST(request: Request) {
 
     // Parse the feedback data
     const body = await request.json();
-    const { rating, feedback_text, anonymous, event_id } = body;
+    const { rating, feedback_text, event_id } = body;
 
     if (!rating || rating < 1 || rating > 5) {
       return NextResponse.json(
@@ -119,14 +125,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Insert the feedback
+    // Insert the feedback - always set anonymous to false
     const { data: feedback, error } = await supabase
       .from('user_feedback')
       .insert({
         user_id: user.id,
         rating,
         feedback_text: feedback_text || null,
-        anonymous: anonymous || false,
+        anonymous: false,
         event_id: event_id || null
       })
       .select(`

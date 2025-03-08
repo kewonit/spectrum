@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { StarRating } from './StarRating';
 import { Card } from "@/components/ui/card";
 import { FeedbackForm, FeedbackFormData } from './FeedbackForm';
-import { Badge } from "@/components/ui/badge";
 import { Edit2, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -13,7 +12,6 @@ interface FeedbackCardProps {
     id: string;
     rating: number;
     feedback_text: string | null;
-    anonymous: boolean;
     user: {
       id: string;
       full_name: string;
@@ -32,8 +30,8 @@ export function FeedbackCard({ feedback, isOwner, onUpdate, onDelete }: Feedback
   
   const formattedDate = formatDistanceToNow(new Date(feedback.updated_at), { addSuffix: true });
   
-  // Only show the user name if not anonymous and user exists
-  const displayName = feedback.anonymous ? 'Anonymous User' : (feedback.user?.full_name || 'User');
+  // Display user name
+  const displayName = feedback.user?.full_name || 'User';
   
   // Handle edit button click
   const handleEdit = () => {
@@ -64,7 +62,6 @@ export function FeedbackCard({ feedback, isOwner, onUpdate, onDelete }: Feedback
             id: feedback.id,
             rating: feedback.rating,
             feedback_text: feedback.feedback_text || '',
-            anonymous: feedback.anonymous,
             event_id: feedback.event_id
           }}
           onSubmit={handleUpdate}

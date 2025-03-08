@@ -146,7 +146,7 @@ export default function MarkAttendanceClient() {
     fetchAttendanceStats();
   }, [currentPage, fetchAttendanceHistory, fetchAttendanceStats]);
 
-  // Fix handleScan with proper dependencies
+  // Fix handleScan with proper dependencies and enhanced error handling
   const handleScan = useCallback(async (scanData: string) => {
     if (!scanData) return;
     
@@ -174,8 +174,18 @@ export default function MarkAttendanceClient() {
         duration: 10000 // Longer timeout just in case
       });
       
-      // Trim any whitespace from the QR data
+      // Trim any whitespace and validate QR code data
       const cleanedData = scanData.trim();
+      
+      if (!cleanedData) {
+        toast.dismiss(loadingToastId);
+        toast.error("Invalid QR code", {
+          description: "The QR code contains no data",
+          id: `error-${Date.now()}`,
+          duration: 4000,
+        });
+        return;
+      }
       
       console.log('Scanning QR code data:', cleanedData);
       
@@ -183,92 +193,158 @@ export default function MarkAttendanceClient() {
       const params = new URLSearchParams();
       params.append('userId', cleanedData);
       
-      const response = await fetch('/api/attendance/mark?' + params.toString(), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: cleanedData,
-          verificationMethod: 'qr_code',
-          notes: 'Marked via QR scan'
-        }),
-      });
+      // Set up fetch with timeout for network issues
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
       
-      // Always dismiss loading toast regardless of success/failure
-      toast.dismiss(loadingToastId);
-      
-      const data = await response.json();
-      
-      // Special handling for already marked attendance - use error toast instead of info
-      if (response.status === 409 && data.alreadyMarked) {
-        // Get attendee name and prepare description
-        const attendeeName = data.attendee?.full_name || 'This person';
-        let description = 'Already marked present for today';
+      try {
+        const response = await fetch('/api/attendance/mark?' + params.toString(), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: cleanedData,
+            verificationMethod: 'qr_code',
+            notes: 'Marked via QR scan'
+          }),
+          signal: controller.signal
+        });
         
-        if (data.events && data.events.length > 0) {
-          if (data.events.length === 1) {
-            description = `Already marked present for ${data.events[0]}`;
-          } else {
-            description = `Already marked present for ${data.events.length} events`;
-          }
+        clearTimeout(timeoutId);
+        
+        // Always dismiss loading toast regardless of success/failure
+        toast.dismiss(loadingToastId);
+        
+        // Handle connection errors or invalid responses
+        if (!response) {
+          throw new Error("No response received from server");
         }
         
-        // Show as error toast (red) instead of info (blue)
-        toast.error(`${attendeeName} already marked`, {
-          description: description,
-          id: `already-marked-${Date.now()}`,
-          duration: 4000,
-        });
+        // Parse the response data with error handling
+        let data;
+        try {
+          data = await response.json();
+        } catch (parseError) {
+          console.error('Error parsing response:', parseError);
+          throw new Error("Invalid response format from server");
+        }
         
-        return; // Exit early, don't treat this as an error
+        // Special handling for already marked attendance - use error toast instead of info
+        if (response.status === 409 && data.alreadyMarked) {
+          // Get attendee name and prepare description
+          const attendeeName = data.attendee?.full_name || 'This person';
+          let description = 'Cannot register again';
+          
+          // Enhanced description based on registration details
+          if (data.markedPresent) {
+            description = 'Already registered and marked as present';
+          } else if (data.registeredAt) {
+            const date = new Date(data.registeredAt).toLocaleDateString();
+            const method = data.registrationMethod ? 
+              ` via ${data.registrationMethod.replace('_', ' ')}` : '';
+            description = `Registered on ${date}${method}`;
+          }
+          
+          // Add event information if available
+          if (data.events && data.events.length > 0) {
+            if (data.events.length === 1) {
+              description += ` for ${data.events[0]}`;
+            } else {
+              description += ` for ${data.events.length} events`;
+            }
+          }
+          
+          // Show as error toast (red) instead of info (blue)
+          toast.error(`${attendeeName} already registered`, {
+            description: description,
+            id: `already-marked-${Date.now()}`,
+            duration: 4000,
+          });
+          
+          return; // Exit early, don't treat this as an error
+        }
+        
+        // Check for other errors including 404 for user not found
+        if (response.status === 404) {
+          toast.error("User not found", {
+            description: data.error || "The QR code doesn't match any registered user",
+            id: `not-found-${Date.now()}`,
+            duration: 4000,
+          });
+          return;
+        }
+        
+        // Handle permission errors specifically
+        if (response.status === 403) {
+          toast.error("Permission denied", {
+            description: data.error || "You don't have permission to mark attendance",
+            id: `permission-${Date.now()}`,
+            duration: 4000,
+          });
+          return;
+        }
+        
+        // Handle other error responses
+        if (!response.ok) {
+          console.error('Error marking attendance:', data);
+          throw new Error(data.error || `Server error (${response.status})`);
+        }
+        
+        // Play success sound - use global function to avoid browser autoplay restrictions
+        if (window.playSuccess) {
+          window.playSuccess();
+        }
+        
+        // Create specific success toast based on data
+        const attendeeName = data.attendee?.full_name || 'Unknown';
+        
+        // Improve toast triggering to ensure it shows up
+        // Using a more reliable approach with unique IDs and no setTimeout
+        if (data.isDefaultAttendance) {
+          toast.success(`Attendance marked for ${attendeeName}`, {
+            description: `Marked present for ${data.eventNames[0]} (not registered)`,
+            id: `success-${Date.now()}`, // Force unique ID
+            duration: 5000,
+          });
+        } else if (data.eventCount > 1) {
+          toast.success(`Attendance marked for ${attendeeName}`, {
+            description: `Successfully checked in to ${data.eventCount} events`,
+            id: `success-${Date.now()}`,
+            duration: 5000,
+          });
+        } else if (data.eventCount === 1) {
+          toast.success(`Attendance marked for ${attendeeName}`, {
+            description: `Successfully checked in to ${data.eventNames[0]}`,
+            id: `success-${Date.now()}`,
+            duration: 5000,
+          });
+        } else {
+          toast.success(`Attendance marked for ${attendeeName}`, {
+            id: `success-${Date.now()}`,
+            duration: 5000,
+          });
+        }
+        
+        // Refresh attendance history and stats
+        fetchAttendanceHistory();
+        fetchAttendanceStats();
+      } catch (fetchError: any) {
+        clearTimeout(timeoutId);
+        toast.dismiss(loadingToastId);
+        
+        // Handle abort/timeout specifically
+        if (fetchError.name === 'AbortError') {
+          toast.error("Request timed out", {
+            description: "The server took too long to respond. Please try again.",
+            id: `timeout-${Date.now()}`,
+            duration: 5000,
+          });
+          return;
+        }
+        
+        throw fetchError; // Re-throw for general error handling
       }
-      
-      // Check for other errors
-      if (!response.ok) {
-        console.error('Error marking attendance:', data);
-        throw new Error(data.error || 'Failed to mark attendance');
-      }
-      
-      // Play success sound - use global function to avoid browser autoplay restrictions
-      if (window.playSuccess) {
-        window.playSuccess();
-      }
-      
-      // Create specific success toast based on data
-      const attendeeName = data.attendee?.full_name || 'Unknown';
-      
-      // Improve toast triggering to ensure it shows up
-      // Using a more reliable approach with unique IDs and no setTimeout
-      if (data.isDefaultAttendance) {
-        toast.success(`Attendance marked for ${attendeeName}`, {
-          description: `Marked present for ${data.eventNames[0]} (not registered)`,
-          id: `success-${Date.now()}`, // Force unique ID
-          duration: 5000,
-        });
-      } else if (data.eventCount > 1) {
-        toast.success(`Attendance marked for ${attendeeName}`, {
-          description: `Successfully checked in to ${data.eventCount} events`,
-          id: `success-${Date.now()}`,
-          duration: 5000,
-        });
-      } else if (data.eventCount === 1) {
-        toast.success(`Attendance marked for ${attendeeName}`, {
-          description: `Successfully checked in to ${data.eventNames[0]}`,
-          id: `success-${Date.now()}`,
-          duration: 5000,
-        });
-      } else {
-        toast.success(`Attendance marked for ${attendeeName}`, {
-          id: `success-${Date.now()}`,
-          duration: 5000,
-        });
-      }
-      
-      // Refresh attendance history and stats
-      fetchAttendanceHistory();
-      fetchAttendanceStats();
-      
     } catch (err: any) {
       console.error('Error marking attendance:', err);
       

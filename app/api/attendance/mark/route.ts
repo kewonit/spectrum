@@ -149,33 +149,43 @@ export async function POST(request: NextRequest) {
     // Use the validated attendee profile ID for all subsequent operations
     const validatedUserId = attendeeProfile.id;
 
-    // Check if the user already has attendance marked for any of their events today
-    
-    // Get today's date in UTC format (start of day)
-    const today = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-    const todayStr = today.toISOString();
-    
-    // Check for existing attendance records that are already marked present
+    // Check if the user has ANY attendance record already (regardless of date, status or marking)
+    // This enforces the rule that registration can only happen once per user
     const { data: existingAttendance, error: checkError } = await supabase
       .from("event_attendance")
-      .select("id, event_id, events:event_id(name)")
-      .eq("user_id", validatedUserId)
-      .eq("is_present", true)
-      .gte("marked_at", todayStr);
+      .select("id, event_id, events:event_id(name), is_present, marked_at, verification_method")
+      .eq("user_id", validatedUserId);
       
     if (checkError) {
       console.error('Error checking for existing attendance:', checkError);
-      // Continue anyway, just log the error
+      return NextResponse.json(
+        { error: "Database error when checking existing attendance: " + checkError.message },
+        { status: 500 }
+      );
     }
     
-    // If we found existing attendance records, prevent remarking
+    // If we found ANY existing attendance records, prevent remarking
+    // Even if they were previously marked as absent (is_present=false)
     if (existingAttendance && existingAttendance.length > 0) {
-      // Get list of event names they're already marked for
+      // Get list of event names they're already registered for
       const eventNames = existingAttendance.map(record => {
         const event = record.events as any;
         return event?.name || "Unknown event";
       });
+
+      // Check if any record is marked as present
+      const alreadyMarkedPresent = existingAttendance.some(record => record.is_present);
+      
+      // Get most recent registration time
+      const mostRecentTime = existingAttendance.reduce((latest, record) => {
+        const recordTime = new Date(record.marked_at || '').getTime();
+        return recordTime > latest ? recordTime : latest;
+      }, 0);
+      
+      const registeredAt = mostRecentTime ? new Date(mostRecentTime).toISOString() : null;
+      
+      // Get verification method of the first record
+      const registrationMethod = existingAttendance[0]?.verification_method || 'unknown';
       
       // Get attendee name for the error message
       const { data: profileData } = await supabase
@@ -188,11 +198,15 @@ export async function POST(request: NextRequest) {
       
       return NextResponse.json(
         { 
-          error: "Already marked present",
-          message: `${attendeeName} is already marked present for today`,
+          error: "Already registered",
+          message: `${attendeeName} is already registered and cannot be marked again`,
           events: eventNames,
           attendee: { full_name: profileData?.full_name, email: profileData?.email },
-          alreadyMarked: true
+          alreadyMarked: true,
+          markedPresent: alreadyMarkedPresent,
+          registeredAt: registeredAt,
+          registrationMethod: registrationMethod,
+          recordCount: existingAttendance.length
         },
         { status: 409 } // 409 Conflict is appropriate for this case
       );

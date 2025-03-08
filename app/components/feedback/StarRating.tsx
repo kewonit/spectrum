@@ -2,8 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
-import { cn } from '@/app/libs/utils';
 import { useMediaQuery } from '@/app/hooks/use-media-query';
+
+// Simple standalone utility function with no dependencies
+const combineClasses = (...classes: string[]): string => {
+  return classes.filter(Boolean).join(' ');
+};
 
 interface StarRatingProps {
   initialRating?: number;
@@ -13,9 +17,9 @@ interface StarRatingProps {
   className?: string;
 }
 
-export function StarRating({ 
-  initialRating = 0, 
-  onChange, 
+export function StarRating({
+  initialRating = 0,
+  onChange,
   readOnly = false,
   size = 'md',
   className
@@ -54,7 +58,7 @@ export function StarRating({
   };
   
   return (
-    <div className={cn('flex items-center', containerSizes[size], className)}>
+    <div className={combineClasses('flex items-center', containerSizes[size] || '', className || '')}>
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
@@ -65,19 +69,19 @@ export function StarRating({
           onTouchStart={() => !readOnly && setHover(star)}
           onTouchEnd={() => !readOnly && setHover(null)}
           disabled={readOnly}
-          className={cn(
+          className={combineClasses(
             "p-1 -m-1 rounded-full transition-colors",
-            readOnly ? "cursor-default" : "cursor-pointer hover:bg-gray-100/50",
+            readOnly ? "cursor-default" : "cursor-pointer hover:bg-gray-100/50"
           )}
           aria-label={`Rate ${star} out of 5 stars`}
         >
           <Star
-            className={cn(
-              starSizes[size],
+            className={combineClasses(
+              starSizes[size] || '',
               'transition-colors',
               (hover !== null ? hover >= star : rating >= star)
                 ? 'fill-amber-400 text-amber-400'
-                : 'text-gray-300',
+                : 'text-gray-300'
             )}
           />
         </button>

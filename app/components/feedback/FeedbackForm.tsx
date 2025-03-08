@@ -1,161 +1,176 @@
 'use client';
 
 import { useState } from 'react';
-import { StarRating } from './StarRating';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { AlertCircle } from 'lucide-react';
+import { StarRating } from './StarRating';
+import { toast } from "sonner";
+import { Edit2, Trash2, Send, X, Loader2 } from 'lucide-react';
 
 export interface FeedbackFormData {
   id?: string;
   rating: number;
   feedback_text: string;
-  anonymous: boolean;
   event_id?: string | null;
 }
 
 interface FeedbackFormProps {
   initialData?: FeedbackFormData;
   onSubmit: (data: FeedbackFormData) => Promise<void>;
-  onCancel: () => void;
+  onCancel?: () => void;
   onDelete?: () => Promise<void>;
   isEditing?: boolean;
 }
 
-export function FeedbackForm({ 
-  initialData, 
-  onSubmit, 
+export function FeedbackForm({
+  initialData,
+  onSubmit,
   onCancel,
-  onDelete, 
-  isEditing = false 
+  onDelete,
+  isEditing = false
 }: FeedbackFormProps) {
   const [rating, setRating] = useState<number>(initialData?.rating || 0);
   const [feedbackText, setFeedbackText] = useState<string>(initialData?.feedback_text || '');
-  const [anonymous, setAnonymous] = useState<boolean>(initialData?.anonymous || false);
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (rating === 0) {
-      setError('Please provide a rating');
+      toast.error("Please select a rating");
       return;
     }
-    
-    setSubmitting(true);
-    setError(null);
-    
+
+    setIsSubmitting(true);
+
     try {
       await onSubmit({
         id: initialData?.id,
         rating,
-        feedback_text: feedbackText.trim(),
-        anonymous,
-        event_id: initialData?.event_id || null
+        feedback_text: feedbackText,
+        event_id: initialData?.event_id
       });
-    } catch (err) {
-      setError('Failed to submit feedback. Please try again.');
-      console.error(err);
+      
+      if (!isEditing) {
+        setRating(0);
+        setFeedbackText('');
+      }
+      
+      toast.success(isEditing ? "Feedback updated successfully" : "Thank you for your feedback");
+    } catch (error) {
+      console.error("Failed to submit feedback:", error);
+      toast.error("Failed to submit feedback. Please try again.");
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
-  
+
   const handleDelete = async () => {
     if (!onDelete) return;
+
+    if (!window.confirm("Are you sure you want to delete your feedback?")) {
+      return;
+    }
     
-    if (confirm('Are you sure you want to delete this feedback? This action cannot be undone.')) {
-      setSubmitting(true);
-      try {
-        await onDelete();
-      } catch (err) {
-        setError('Failed to delete feedback');
-        console.error(err);
-        setSubmitting(false);
-      }
+    setIsDeleting(true);
+    
+    try {
+      await onDelete();
+      toast.success("Feedback deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete feedback:", error);
+      toast.error("Failed to delete feedback. Please try again.");
+    } finally {
+      setIsDeleting(false);
     }
   };
-  
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-white rounded-lg border border-gray-100 shadow-sm">
-      <div>
-        <Label htmlFor="rating" className="block text-sm font-medium text-gray-700 mb-1">
-          Your Rating
-        </Label>
-        <StarRating
-          initialRating={rating}
-          onChange={setRating}
-          size="md"
-          className="mb-1"
-        />
-        {rating === 0 && (
-          <p className="text-xs text-red-600 mt-1">Please select a rating</p>
-        )}
+    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="rating" className="text-sm sm:text-base font-medium text-gray-700">
+            Rate our website
+          </Label>
+          <span className="text-xs sm:text-sm bg-gray-50 px-2 py-0.5 rounded text-gray-500 font-medium">
+            {rating > 0 ? `${rating}/5 stars` : "Select rating"}
+          </span>
+        </div>
+        <div className="bg-white/80 rounded-lg border border-gray-200 p-3 sm:p-4 flex items-center justify-center">
+          <StarRating 
+            initialRating={rating} 
+            onChange={setRating}
+            size="lg"
+            className="py-1"
+          />
+        </div>
       </div>
-      
-      <div>
-        <Label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-1">
-          Your Feedback (Optional)
+
+      <div className="space-y-2">
+        <Label htmlFor="feedback_text" className="text-sm sm:text-base font-medium text-gray-700 flex items-center">
+          Your comments <span className="text-gray-400 font-normal ml-1">(optional)</span>
         </Label>
         <Textarea
-          id="feedback"
+          id="feedback_text"
+          placeholder="What do you like about our website? Any suggestions for improving the user experience?"
           value={feedbackText}
           onChange={(e) => setFeedbackText(e.target.value)}
-          placeholder="Share your experience..."
-          className="min-h-[100px] resize-y"
+          className="resize-none h-24 sm:h-32 bg-white/80 border-gray-200 focus:border-primary text-sm"
         />
       </div>
-      
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="anonymous"
-          checked={anonymous}
-          onCheckedChange={setAnonymous}
-        />
-        <Label htmlFor="anonymous" className="text-sm text-gray-700">
-          Submit anonymously
-        </Label>
-      </div>
-      
-      {error && (
-        <div className="bg-red-50 text-red-700 p-3 rounded-md flex gap-2 items-center text-sm">
-          <AlertCircle className="h-4 w-4" />
-          <span>{error}</span>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 sm:pt-4">
+        <div className="flex items-center gap-2">
+          {isEditing && onDelete && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="icon"
+              onClick={handleDelete}
+              disabled={isSubmitting || isDeleting}
+              className="h-8 w-8 sm:h-9 sm:w-9 bg-red-50 text-red-600 hover:bg-red-100 border-red-200"
+              aria-label="Delete feedback"
+            >
+              {isDeleting ? (
+                <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin" />
+              ) : (
+                <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              )}
+            </Button>
+          )}
+          
+          {onCancel && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onCancel}
+              disabled={isSubmitting || isDeleting}
+              className="h-8 sm:h-9 text-xs sm:text-sm px-2.5 sm:px-3 bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200"
+            >
+              <X className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5" />
+              Cancel
+            </Button>
+          )}
         </div>
-      )}
-      
-      <div className="flex justify-between pt-2">
-        <div className="space-x-2">
-          <Button 
-            type="submit" 
-            disabled={submitting || rating === 0}
-          >
-            {submitting ? 'Submitting...' : isEditing ? 'Update' : 'Submit'}
-          </Button>
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={onCancel}
-            disabled={submitting}
-          >
-            Cancel
-          </Button>
-        </div>
-        
-        {isEditing && onDelete && (
-          <Button 
-            type="button" 
-            variant="outline"
-            onClick={handleDelete}
-            disabled={submitting}
-            className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300 hover:bg-red-50"
-          >
-            Delete
-          </Button>
-        )}
+
+        <Button 
+          type="submit" 
+          disabled={isSubmitting || isDeleting || rating === 0}
+          className="ml-auto h-8 sm:h-10 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap flex-shrink-0"
+          variant={isEditing ? "outline" : "default"}
+          size="sm"
+        >
+          {isSubmitting ? (
+            <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 animate-spin" />
+          ) : isEditing ? (
+            <Edit2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5" />
+          ) : (
+            <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5" />
+          )}
+          {isEditing ? 'Update' : 'Submit Review'}
+        </Button>
       </div>
     </form>
   );

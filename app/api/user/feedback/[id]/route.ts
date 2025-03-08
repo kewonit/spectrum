@@ -38,7 +38,7 @@ export async function PUT(
 
     // Parse the updated feedback data
     const body = await request.json();
-    const { rating, feedback_text, anonymous } = body;
+    const { rating, feedback_text } = body;
 
     if (!rating || rating < 1 || rating > 5) {
       return NextResponse.json(
@@ -47,13 +47,13 @@ export async function PUT(
       );
     }
 
-    // Update the feedback
+    // Update the feedback - always set anonymous to false
     const { data: feedback, error } = await supabase
       .from('user_feedback')
       .update({
         rating,
         feedback_text: feedback_text || null,
-        anonymous: anonymous || false,
+        anonymous: false,
       })
       .eq('id', feedbackId)
       .select(`

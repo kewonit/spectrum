@@ -6,7 +6,13 @@ import { twMerge } from 'tailwind-merge';
  * This allows for conditional and merged Tailwind CSS classes
  */
 export function cn(...inputs: ClassValue[]): string {
-  return twMerge(clsx(inputs));
+  try {
+    return twMerge(clsx(inputs));
+  } catch (error) {
+    console.error("Error in cn function:", error);
+    // Fallback: just join the class names without merging
+    return inputs.filter(Boolean).join(' ');
+  }
 }
 
 /**
