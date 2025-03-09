@@ -3,19 +3,20 @@
 import { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { FeedbackForm, FeedbackFormData } from './FeedbackForm';
-import { MessageSquare, Badge as BadgeIcon, Star, Pencil, Trash2, AlertCircle, ChevronUp, ChevronDown, Laptop } from 'lucide-react';
+import { Pencil, Trash2, AlertCircle, ChevronUp, ChevronDown, Laptop, Star } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { EmptyFeedbackState } from '../EmptyFeedbackState';
 
 interface FeedbackSectionProps {
   profileId: string;
   userName: string;
 }
 
-// Add this function at the top level
+// Simple utility to render star rating
 const renderStars = (rating: number) => {
   return (
     <div className="flex items-center">
@@ -30,31 +31,36 @@ const renderStars = (rating: number) => {
 };
 
 export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
-  const [myFeedback, setMyFeedback] = useState<any | null>(null);
+  const [userFeedback, setUserFeedback] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [expanded, setExpanded] = useState<boolean>(true);
-  
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchFeedback = async () => {
+      if (!profileId) return;
+      
       try {
         setLoading(true);
+        setError(null);
         const response = await fetch('/api/user/feedback');
-        const data = await response.json();
         
-        if (response.ok) {
-          setMyFeedback(data.userFeedback || null);
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
         }
-      } catch (error) {
-        console.error('Failed to fetch feedback:', error);
+        
+        const data = await response.json();
+        setUserFeedback(data.userFeedback || null);
+      } catch (err) {
+        console.error('Failed to fetch feedback:', err);
+        setError('Failed to load feedback data');
       } finally {
         setLoading(false);
       }
     };
     
-    if (profileId) {
-      fetchFeedback();
-    }
+    fetchFeedback();
   }, [profileId]);
   
   const handleSubmitFeedback = async (data: FeedbackFormData) => {
@@ -68,20 +74,21 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit feedback');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit feedback');
       }
 
       const result = await response.json();
-      setMyFeedback(result.feedback);
+      setUserFeedback(result.feedback);
       setIsEditing(false);
-      toast.success("Thank you for your website feedback! 🙌", {
+      toast.success("Thank you for your website feedback!", {
         description: "Your insights help us improve Spectrum's web experience"
       });
       return Promise.resolve();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting feedback:', error);
       toast.error("Failed to submit feedback", {
-        description: "Please try again later"
+        description: error.message || "Please try again later"
       });
       return Promise.reject(error);
     }
@@ -100,20 +107,21 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update feedback');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update feedback');
       }
 
       const result = await response.json();
-      setMyFeedback(result.feedback);
+      setUserFeedback(result.feedback);
       setIsEditing(false);
       toast.success("Your website feedback has been updated", {
         description: "Thank you for keeping your review current"
       });
       return Promise.resolve();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating feedback:', error);
       toast.error("Failed to update feedback", {
-        description: "Please try again later"
+        description: error.message || "Please try again later"
       });
       return Promise.reject(error);
     }
@@ -126,17 +134,18 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete feedback');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete feedback');
       }
 
-      setMyFeedback(null);
+      setUserFeedback(null);
       setIsEditing(false);
       toast.success("Your website feedback has been deleted");
       return Promise.resolve();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting feedback:', error);
       toast.error("Failed to delete feedback", {
-        description: "Please try again later"
+        description: error.message || "Please try again later"
       });
       return Promise.reject(error);
     }
@@ -152,7 +161,6 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
           <div className="p-4 sm:p-5 lg:p-6 border-b-2 border-gray-300 flex flex-col sm:flex-row gap-3 sm:gap-0 sm:items-center sm:justify-between cursor-pointer bg-[#EBE9E0]/30 hover:bg-[#EBE9E0]/40 transition-colors">
             <div className="flex items-center gap-2.5">
               <div className="bg-[#EBE9E0]/80 p-1.5 rounded-full">
-                {/* Changed icon to match the Dashboard section icons styling */}
                 <Laptop className="h-5 w-5 text-primary/80" />
               </div>
               <div>
@@ -162,11 +170,11 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
             </div>
             
             <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-3">
-              {myFeedback && !isEditing && (
+              {userFeedback && !isEditing && (
                 <Badge variant="outline" className="bg-[#EBE9E0]/70 text-gray-700 px-3 py-1.5 text-sm sm:text-base font-medium h-9 sm:h-10 flex items-center justify-center border-2 border-gray-300">
-                  <BadgeIcon className="h-4 w-4 mr-2 text-amber-500" />
+                  <Star className="h-4 w-4 mr-2 text-amber-500 fill-amber-500" />
                   <span className="whitespace-nowrap">
-                    {myFeedback.rating}/5 Stars
+                    {userFeedback.rating}/5 Stars
                   </span>
                 </Badge>
               )}
@@ -195,12 +203,19 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
                 <Skeleton className="h-32 w-full" />
                 <Skeleton className="h-10 w-32 ml-auto" />
               </div>
+            ) : error ? (
+              <div className="bg-red-50 border border-red-100 rounded-lg p-4 text-center">
+                <AlertCircle className="h-6 w-6 text-red-500 mx-auto mb-2" />
+                <p className="text-red-700">
+                  {error}. Please try refreshing the page.
+                </p>
+              </div>
             ) : (
               <>
-                {/* Submitted Feedback View */}
-                {myFeedback && !isEditing ? (
+                {/* User has submitted feedback */}
+                {userFeedback && !isEditing ? (
                   <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-gray-200 shadow-sm">
-                    {/* Website feedback notice - styled to match the dashboard alerts */}
+                    {/* Website feedback notice */}
                     <div className="mb-4 px-3 py-2.5 bg-blue-50/80 border border-blue-100 rounded-lg flex items-center gap-2">
                       <AlertCircle className="h-4 w-4 text-blue-600 shrink-0" />
                       <p className="text-xs sm:text-sm text-blue-700">
@@ -208,22 +223,21 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
                       </p>
                     </div>
                     
-                    {/* Moved buttons below content for better mobile experience */}
                     <div className="flex flex-col gap-4 mb-4">
                       <div className="space-y-2">
                         <h4 className="text-base sm:text-lg font-medium text-gray-800">
                           Your Website Review
                         </h4>
                         <div className="flex items-center gap-2">
-                          {renderStars(myFeedback.rating)}
-                          <span className="text-sm text-gray-500 font-medium">{myFeedback.rating}/5</span>
+                          {renderStars(userFeedback.rating)}
+                          <span className="text-sm text-gray-500 font-medium">{userFeedback.rating}/5</span>
                         </div>
                       </div>
                     </div>
                     
-                    {myFeedback.feedback_text ? (
+                    {userFeedback.feedback_text ? (
                       <div className="bg-[#EBE9E0]/40 rounded-lg p-3 sm:p-4 mb-4 border border-gray-200">
-                        <p className="text-sm sm:text-base text-gray-700 whitespace-pre-wrap">{myFeedback.feedback_text}</p>
+                        <p className="text-sm sm:text-base text-gray-700 whitespace-pre-wrap">{userFeedback.feedback_text}</p>
                       </div>
                     ) : (
                       <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-4 border border-gray-200 text-gray-500 italic text-xs sm:text-sm">
@@ -231,7 +245,7 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
                       </div>
                     )}
                     
-                    {/* Action buttons moved below content */}
+                    {/* Action buttons */}
                     <div className="flex items-center gap-2 mb-3">
                       <Button
                         variant="outline"
@@ -247,7 +261,7 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
                         size="icon"
                         onClick={() => {
                           if (window.confirm("Are you sure you want to delete your feedback?")) {
-                            handleDeleteFeedback(myFeedback.id);
+                            handleDeleteFeedback(userFeedback.id);
                           }
                         }}
                         className="h-8 w-8 sm:h-9 sm:w-9 bg-red-50 hover:bg-red-100 text-red-600 border-red-200"
@@ -257,10 +271,10 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
                       </Button>
                     </div>
                     
-                    {/* Changed from showing anonymous/public status to just showing submission date */}
+                    {/* Submission date */}
                     <div className="flex justify-end items-center mt-4 text-xs text-gray-500">
                       <div>
-                        Submitted: {new Date(myFeedback.created_at).toLocaleDateString()}
+                        Submitted: {new Date(userFeedback.created_at).toLocaleDateString()}
                       </div>
                     </div>
                     
@@ -277,7 +291,7 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
                   </div>
                 ) : isEditing ? (
                   <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-gray-200 shadow-sm">
-                    {/* Website feedback notice - styled to match the dashboard alerts */}
+                    {/* Website feedback notice */}
                     <div className="mb-4 px-3 py-2.5 bg-blue-50/80 border border-blue-100 rounded-lg flex items-center gap-2">
                       <AlertCircle className="h-4 w-4 text-blue-600 shrink-0" />
                       <p className="text-xs sm:text-sm text-blue-700">
@@ -295,19 +309,19 @@ export function FeedbackSection({ profileId, userName }: FeedbackSectionProps) {
                     </div>
                     <FeedbackForm
                       initialData={{
-                        id: myFeedback.id,
-                        rating: myFeedback.rating,
-                        feedback_text: myFeedback.feedback_text || '',
+                        id: userFeedback.id,
+                        rating: userFeedback.rating,
+                        feedback_text: userFeedback.feedback_text || '',
                       }}
                       onSubmit={handleUpdateFeedback}
                       onCancel={() => setIsEditing(false)}
-                      onDelete={() => handleDeleteFeedback(myFeedback.id)}
+                      onDelete={() => handleDeleteFeedback(userFeedback.id)}
                       isEditing={true}
                     />
                   </div>
                 ) : (
                   <div className="space-y-4 sm:space-y-5">
-                    {/* Website feedback notice - styled to match the dashboard alerts */}
+                    {/* Website feedback notice */}
                     <div className="bg-blue-50/80 border border-blue-100 rounded-lg p-3 sm:p-4 flex items-center gap-2.5">
                       <AlertCircle className="h-4 w-4 text-blue-600 shrink-0" />
                       <p className="text-xs sm:text-sm text-blue-700">

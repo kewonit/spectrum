@@ -1,23 +1,6 @@
 import { createClient } from "@/app/utils/supabase/server";
 import { NextResponse } from "next/server";
 
-// Define interfaces for proper typing
-interface UserProfile {
-  id: string;
-  full_name: string;
-}
-
-interface FeedbackItem {
-  id: string;
-  rating: number;
-  feedback_text: string | null;
-  anonymous: boolean;
-  event_id: string | null;
-  created_at: string;
-  updated_at: string;
-  user: UserProfile | null;
-}
-
 export async function GET() {
   const supabase = await createClient();
 
@@ -27,7 +10,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's own feedback
+    // Get user's own feedback only
     const { data: userFeedback, error: userFeedbackError } = await supabase
       .from('user_feedback')
       .select('*')
@@ -39,49 +22,17 @@ export async function GET() {
       // If it's just a "no rows" error, don't treat it as an error
       if (userFeedbackError.code === 'PGRST116') {
         console.log("No feedback found for user, this is normal for new users");
+        return NextResponse.json({ userFeedback: null });
       } else {
         console.error("Failed to fetch user feedback:", userFeedbackError);
+        return NextResponse.json(
+          { error: "Failed to fetch feedback" }, 
+          { status: 500 }
+        );
       }
     }
 
-    // Get all feedback (including user's own)
-    const { data: allFeedback, error: allFeedbackError } = await supabase
-      .from('user_feedback')
-      .select(`
-        id, 
-        rating, 
-        feedback_text, 
-        anonymous, 
-        event_id,
-        created_at, 
-        updated_at,
-        user:profiles (
-          id, 
-          full_name
-        )
-      `)
-      .order('created_at', { ascending: false })
-      .limit(100);
-
-    if (allFeedbackError) {
-      throw allFeedbackError;
-    }
-
-    // Process the feedback list to hide user identity for anonymous feedback
-    const processedFeedback = (allFeedback as unknown as FeedbackItem[]).map(feedback => {
-      if (feedback.anonymous && feedback.user?.id !== user.id) {
-        return {
-          ...feedback,
-          user: null
-        };
-      }
-      return feedback;
-    });
-
-    return NextResponse.json({ 
-      userFeedback,
-      allFeedback: processedFeedback
-    });
+    return NextResponse.json({ userFeedback });
   } catch (error) {
     console.error("Failed to fetch feedback:", error);
     return NextResponse.json(
@@ -135,23 +86,15 @@ export async function POST(request: Request) {
         anonymous: false,
         event_id: event_id || null
       })
-      .select(`
-        id, 
-        rating, 
-        feedback_text, 
-        anonymous, 
-        event_id,
-        created_at, 
-        updated_at,
-        user:profiles (
-          id, 
-          full_name
-        )
-      `)
+      .select('*')
       .single();
 
     if (error) {
-      throw error;
+      console.error("Database error when inserting feedback:", error);
+      return NextResponse.json(
+        { error: "Failed to submit feedback" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ feedback });

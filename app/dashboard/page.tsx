@@ -15,8 +15,7 @@ import { Card } from "@/components/ui/card";
 import { AttendanceCardDialog } from '@/components/AttendanceCardDialog';
 import { format } from 'date-fns';
 import { EventAttendanceWrapper } from "@/app/components/EventAttendanceWrapper";
-import { FeedbackSection } from "@/app/components/feedback/FeedbackSection";
-import { FeedbackErrorBoundary } from "../components/feedback/FeedbackErrorBoundary";
+import { FeedbackSectionWrapper } from "../components/feedback/FeedbackSectionWrapper";
 
 // Add COLLEGE_OPTIONS constant
 const COLLEGE_OPTIONS = {
@@ -274,6 +273,16 @@ export default function DashboardPage() {
             ]}
             className="mb-6"
           />
+
+          {/* Feedback Section - Add this new component */}
+          <div className="mb-8">
+            {isProfileComplete(profile) && (
+              <FeedbackSectionWrapper 
+                profileId={profile.id}
+                userName={profile.full_name}
+              />
+            )}
+          </div>
 
           {/* Attendance display section - using suspense */}
           <div className="mb-8">

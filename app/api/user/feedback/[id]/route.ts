@@ -56,23 +56,15 @@ export async function PUT(
         anonymous: false,
       })
       .eq('id', feedbackId)
-      .select(`
-        id, 
-        rating, 
-        feedback_text, 
-        anonymous, 
-        event_id,
-        created_at, 
-        updated_at,
-        user:profiles (
-          id, 
-          full_name
-        )
-      `)
+      .select('*')
       .single();
 
     if (error) {
-      throw error;
+      console.error("Database error when updating feedback:", error);
+      return NextResponse.json(
+        { error: "Failed to update feedback" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ feedback });
@@ -127,7 +119,11 @@ export async function DELETE(
       .eq('id', feedbackId);
 
     if (error) {
-      throw error;
+      console.error("Database error when deleting feedback:", error);
+      return NextResponse.json(
+        { error: "Failed to delete feedback" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ success: true });
