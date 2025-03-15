@@ -84,11 +84,11 @@ const dfqTeam = [
     instagram: "https://www.instagram.com/_varda.__/"
   },
   {
-    name: "Abhiraj Hiwale",
-    image: "https://i.imgur.com/o8DbrEA.jpg",
+    name: "Swayam Mandhani",
+    image: "https://res.cloudinary.com/dfyrk32ua/image/upload/v1742050066/Spectrum/profile_dvmg6t.jpg",
     role: "Registration",
-    linkedin: "https://www.linkedin.com/in/abhiraj-hiwale-587676276",
-    instagram: "https://www.instagram.com/__abhiraj.sh/"
+    linkedin: "https://www.linkedin.com/in/swayam-mandhani-a95b41292",
+    instagram: "https://www.instagram.com/swayamm.11/"
   }
 ];
 
