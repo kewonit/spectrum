@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
 import { toast } from "sonner";
-import { Pencil, Mail, Phone, GraduationCap, LogOut, ChevronRight, QrCode, Download, Calendar, Clock, CheckCircle, XCircle, MapPin } from "lucide-react";
+import { Pencil, Mail, Phone, GraduationCap, LogOut, ChevronRight, QrCode, Download, Calendar, Clock, CheckCircle, XCircle, MapPin, MessageSquare } from "lucide-react";
 import { CompleteProfilePopup } from '@/components/CompleteProfilePopup';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { AlertCircle } from "lucide-react";
@@ -490,7 +490,41 @@ export default function DashboardPage() {
 
           {/* Rest of the content */}
           <div className="space-y-6">
-            {/* Quick Actions Grid - adjusted spacing */}
+            {/* Feedback Prompt - Updated without dismiss button and improved mobile styling */}
+            <div className="relative rounded-2xl overflow-hidden">
+              <div className="absolute inset-0 -m-0.5">
+                <div className="w-full h-full border-2 border-dashed border-blue-300/30 rounded-[14px]" />
+              </div>
+              <div className="relative bg-white/90 backdrop-blur shadow-sm rounded-xl overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400"></div>
+                <div className="px-4 py-5 sm:p-6">
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border border-blue-100 shadow-sm">
+                      <MessageSquare className="h-6 w-6 text-blue-500" />
+                    </div>
+                    
+                    <div className="flex-1 text-center sm:text-left">
+                      <h2 className="text-lg font-semibold text-gray-800 mb-1">Share Your Website Experience!</h2>
+                      <p className="text-gray-600 mb-4 sm:mb-0">
+                        Help us improve the Spectrum platform by sharing your thoughts and suggestions about the website.
+                      </p>
+                    </div>
+                    
+                    <div className="w-full sm:w-auto">
+                      <Button
+                        onClick={() => router.push('/dashboard/feedback')}
+                        className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0"
+                      >
+                        <MessageSquare className="h-4 w-4 mr-2" />
+                        Give Feedback
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            {/* Quick Actions Grid - Remove Website Feedback card */}
             <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                 <h2 className="font-semibold text-lg mb-2">Events</h2>
@@ -525,12 +559,13 @@ export default function DashboardPage() {
                   Manage Invites
                 </Button>
               </div>
+              {/* Website Feedback card removed */}
             </div>
 
-            {/* Feedback Section - Add before Payments */}
-            <div className="my-6">
+            {/* Remove the inline Feedback Section since there's now a dedicated page */}
+            {/* <div className="my-6">
               <FeedbackSection />
-            </div>
+            </div> */}
 
             {/* Payment Card - adjusted spacing */}
             <div className="my-6">

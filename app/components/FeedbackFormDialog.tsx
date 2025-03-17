@@ -103,19 +103,19 @@ export function FeedbackFormDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>
-            {mode === 'create' ? 'Submit Feedback' : 'Edit Feedback'}
+      <DialogContent className="sm:max-w-[500px] p-0 gap-0 bg-[#FAF9F6] rounded-2xl">
+        <DialogHeader className="p-6 pb-2 bg-gradient-to-b from-[#E6F7FF]/50 to-transparent">
+          <DialogTitle className="text-xl font-semibold text-gray-900">
+            {mode === 'create' ? 'Share Your Website Feedback' : 'Edit Your Feedback'}
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 py-4">
-          {/* Rating */}
+        <form onSubmit={handleSubmit} className="space-y-5 p-6 pt-3">
+          {/* Rating */} 
           <div className="space-y-2">
-            <Label htmlFor="rating">Rating</Label>
-            <div className="flex items-center gap-2 p-3 bg-[#EBE9E0]/30 rounded-md border border-gray-200">
-              <div className="flex gap-1" id="rating">
+            <Label htmlFor="rating" className="text-sm font-medium">Rate Your Experience</Label>
+            <div className="flex items-center justify-between p-4 bg-[#FFF4E5]/60 rounded-xl border border-amber-100">
+              <div className="flex gap-1 sm:gap-2" id="rating">
                 {[1, 2, 3, 4, 5].map((value) => (
                   <button
                     key={value}
@@ -123,68 +123,75 @@ export function FeedbackFormDialog({
                     onClick={() => setRating(value)}
                     onMouseEnter={() => setHoverRating(value)}
                     onMouseLeave={() => setHoverRating(0)}
-                    className="p-1"
+                    className="p-1 sm:p-1.5 touch-manipulation hover:scale-110 transition-transform"
                   >
                     <Star
-                      className={`h-6 w-6 transition-colors ${
+                      className={`h-6 w-6 sm:h-7 sm:w-7 transition-colors ${
                         (hoverRating ? value <= hoverRating : value <= rating)
                           ? 'text-amber-400 fill-amber-400'
-                          : 'text-gray-300'
+                          : 'text-amber-200'
                       }`}
                     />
                   </button>
                 ))}
               </div>
-              <span className="text-sm font-medium ml-2">
+              <span className="text-sm font-medium ml-2 min-w-[36px] text-right">
                 {hoverRating || rating}/5
               </span>
             </div>
           </div>
 
-          {/* Feedback text */}
+          {/* Feedback text - FIXED VERSION */}
           <div className="space-y-2">
-            <Label htmlFor="feedback">Your Feedback (optional)</Label>
-            <Textarea
-              id="feedback"
-              placeholder="Share your thoughts and suggestions..."
+            <label htmlFor="feedbackText" className="text-sm font-medium block">Your Comments (optional)</label>
+            <textarea
+              id="feedbackText"
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
-              className="h-24 resize-none"
+              placeholder="Share your thoughts about the website, any issues you've encountered, or suggestions for improvement..."
+              className="w-full h-28 px-3 py-2 text-base placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white"
+              style={{ zIndex: 100, position: 'relative' }}
             />
             <p className="text-xs text-gray-500">
-              Your feedback helps us improve our events and services.
+              Your feedback helps us improve the Spectrum website and platform experience.
             </p>
           </div>
 
-          {/* Anonymous option */}
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="anonymous"
-              checked={anonymous}
-              onCheckedChange={(checked) => setAnonymous(checked === true)}
-            />
-            <Label 
-              htmlFor="anonymous" 
-              className="text-sm font-normal cursor-pointer"
-            >
-              Submit anonymously (your name won&apos;t be submitted)
-            </Label>
+          {/* Anonymous option - FIXED VERSION */}
+          <div className="flex items-center space-x-3 pt-1">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="anonymousCheck"
+                checked={anonymous}
+                onChange={() => setAnonymous(!anonymous)}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                style={{ zIndex: 100, position: 'relative' }}
+              />
+              <label 
+                htmlFor="anonymousCheck" 
+                className="ml-2 text-sm font-normal cursor-pointer"
+                onClick={() => setAnonymous(!anonymous)}
+              >
+                Submit anonymously (hide your name)
+              </label>
+            </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="sm:justify-between flex-col-reverse sm:flex-row gap-3 pt-2 mt-4">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
               disabled={loading}
-              className="border-gray-200"
+              className="border-gray-200 hover:bg-gray-100 w-full sm:w-auto"
             >
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={loading || rating < 1}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-blue-500 hover:bg-blue-600 text-white w-full sm:w-auto"
             >
               {loading ? (
                 <>
