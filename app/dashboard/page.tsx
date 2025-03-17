@@ -14,6 +14,8 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Card } from "@/components/ui/card";
 import { AttendanceCardDialog } from '@/components/AttendanceCardDialog';
 import { format } from 'date-fns';
+import { EventAttendanceWrapper } from '@/app/components/EventAttendanceWrapper';
+import { FeedbackSection } from '@/app/components/FeedbackSection';
 
 // Add COLLEGE_OPTIONS constant
 const COLLEGE_OPTIONS = {
@@ -538,6 +540,11 @@ export default function DashboardPage() {
               </div>
             </div>
 
+            {/* Feedback Section - Add before Payments */}
+            <div className="my-6">
+              <FeedbackSection />
+            </div>
+
             {/* Payment Card - adjusted spacing */}
             <div className="my-6">
               <div className="bg-white/80 backdrop-blur p-6 sm:p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
@@ -553,6 +560,36 @@ export default function DashboardPage() {
                   >
                     Manage Payments
                   </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Attendance display section */}
+            <div className="my-6">
+              <div className="bg-white/80 backdrop-blur p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-4">
+                  <div className="space-y-1">
+                    <h2 className="font-semibold text-lg">Event Attendance</h2>
+                    <p className="text-sm text-gray-600">Track your event attendance</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="bg-green-50 hover:bg-green-100 border-green-200 w-full sm:w-auto"
+                    onClick={() => setShowAttendanceCard(true)}
+                  >
+                    <QrCode className="h-4 w-4 mr-2 hidden sm:inline" />
+                    Show QR Code
+                  </Button>
+                </div>
+                
+                <div className="overflow-hidden rounded-xl">
+                  <EventAttendanceWrapper
+                    profileId={profile?.id}
+                    userName={profile?.full_name}
+                    userPhone={profile?.phone} 
+                    onShowQr={() => setShowAttendanceCard(true)} 
+                  />
                 </div>
               </div>
             </div>

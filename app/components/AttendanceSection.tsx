@@ -410,7 +410,7 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
           <div className="bg-[#EBE9E0]/80 p-1.5 rounded-full">
             <CheckCircle className="h-5 w-5 text-primary/80" />
           </div>
-          <h3 className="font-semibold text-gray-800 text-lg lg:text-xl">Event Attendance</h3>
+          <h3 className="font-semibold text-gray-800 text-lg">Event Attendance</h3>
         </div>
         <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-3">
           {!loading && attendanceData.length > 0 && isExpanded && (
@@ -422,50 +422,50 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
                 downloadAllCardsAsPng();
               }}
               disabled={downloading}
-              className="h-10 lg:h-11 text-base lg:text-lg px-4 py-2 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-600 border-2 border-blue-200 font-medium flex-1 sm:flex-auto"
+              className="h-9 px-3 md:px-4 py-2 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-600 border-2 border-blue-200 font-medium flex-1 sm:flex-auto min-w-0"
             >
               {downloading ? (
                 <>
-                  <div className="h-5 w-5 lg:h-5 lg:w-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2" />
-                  <span>Saving...</span>
+                  <div className="h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-1.5 flex-shrink-0" />
+                  <span className="truncate">Saving...</span>
                 </>
               ) : (
                 <>
-                  <Archive className="h-5 w-5 lg:h-5 lg:w-5 mr-2" />
-                  <span className="whitespace-nowrap">Download ALL</span>
+                  <Archive className="h-4 w-4 mr-1.5 md:mr-2 flex-shrink-0" />
+                  <span className="truncate">Download</span>
                 </>
               )}
             </Button>
           )}
           {!loading && attendanceData.length > 0 && isExpanded && (
-            <Badge variant="outline" className="bg-[#EBE9E0]/70 text-gray-700 hover:bg-[#EBE9E0] px-3 py-1.5 text-sm sm:text-base font-medium h-10 flex items-center justify-center border-2 border-gray-300">
+            <Badge variant="outline" className="bg-[#EBE9E0]/70 text-gray-700 hover:bg-[#EBE9E0] px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium h-9 flex items-center justify-center border-2 border-gray-300">
               <span className="whitespace-nowrap">{attendanceData.filter(a => a.is_present).length} Event{attendanceData.filter(a => a.is_present).length !== 1 ? 's' : ''}</span>
             </Badge>
           )}
-          <div className="flex items-center justify-center h-10 w-10">
+          <div className="flex items-center justify-center h-9 w-9 flex-shrink-0">
             <ChevronDown className={`h-5 w-5 text-gray-500 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
           </div>
         </div>
       </div>
       
       {isExpanded && (
-        <div className="p-4 sm:p-6 lg:p-8">
+        <div className="p-3 sm:p-5 lg:p-6">
           {loading ? (
             <div className="py-8 flex items-center justify-center">
-              <div className="h-7 w-40 bg-gray-200 animate-pulse rounded"></div>
+              <div className="h-6 w-36 bg-gray-200 animate-pulse rounded"></div>
             </div>
           ) : attendanceData.length > 0 ? (
             <>
               {/* Visible grid of cards */}
-              <div className={`grid grid-cols-1 ${attendanceData.length > 1 ? 'xl:grid-cols-2' : ''} gap-5 xl:gap-6`}>
+              <div className={`grid grid-cols-1 ${attendanceData.length > 1 ? 'xl:grid-cols-2' : ''} gap-4 sm:gap-5 xl:gap-6`}>
                 {attendanceData.slice(0, 3).map((record, index) => (
                   <div 
                     key={record.id} 
                     className="bg-white/90 backdrop-blur-sm rounded-xl border-2 border-gray-300 overflow-hidden shadow-sm hover:shadow-md transition-all"
                     ref={(el) => { cardRefs.current[index] = el; }}
                   >
-                    {/* Event image background - larger, with overflow */}
-                    <div className="h-32 sm:h-40 lg:h-44 relative overflow-hidden">
+                    {/* Event image background - optimized for mobile */}
+                    <div className="h-28 sm:h-32 md:h-40 lg:h-44 relative overflow-hidden">
                       <div className="absolute inset-0 bg-[#EBE9E0]/40 z-10" />
                       {record.events.img_url ? (
                         <div className="relative w-full h-full">
@@ -483,9 +483,9 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
                         <div className="w-full h-full bg-gradient-to-r from-[#EBE9E0]/60 to-[#EBE9E0]/20" />
                       )}
                       
-                      {/* Logo overlaid on background */}
-                      <div className="absolute top-1/2 left-6 transform -translate-y-1/2 z-20">
-                        <div className="relative w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 bg-white rounded-xl shadow-md border-2 border-gray-200 p-2 sm:p-3">
+                      {/* Logo overlaid on background - adjusted for mobile */}
+                      <div className="absolute top-1/2 left-4 sm:left-6 transform -translate-y-1/2 z-20">
+                        <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-white rounded-xl shadow-md border-2 border-gray-200 p-2">
                           {record.events.img_url ? (
                             <Image
                               src={record.events.img_url}
@@ -503,54 +503,54 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
                         </div>
                       </div>
                       
-                      {/* Event type and status on the right */}
-                      <div className="absolute top-0 right-0 p-3 flex flex-col items-end gap-2 z-20">
+                      {/* Event type and status on the right - adjusted for mobile */}
+                      <div className="absolute top-0 right-0 p-2 sm:p-3 flex flex-col items-end gap-1.5 sm:gap-2 z-20">
                         <Badge 
                           variant="outline" 
-                          className="text-xs lg:text-sm capitalize px-2.5 py-0.5 bg-white/80 text-gray-700 border-2 border-gray-300"
+                          className="text-xs capitalize px-2 py-0.5 bg-white/80 text-gray-700 border-2 border-gray-300"
                         >
                           {formatEventType(record.events.event_type)}
                         </Badge>
                         
                         {record.is_present ? (
-                          <div className="flex items-center gap-1.5 text-xs lg:text-sm text-green-600 font-medium bg-green-50 px-2.5 py-1 rounded-full border-2 border-green-200">
-                            <CheckCircle className="h-3 w-3 lg:h-3.5 lg:w-3.5" />
+                          <div className="flex items-center gap-1 sm:gap-1.5 text-xs text-green-600 font-medium bg-green-50 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border-2 border-green-200">
+                            <CheckCircle className="h-3 w-3" />
                             <span>Present</span>
                           </div>
                         ) : (
-                          <div className="flex items-center gap-1.5 text-xs lg:text-sm text-gray-500 font-medium bg-gray-50 px-2.5 py-1 rounded-full border-2 border-gray-300">
-                            <XCircle className="h-3 w-3 lg:h-3.5 lg:w-3.5" />
+                          <div className="flex items-center gap-1 sm:gap-1.5 text-xs text-gray-500 font-medium bg-gray-50 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border-2 border-gray-300">
+                            <XCircle className="h-3 w-3" />
                             <span>Not marked</span>
                           </div>
                         )}
                       </div>
                     </div>
                     
-                    {/* Event information section with user info */}
-                    <div className="p-4 sm:p-5 lg:p-6 pt-3 lg:pt-4 border-t-2 border-gray-300">
+                    {/* Event information section with user info - optimized padding for mobile */}
+                    <div className="p-3 sm:p-4 md:p-5 lg:p-6 pt-2 sm:pt-3 border-t-2 border-gray-300">
                       {/* Added user info section */}
-                      <div className="mb-3 pb-3 border-b border-gray-200">
-                        <div className="flex items-center gap-2">
-                          <User className="h-4 w-4 text-gray-400 shrink-0" />
-                          <span className="text-sm font-medium text-gray-600">{userName || 'User'}</span>
+                      <div className="mb-2 sm:mb-3 pb-2 sm:pb-3 border-b border-gray-200">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-400 shrink-0" />
+                          <span className="text-xs sm:text-sm font-medium text-gray-600 truncate">{userName || 'User'}</span>
                         </div>
                         {userPhone && (
-                          <div className="flex items-center gap-2 mt-1">
-                            <Phone className="h-4 w-4 text-gray-400 shrink-0" />
-                            <span className="text-sm text-gray-600">{userPhone}</span>
+                          <div className="flex items-center gap-1.5 sm:gap-2 mt-1">
+                            <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-400 shrink-0" />
+                            <span className="text-xs sm:text-sm text-gray-600">{userPhone}</span>
                           </div>
                         )}
                       </div>
                       
-                      <h4 className="font-semibold text-gray-900 text-lg lg:text-xl leading-tight mb-3">{record.events.name}</h4>
+                      <h4 className="font-semibold text-gray-900 text-base sm:text-lg md:text-xl leading-tight mb-2 sm:mb-3">{record.events.name}</h4>
                       
                       {/* Attendance information */}
                       {record.is_present && (
-                        <div className="bg-[#EBE9E0]/70 rounded-md px-4 py-3 mb-4 border-2 border-gray-300">
-                          <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 lg:h-5 lg:w-5 shrink-0 text-primary/70" />
-                              <span className="text-sm lg:text-base font-medium text-gray-700">
+                        <div className="bg-[#EBE9E0]/70 rounded-md px-3 sm:px-4 py-2 sm:py-3 mb-3 sm:mb-4 border-2 border-gray-300">
+                          <div className="flex flex-col gap-1.5 sm:gap-2">
+                            <div className="flex items-center gap-1.5 sm:gap-2">
+                              <Clock className="h-4 w-4 shrink-0 text-primary/70" />
+                              <span className="text-xs sm:text-sm md:text-base font-medium text-gray-700">
                                 Marked: {formatDate(record.marked_at, true)}
                               </span>
                             </div>
@@ -558,46 +558,44 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
                         </div>
                       )}
                       
-                      {/* Action buttons */}
-                      <div className="flex flex-wrap gap-2.5 mt-3 lg:mt-4">
+                      {/* Action buttons - more touch-friendly */}
+                      <div className="flex flex-wrap gap-2 sm:gap-2.5 mt-2 sm:mt-3">
                         {record.events.whatsapp_url && (
                           <div className="flex flex-col">
                             <a 
                               href={record.events.whatsapp_url} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366]/15 transition-colors border-2 border-[#25D366]/30 text-sm lg:text-base font-medium"
+                              className="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366]/15 transition-colors border-2 border-[#25D366]/30 text-xs sm:text-sm font-medium"
                             >
                               <svg 
                                 xmlns="http://www.w3.org/2000/svg" 
                                 viewBox="0 0 448 512"
-                                className="h-4 w-4 lg:h-5 lg:w-5 fill-[#25D366]"
+                                className="h-3.5 w-3.5 sm:h-4 sm:w-4 fill-[#25D366]"
                               >
                                 <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
                               </svg>
-                              <span>WhatsApp Group</span>
+                              <span>WhatsApp</span>
                             </a>
                             
                             {/* Marked by information */}
                             {record.is_present && record.staff && (
-                              <div className="mt-1.5 px-2 text-xs lg:text-sm text-gray-500 flex items-center">
-                                <span className="opacity-60">Attendance verified by: </span>
-                                <span className="ml-1 font-medium text-gray-600">{record.staff.full_name}</span>
+                              <div className="mt-1 px-1.5 sm:px-2 text-xs text-gray-500 flex items-center">
+                                <span className="opacity-60">Verified by: </span>
+                                <span className="ml-1 font-medium text-gray-600 truncate">{record.staff.full_name}</span>
                               </div>
                             )}
                           </div>
                         )}
-                        
-                        {/* Individual download button removed */}
                         
                         {!record.is_present && (
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={onShowQr}
-                            className="h-9 lg:h-10 text-sm lg:text-base px-3.5 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-600 border-2 border-amber-200 font-medium"
+                            className="h-8 sm:h-9 text-xs sm:text-sm px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-600 border-2 border-amber-200 font-medium"
                           >
-                            <QrCode className="h-4 w-4 lg:h-5 lg:w-5 mr-2" />
+                            <QrCode className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
                             <span>Show QR</span>
                           </Button>
                         )}
@@ -605,7 +603,7 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
                       
                       {/* Display marked by information when there's no WhatsApp link */}
                       {record.is_present && record.staff && !record.events.whatsapp_url && (
-                        <div className="mt-3 text-xs lg:text-sm text-gray-500">
+                        <div className="mt-2 sm:mt-3 text-[10px] sm:text-xs text-gray-500">
                           <span className="opacity-60">Verified by: </span>
                           <span className="font-medium text-gray-600">{record.staff.full_name}</span>
                         </div>
@@ -614,12 +612,13 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
                   </div>
                 ))}
 
+                {/* View all link - more touch-friendly */}
                 {attendanceData.length > 3 && (
                   <Button 
                     variant="link" 
-                    className="text-gray-600 hover:text-gray-800 p-0 h-auto flex items-center font-medium col-span-1 xl:col-span-2"
+                    className="text-gray-600 hover:text-gray-800 p-0 h-auto flex items-center font-medium col-span-1 xl:col-span-2 text-sm sm:text-base"
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevent closing the expanded section
+                      e.stopPropagation();
                       router.push('/dashboard/attendance');
                     }}
                   >
@@ -632,13 +631,14 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
                   </Button>
                 )}
 
+                {/* No attendance message - improved for mobile */}
                 {!attendanceData.some(record => record.is_present) && (
-                  <div className="mt-3 bg-[#EBE9E0]/60 border-2 border-gray-300 rounded-lg p-4 text-sm lg:text-base text-gray-700 col-span-1 xl:col-span-2">
-                    <div className="flex items-start gap-3">
-                      <MapPin className="h-5 w-5 text-primary/70 shrink-0 mt-0.5" />
+                  <div className="mt-2 sm:mt-3 bg-[#EBE9E0]/60 border-2 border-gray-300 rounded-lg p-3 sm:p-4 text-xs sm:text-sm md:text-base text-gray-700 col-span-1 xl:col-span-2">
+                    <div className="flex items-start gap-2 sm:gap-3">
+                      <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-primary/70 shrink-0 mt-0.5" />
                       <div>
                         <p className="font-medium">No attendance marked yet</p>
-                        <p className="text-sm mt-1">
+                        <p className="text-xs sm:text-sm mt-0.5 sm:mt-1">
                           Please visit the registration desk on the ground to mark your attendance. You&apos;ll need to show your Attendance QR code.
                         </p>
                       </div>
@@ -648,14 +648,14 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
               </div>
             </>
           ) : (
-            <div className="py-6 px-1 space-y-4 max-w-3xl mx-auto">
-              <div className="flex items-start gap-4">
-                <div className="bg-[#EBE9E0] p-2.5 rounded-full">
-                  <MapPin className="h-6 w-6 text-primary/70" />
+            <div className="py-4 sm:py-6 px-1 space-y-3 sm:space-y-4 max-w-3xl mx-auto">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="bg-[#EBE9E0] p-2 sm:p-2.5 rounded-full">
+                  <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-primary/70" />
                 </div>
                 <div>
-                  <p className="text-lg font-medium text-gray-700">No attendance records found</p>
-                  <p className="text-sm text-gray-500 mt-1.5">
+                  <p className="text-base sm:text-lg font-medium text-gray-700">No attendance records found</p>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-1.5">
                     Visit the registration desk on the ground to mark your attendance with your Attendance QR code
                   </p>
                 </div>
@@ -664,13 +664,13 @@ export function AttendanceSection({ profileId, userName, userPhone, onShowQr }: 
               <Button
                 variant="outline" 
                 size="sm"
-                className="mt-2 bg-[#EBE9E0]/70 hover:bg-[#EBE9E0] border-2 border-gray-300 text-gray-700 h-10 px-4"
+                className="mt-1 sm:mt-2 bg-[#EBE9E0]/70 hover:bg-[#EBE9E0] border-2 border-gray-300 text-gray-700 h-9 px-3 sm:px-4 text-sm"
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent collapsing the section
+                  e.stopPropagation();
                   onShowQr();
                 }}
               >
-                <QrCode className="h-4 w-4 mr-2" /> 
+                <QrCode className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" /> 
                 View Attendance QR
               </Button>
             </div>

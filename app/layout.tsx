@@ -89,7 +89,7 @@ export default function RootLayout({
         <Providers>
           <main>
             <div style={{ backgroundColor: '#e6ffe6', color: '#2e7d32', padding: '12px', textAlign: 'center', fontWeight: 'bold' }}>
-              ‼️ Registrations Closing Soon! <Link href="/dashboard/events/registrations" style={{ textDecoration: 'underline', color: '#1a5f1a', marginLeft: '4px' }}>Register Now</Link>
+              Certificates Coming Soon!
             </div>
             <Navigation />
             <Script src='https://www.cssscript.com/demo/cat-follow-cursor-oneko/oneko.js' />
