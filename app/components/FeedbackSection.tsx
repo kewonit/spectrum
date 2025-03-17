@@ -6,12 +6,6 @@ import { MessageSquare, Plus, RefreshCw, Star, ChevronUp, ChevronDown } from "lu
 import { FeedbackCard } from "./FeedbackCard";
 import { EmptyFeedbackState } from "./EmptyFeedbackState";
 import { toast } from "sonner";
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, AlertCircle } from "lucide-react";
 
 // Define a simple utility function for class name joining
@@ -172,25 +166,25 @@ export function FeedbackSection() {
         </div>
       </div>
       
-      {/* Inline Feedback Form */}
+      {/* Inline Feedback Form - Using standard HTML elements instead of shadcn components */}
       {showFeedbackForm && (
         <div className="border-b border-gray-100">
-          <Card className="m-4 sm:m-6 bg-[#FAF9F6] shadow-none border border-gray-200">
+          <div className="m-4 sm:m-6 bg-[#FAF9F6] border border-gray-200 rounded-lg">
             <div className="pb-2 pt-4 px-6">
               <h3 className="text-lg font-medium text-gray-900">Share Your Website Feedback</h3>
             </div>
             <div className="px-6 pb-6">
               <form onSubmit={handleSubmitFeedback} className="space-y-4">
                 {formError && (
-                  <Alert variant="destructive" className="mb-4">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertDescription>{formError}</AlertDescription>
-                  </Alert>
+                  <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md flex gap-2 items-start mb-4">
+                    <AlertTriangle className="h-4 w-4 mt-0.5" />
+                    <div className="text-sm">{formError}</div>
+                  </div>
                 )}
                 
                 {/* Rating */} 
                 <div className="space-y-2">
-                  <Label htmlFor="rating" className="text-sm font-medium">Rate Your Experience</Label>
+                  <label htmlFor="rating" className="text-sm font-medium block">Rate Your Experience</label>
                   <div className="flex items-center justify-between p-4 bg-[#FFF4E5]/60 rounded-xl border border-amber-100">
                     <div className="flex gap-1 sm:gap-2" id="rating">
                       {[1, 2, 3, 4, 5].map((value) => (
@@ -218,64 +212,65 @@ export function FeedbackSection() {
                   </div>
                 </div>
 
-                {/* Feedback text */}
+                {/* Feedback text - Using native textarea */}
                 <div className="space-y-2">
-                  <Label htmlFor="feedbackText" className="text-sm font-medium">Your Comments (optional)</Label>
-                  <Textarea
+                  <label htmlFor="feedbackText" className="text-sm font-medium block">Your Comments (optional)</label>
+                  <textarea
                     id="feedbackText"
                     placeholder="Share your thoughts about the website, any issues you've encountered, or suggestions for improvement..."
                     value={feedbackText}
                     onChange={(e) => setFeedbackText(e.target.value)}
-                    className="h-28 resize-none bg-white/80 border-gray-200 focus-visible:ring-blue-300 focus-visible:border-blue-300"
+                    className="w-full h-28 px-3 py-2 resize-none bg-white/80 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300"
                   />
                   <p className="text-xs text-gray-500">
                     Your feedback helps us improve the Spectrum website and platform experience.
                   </p>
                 </div>
 
-                {/* Anonymous option */}
+                {/* Anonymous option - Using native checkbox */}
                 <div className="flex items-center space-x-3 pt-1">
                   <div className="flex items-center space-x-2">
-                    <Checkbox
+                    <input
+                      type="checkbox"
                       id="anonymous"
                       checked={anonymous}
-                      onCheckedChange={(checked) => setAnonymous(checked === true)}
+                      onChange={(e) => setAnonymous(e.target.checked)}
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
-                    <Label 
+                    <label 
                       htmlFor="anonymous" 
                       className="text-sm font-normal cursor-pointer"
                     >
                       Submit anonymously (hide your name)
-                    </Label>
+                    </label>
                   </div>
                 </div>
 
                 <div className="flex justify-end space-x-2 pt-2">
-                  <Button
+                  <button
                     type="button"
-                    variant="outline"
                     onClick={toggleFeedbackForm}
                     disabled={submitting}
-                    className="border-gray-200 hover:bg-gray-100"
+                    className="px-4 py-2 text-sm font-medium rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 transition-colors"
                   >
                     Cancel
-                  </Button>
-                  <Button 
+                  </button>
+                  <button 
                     type="submit" 
                     disabled={submitting || rating < 1}
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
+                    className="px-4 py-2 text-sm font-medium rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors disabled:opacity-70"
                   >
                     {submitting ? (
                       <>
-                        <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        <div className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                         Submitting...
                       </>
                     ) : 'Submit Feedback'}
-                  </Button>
+                  </button>
                 </div>
               </form>
             </div>
-          </Card>
+          </div>
         </div>
       )}
       
