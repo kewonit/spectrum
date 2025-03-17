@@ -14,8 +14,6 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Card } from "@/components/ui/card";
 import { AttendanceCardDialog } from '@/components/AttendanceCardDialog';
 import { format } from 'date-fns';
-import { EventAttendanceWrapper } from "@/app/components/EventAttendanceWrapper";
-import { FeedbackSectionWrapper } from "../components/feedback/FeedbackSectionWrapper";
 
 // Add COLLEGE_OPTIONS constant
 const COLLEGE_OPTIONS = {
@@ -273,27 +271,6 @@ export default function DashboardPage() {
             ]}
             className="mb-6"
           />
-
-          {/* Feedback Section - Add this new component */}
-          <div className="mb-8">
-            {isProfileComplete(profile) && (
-              <FeedbackSectionWrapper 
-                profileId={profile.id}
-                userName={profile.full_name}
-              />
-            )}
-          </div>
-
-          {/* Attendance display section - using suspense */}
-          <div className="mb-8">
-            {/* Replace Suspense and AttendanceSection with EventAttendanceWrapper */}
-            <EventAttendanceWrapper
-              profileId={profile?.id}
-              userName={profile?.full_name}
-              userPhone={profile?.phone} 
-              onShowQr={() => setShowAttendanceCard(true)} 
-            />
-          </div>
 
           {/* Enhanced User Profile Header with improved styling */}
           <div className="relative mb-8 sm:mb-10 mt-2">
