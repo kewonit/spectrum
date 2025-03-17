@@ -14,6 +14,11 @@ import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, AlertCircle } from "lucide-react";
 
+// Define a simple utility function for class name joining
+const cn = (...classes: (string | boolean | undefined)[]) => {
+  return classes.filter(Boolean).join(' ');
+};
+
 interface FeedbackItem {
   id: string;
   rating: number;
@@ -149,7 +154,7 @@ export function FeedbackSection() {
               onClick={toggleFeedbackForm}
               size="sm"
               variant={showFeedbackForm ? "outline" : "default"}
-              className={`h-9 ${showFeedbackForm ? 'border-gray-200 hover:bg-gray-50' : 'bg-blue-500 hover:bg-blue-600'}`}
+              className={showFeedbackForm ? 'border-gray-200 hover:bg-gray-50' : 'bg-blue-500 hover:bg-blue-600'}
             >
               {showFeedbackForm ? (
                 <>
@@ -171,10 +176,10 @@ export function FeedbackSection() {
       {showFeedbackForm && (
         <div className="border-b border-gray-100">
           <Card className="m-4 sm:m-6 bg-[#FAF9F6] shadow-none border border-gray-200">
-            <CardHeader className="pb-2 pt-4">
+            <div className="pb-2 pt-4 px-6">
               <h3 className="text-lg font-medium text-gray-900">Share Your Website Feedback</h3>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="px-6 pb-6">
               <form onSubmit={handleSubmitFeedback} className="space-y-4">
                 {formError && (
                   <Alert variant="destructive" className="mb-4">
@@ -221,7 +226,7 @@ export function FeedbackSection() {
                     placeholder="Share your thoughts about the website, any issues you've encountered, or suggestions for improvement..."
                     value={feedbackText}
                     onChange={(e) => setFeedbackText(e.target.value)}
-                    className="h-28 resize-none bg-white/80 border-gray-200 focus:border-blue-300 focus:ring-blue-200"
+                    className="h-28 resize-none bg-white/80 border-gray-200 focus-visible:ring-blue-300 focus-visible:border-blue-300"
                   />
                   <p className="text-xs text-gray-500">
                     Your feedback helps us improve the Spectrum website and platform experience.
@@ -235,7 +240,6 @@ export function FeedbackSection() {
                       id="anonymous"
                       checked={anonymous}
                       onCheckedChange={(checked) => setAnonymous(checked === true)}
-                      className="border-gray-300 text-blue-600 focus:ring-blue-200"
                     />
                     <Label 
                       htmlFor="anonymous" 
@@ -270,7 +274,7 @@ export function FeedbackSection() {
                   </Button>
                 </div>
               </form>
-            </CardContent>
+            </div>
           </Card>
         </div>
       )}
