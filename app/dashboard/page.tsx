@@ -358,20 +358,7 @@ export default function DashboardPage() {
 
                       {/* Actions */}
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 pt-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => router.push('/dashboard/profile/edit')}
-                          className={`h-9 transition-colors duration-200 group w-full sm:w-auto
-                            ${!isProfileComplete(profile) 
-                              ? 'bg-amber-50 hover:bg-amber-100 text-amber-600 hover:text-amber-700 border-amber-200 hover:border-amber-300'
-                              : 'bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300'
-                            }`}
-                        >
-                          <Pencil className="h-4 w-4 mr-2 shrink-0" />
-                          <span>{!isProfileComplete(profile) ? 'Complete Profile' : 'Edit Profile'}</span>
-                          <ChevronRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" />
-                        </Button>
+                        {/* Edit Profile button removed */}
 
                         {/* Add Download Attendance Card button when profile is complete */}
                         {isProfileComplete(profile) && (
