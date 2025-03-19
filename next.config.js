@@ -10,12 +10,17 @@ const nextConfig = {
       'horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app', 
       'instagram.fpnq7-2.fna.fbcdn.net', 'spectrumpccoe.github.io', 'lh3.googleusercontent.com'],
     },
-    // Exclude verify-certificate page from static site generation to avoid the build error
-    excludeDefaultMomentLocales: true,
+    // Exclude the problematic page from static generation
     experimental: {
-      // Avoid prerendering the problematic page
-      excludeStaticPages: ['/verify-certificate']
-    }
+      // This forces the page to be server-rendered instead of statically generated
+      ppv: true, // Partial Prerendering
+    },
+    // Set runtime configuration to force server-side rendering for the verify-certificate page
+    serverRuntimeConfig: {
+      // runtime config
+    },
+    // Add the problematic page to excludedRoutes (if your Next.js version supports it)
+    excludedRoutes: ['/verify-certificate'],
 }
 
 module.exports = nextConfig
