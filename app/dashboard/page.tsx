@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 import { Breadcrumbs } from "@/app/components/breadcrumbs";
 import { toast } from "sonner";
-import { Pencil, Mail, Phone, GraduationCap, LogOut, ChevronRight, QrCode, Download, Calendar, Clock, CheckCircle, XCircle, MapPin, MessageSquare } from "lucide-react";
+import { Pencil, Mail, Phone, GraduationCap, LogOut, ChevronRight, QrCode, Download, Calendar, Clock, CheckCircle, XCircle, MapPin, MessageSquare, FileText } from "lucide-react";
 import { CompleteProfilePopup } from '@/components/CompleteProfilePopup';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { AlertCircle } from "lucide-react";
@@ -559,7 +559,21 @@ export default function DashboardPage() {
                   Manage Invites
                 </Button>
               </div>
-              {/* Website Feedback card removed */}
+              {/* New Certificates card */}
+              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                <h2 className="font-semibold text-lg mb-2 flex items-center">
+                  <FileText className="h-5 w-5 mr-2 text-blue-500" />
+                  Certificates
+                </h2>
+                <p className="text-sm text-gray-600 mb-4">View and download your achievement certificates.</p>
+                <Button
+                  variant="outline"
+                  className="w-full bg-cyan-50 hover:bg-cyan-100 border-cyan-200"
+                  onClick={() => router.push('/dashboard/certificates')}
+                >
+                  View Certificates
+                </Button>
+              </div>
             </div>
 
             {/* Remove the inline Feedback Section since there's now a dedicated page */}
