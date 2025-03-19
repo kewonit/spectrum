@@ -490,40 +490,6 @@ export default function DashboardPage() {
 
           {/* Rest of the content */}
           <div className="space-y-6">
-            {/* Feedback Prompt - Updated without dismiss button and improved mobile styling */}
-            <div className="relative rounded-2xl overflow-hidden">
-              <div className="absolute inset-0 -m-0.5">
-                <div className="w-full h-full border-2 border-dashed border-blue-300/30 rounded-[14px]" />
-              </div>
-              <div className="relative bg-white/90 backdrop-blur shadow-sm rounded-xl overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400"></div>
-                <div className="px-4 py-5 sm:p-6">
-                  <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border border-blue-100 shadow-sm">
-                      <MessageSquare className="h-6 w-6 text-blue-500" />
-                    </div>
-                    
-                    <div className="flex-1 text-center sm:text-left">
-                      <h2 className="text-lg font-semibold text-gray-800 mb-1">Share Your Website Experience!</h2>
-                      <p className="text-gray-600 mb-4 sm:mb-0">
-                        Help us improve the Spectrum platform by sharing your thoughts and suggestions about the website.
-                      </p>
-                    </div>
-                    
-                    <div className="w-full sm:w-auto">
-                      <Button
-                        onClick={() => router.push('/dashboard/feedback')}
-                        className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0"
-                      >
-                        <MessageSquare className="h-4 w-4 mr-2" />
-                        Give Feedback
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          
             {/* Quick Actions Grid - Remove Website Feedback card */}
             <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
@@ -559,24 +525,41 @@ export default function DashboardPage() {
                   Manage Invites
                 </Button>
               </div>
-              {/* New Certificates card */}
-              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <h2 className="font-semibold text-lg mb-2 flex items-center">
-                  <FileText className="h-5 w-5 mr-2 text-blue-500" />
+              {/* Feedback card - Improved styling */}
+              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-blue-50">
+                <h2 className="font-semibold text-lg mb-2 flex items-center text-blue-700">
+                  <MessageSquare className="h-5 w-5 mr-2 text-blue-500" />
+                  Share Your Website Experience!
+                </h2>
+                <p className="text-sm text-gray-600 mb-4">Help us improve the Spectrum platform by sharing your thoughts and suggestions about the website.</p>
+                <Button
+                  variant="outline"
+                  className="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 transition-all"
+                  onClick={() => router.push('/dashboard/feedback')}
+                >
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Give Feedback
+                </Button>
+              </div>
+              {/* Certificates card - Improved styling */}
+              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-cyan-50">
+                <h2 className="font-semibold text-lg mb-2 flex items-center text-cyan-700">
+                  <FileText className="h-5 w-5 mr-2 text-cyan-500" />
                   Certificates
                 </h2>
                 <p className="text-sm text-gray-600 mb-4">View and download your achievement certificates.</p>
                 <Button
                   variant="outline"
-                  className="w-full bg-cyan-50 hover:bg-cyan-100 border-cyan-200"
+                  className="w-full bg-cyan-50 hover:bg-cyan-100 text-cyan-600 hover:text-cyan-700 border-cyan-200 hover:border-cyan-300 transition-all"
                   onClick={() => router.push('/dashboard/certificates')}
                 >
+                  <FileText className="h-4 w-4 mr-2" />
                   View Certificates
                 </Button>
               </div>
             </div>
 
-            {/* Remove the inline Feedback Section since there's now a dedicated page */}
+            {/* Remove the standalone Feedback Section since it's now in the cards grid */}
             {/* <div className="my-6">
               <FeedbackSection />
             </div> */}
