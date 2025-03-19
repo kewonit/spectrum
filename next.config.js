@@ -10,6 +10,12 @@ const nextConfig = {
       'horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app', 
       'instagram.fpnq7-2.fna.fbcdn.net', 'spectrumpccoe.github.io', 'lh3.googleusercontent.com'],
     },
+    // Exclude verify-certificate page from static site generation to avoid the build error
+    excludeDefaultMomentLocales: true,
+    experimental: {
+      // Avoid prerendering the problematic page
+      excludeStaticPages: ['/verify-certificate']
+    }
 }
 
 module.exports = nextConfig
