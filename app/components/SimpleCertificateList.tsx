@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, MouseEvent } from "react";
+import { useEffect, useState, MouseEvent, useRef } from "react";
 import { FileX, Search, LogIn, Download, Calendar, Award, Check, Copy, User, FileText } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -36,6 +36,8 @@ function SimpleCertificateCard({ certificate, index = 0 }: SimpleCertificateCard
   const [isCopied, setIsCopied] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
+  // Add a ref to the download button
+  const downloadButtonRef = useRef<HTMLButtonElement>(null);
   
   // Certificate title
   const certificateTitle = `Certificate #${index + 1}`;
@@ -46,18 +48,21 @@ function SimpleCertificateCard({ certificate, index = 0 }: SimpleCertificateCard
 
   const previewImageUrl = "https://res.cloudinary.com/dfyrk32ua/image/upload/v1742325157/Spectrum/preview-certificate.webp";
 
-  const triggerConfetti = (e: MouseEvent<HTMLButtonElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
-    
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { x, y },
-      colors: ['#4285F4', '#0F9D58', '#F4B400', '#DB4437'],
-      disableForReducedMotion: true
-    });
+  // Update triggerConfetti to use the ref instead of the event
+  const triggerConfetti = () => {
+    if (downloadButtonRef.current) {
+      const rect = downloadButtonRef.current.getBoundingClientRect();
+      const x = (rect.left + rect.width / 2) / window.innerWidth;
+      const y = (rect.top + rect.height / 2) / window.innerHeight;
+      
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { x, y },
+        colors: ['#4285F4', '#0F9D58', '#F4B400', '#DB4437'],
+        disableForReducedMotion: true
+      });
+    }
   };
   
   const handleDownload = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -109,7 +114,8 @@ function SimpleCertificateCard({ certificate, index = 0 }: SimpleCertificateCard
         document.body.removeChild(a);
         
         setDownloadProgress(100);
-        triggerConfetti(e);
+        // Call triggerConfetti without passing the event
+        triggerConfetti();
       } catch (error) {
         console.error(error);
       } finally {
@@ -199,6 +205,7 @@ function SimpleCertificateCard({ certificate, index = 0 }: SimpleCertificateCard
       <div className="px-4 pt-0 pb-4 flex gap-2">
         <div className="relative w-full max-w-[160px]">
           <button 
+            ref={downloadButtonRef} // Add the ref here
             onClick={handleDownload} 
             disabled={isDownloading}
             className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none px-3 py-2 h-9 w-full
