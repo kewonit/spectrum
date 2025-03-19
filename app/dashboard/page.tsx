@@ -525,37 +525,45 @@ export default function DashboardPage() {
                   Manage Invites
                 </Button>
               </div>
-              {/* Feedback card - Improved styling */}
-              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-blue-50">
-                <h2 className="font-semibold text-lg mb-2 flex items-center text-blue-700">
-                  <MessageSquare className="h-5 w-5 mr-2 text-blue-500" />
-                  Share Your Website Experience!
-                </h2>
-                <p className="text-sm text-gray-600 mb-4">Help us improve the Spectrum platform by sharing your thoughts and suggestions about the website.</p>
-                <Button
-                  variant="outline"
-                  className="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 transition-all"
-                  onClick={() => router.push('/dashboard/feedback')}
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Give Feedback
-                </Button>
+              {/* Feedback card - Fixed layout for button alignment */}
+              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-blue-50 flex flex-col h-full">
+                <div>
+                  <h2 className="font-semibold text-lg mb-2 flex items-center text-blue-700">
+                    <MessageSquare className="h-5 w-5 mr-2 text-blue-500" />
+                    Share Your Website Experience!
+                  </h2>
+                  <p className="text-sm text-gray-600">Help us improve the Spectrum platform by sharing your thoughts and suggestions about the website.</p>
+                </div>
+                <div className="mt-auto pt-4">
+                  <Button
+                    variant="outline"
+                    className="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 transition-all h-10"
+                    onClick={() => router.push('/dashboard/feedback')}
+                  >
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    Give Feedback
+                  </Button>
+                </div>
               </div>
-              {/* Certificates card - Improved styling */}
-              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-cyan-50">
-                <h2 className="font-semibold text-lg mb-2 flex items-center text-cyan-700">
-                  <FileText className="h-5 w-5 mr-2 text-cyan-500" />
-                  Certificates
-                </h2>
-                <p className="text-sm text-gray-600 mb-4">View and download your achievement certificates.</p>
-                <Button
-                  variant="outline"
-                  className="w-full bg-cyan-50 hover:bg-cyan-100 text-cyan-600 hover:text-cyan-700 border-cyan-200 hover:border-cyan-300 transition-all"
-                  onClick={() => router.push('/dashboard/certificates')}
-                >
-                  <FileText className="h-4 w-4 mr-2" />
-                  View Certificates
-                </Button>
+              {/* Certificates card - Fixed layout for button alignment */}
+              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-cyan-50 flex flex-col h-full">
+                <div>
+                  <h2 className="font-semibold text-lg mb-2 flex items-center text-cyan-700">
+                    <FileText className="h-5 w-5 mr-2 text-cyan-500" />
+                    Certificates
+                  </h2>
+                  <p className="text-sm text-gray-600">View and download your achievement certificates.</p>
+                </div>
+                <div className="mt-auto pt-4">
+                  <Button
+                    variant="outline"
+                    className="w-full bg-cyan-50 hover:bg-cyan-100 text-cyan-600 hover:text-cyan-700 border-cyan-200 hover:border-cyan-300 transition-all h-10"
+                    onClick={() => router.push('/dashboard/certificates')}
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    View Certificates
+                  </Button>
+                </div>
               </div>
             </div>
 
