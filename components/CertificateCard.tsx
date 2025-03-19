@@ -41,13 +41,47 @@ export function CertificateCard({ certificate, index = 0 }: CertificateCardProps
       const x = (rect.left + rect.width / 2) / window.innerWidth;
       const y = (rect.top + rect.height / 2) / window.innerHeight;
       
+      // Create a more spectacular confetti effect
+      // First burst with more particles
       confetti({
-        particleCount: 100,
-        spread: 70,
+        particleCount: 150,
+        spread: 90,
         origin: { x, y },
-        colors: ['#4285F4', '#0F9D58', '#F4B400', '#DB4437'],
+        colors: ['#4285F4', '#0F9D58', '#F4B400', '#DB4437', '#FF8CC6', '#5E35B1', '#FF5722', '#00BCD4'],
+        shapes: ['circle', 'square'],
+        ticks: 300,  // Make it last longer
         disableForReducedMotion: true
       });
+      
+      // Add a second burst with stars and slower velocity for lingering effect
+      setTimeout(() => {
+        confetti({
+          particleCount: 80,
+          angle: 120,
+          spread: 120,
+          origin: { x, y },
+          colors: ['#FFD700', '#FF5252', '#52FF88', '#3399FF', '#FF66FF'],
+          gravity: 0.5,  // Lower gravity = confetti stays in air longer
+          shapes: ['star'],
+          ticks: 400,
+          scalar: 1.2,  // Larger particles
+          disableForReducedMotion: true
+        });
+      }, 150);
+      
+      // Add a third small burst for extended celebration
+      setTimeout(() => {
+        confetti({
+          particleCount: 60,
+          angle: 60,
+          spread: 80,
+          origin: { x, y },
+          startVelocity: 25,
+          colors: ['#FFD700', '#00BCD4', '#76FF03', '#FF4081'],
+          ticks: 350,
+          disableForReducedMotion: true
+        });
+      }, 300);
     }
   };
   
