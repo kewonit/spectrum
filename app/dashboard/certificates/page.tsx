@@ -11,26 +11,122 @@ import Link from "next/link";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CertificatesPage() {
   const [activeTab, setActiveTab] = useState("all");
   const [userLoggedIn, setUserLoggedIn] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     // Check if user is logged in
     const checkAuthStatus = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch('/api/user');
         setUserLoggedIn(response.ok);
       } catch (error) {
         console.error("Error checking auth status:", error);
         setUserLoggedIn(false);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     checkAuthStatus();
   }, []);
+
+  // Loading skeleton UI
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#EBE9E0]">
+        <div className="w-full max-w-screen-xl mx-auto p-4 sm:px-6 lg:p-8">
+          {/* Breadcrumb skeleton */}
+          <div className="mb-6 flex gap-2">
+            <Skeleton className="h-6 w-12" />
+            <Skeleton className="h-6 w-4" />
+            <Skeleton className="h-6 w-24" />
+            <Skeleton className="h-6 w-4" />
+            <Skeleton className="h-6 w-32" />
+          </div>
+
+          {/* Header skeleton */}
+          <div className="relative mb-8 sm:mb-10 mt-6 sm:mt-8">
+            <div className="absolute inset-0 -m-2 sm:-m-4">
+              <div className="w-full h-full border-4 border-dashed border-gray-300/70 rounded-3xl" />
+            </div>
+            <div className="relative">
+              <div className="bg-white/50 backdrop-blur-sm rounded-2xl overflow-hidden">
+                <div className="p-5 sm:p-7 py-7 sm:py-9">
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <div className="space-y-4 flex-1">
+                      <Skeleton className="h-9 w-64" />
+                      <Skeleton className="h-5 w-full max-w-md" />
+                    </div>
+                    <div className="flex items-center gap-2 self-end md:self-auto">
+                      <Skeleton className="h-9 w-32" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Alert skeleton */}
+          <div className="mb-6">
+            <Skeleton className="h-20 w-full" />
+          </div>
+
+          {/* Content skeleton */}
+          <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-6">
+            <div className="mb-6">
+              <Skeleton className="h-10 w-56" />
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="border rounded-lg overflow-hidden">
+                  <Skeleton className="h-48 w-full" />
+                  <div className="p-4 space-y-3">
+                    <Skeleton className="h-5 w-24" />
+                    <Skeleton className="h-4 w-full" />
+                    <div className="flex gap-2 pt-2">
+                      <Skeleton className="h-9 w-24" />
+                      <Skeleton className="h-9 w-20" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Verification section skeleton */}
+          <div className="mt-10">
+            <div className="relative">
+              <div className="absolute inset-0 -m-2 sm:-m-4">
+                <div className="w-full h-full border-4 border-dashed border-gray-300/70 rounded-3xl" />
+              </div>
+              <div className="relative">
+                <div className="bg-white/50 backdrop-blur-sm rounded-2xl overflow-hidden">
+                  <div className="p-5 sm:p-7">
+                    <div className="flex flex-col sm:flex-row items-center gap-5">
+                      <Skeleton className="h-12 w-12 rounded-full" />
+                      <div className="flex-1 space-y-2">
+                        <Skeleton className="h-6 w-48" />
+                        <Skeleton className="h-4 w-full max-w-lg" />
+                      </div>
+                      <Skeleton className="h-10 w-36" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // If we don't know the auth status yet, show nothing to prevent flashing
   if (userLoggedIn === null) {

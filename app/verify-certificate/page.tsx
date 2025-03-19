@@ -11,6 +11,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+// Define the cn function inline to avoid build errors
+function cn(...inputs: any[]) {
+  return twMerge(clsx(inputs));
+}
 
 interface VerificationResult {
   verified: boolean;
