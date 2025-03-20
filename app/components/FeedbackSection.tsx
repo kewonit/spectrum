@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Plus, RefreshCw, Star, ChevronUp, ChevronDown } from "lucide-react";
+import { MessageSquare, Plus, RefreshCw, Star, ChevronUp, ChevronDown, LogIn } from "lucide-react";
 import { FeedbackCard } from "./FeedbackCard";
 import { EmptyFeedbackState } from "./EmptyFeedbackState";
 import { toast } from "sonner";
 import { AlertTriangle, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 // Define a simple utility function for class name joining
 const cn = (...classes: (string | boolean | undefined)[]) => {
@@ -31,6 +32,7 @@ export function FeedbackSection() {
   const [feedback, setFeedback] = useState<FeedbackItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   
   // Form states
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
@@ -44,11 +46,20 @@ export function FeedbackSection() {
   const fetchFeedback = async () => {
     try {
       const response = await fetch('/api/feedback');
+      
+      if (response.status === 401) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+      
       if (!response.ok) {
         throw new Error('Failed to fetch feedback');
       }
+      
       const data = await response.json();
       setFeedback(data.feedback || []);
+      setIsAuthenticated(true);
     } catch (error) {
       console.error('Error fetching feedback:', error);
       toast.error("Failed to load feedback");
@@ -118,6 +129,25 @@ export function FeedbackSection() {
     }
   };
 
+  // Login Message Component
+  const LoginMessage = () => (
+    <div className="p-8 text-center">
+      <div className="mx-auto w-16 h-16 bg-blue-50 flex items-center justify-center rounded-full mb-4">
+        <LogIn className="h-8 w-8 text-blue-500" />
+      </div>
+      <h3 className="text-xl font-semibold text-gray-800 mb-2">Authentication Required</h3>
+      <p className="text-gray-600 mb-6 max-w-md mx-auto">
+        Please sign in to view and submit feedback. Your insights help us improve the Spectrum platform.
+      </p>
+      <Link href="/login">
+        <Button className="bg-blue-500 hover:bg-blue-600">
+          <LogIn className="h-4 w-4 mr-2" />
+          Sign In
+        </Button>
+      </Link>
+    </div>
+  );
+
   return (
     <div className="bg-white/90 backdrop-blur rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-100">
       <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-[#F0F7FF]/40 to-[#F9F5FF]/40">
@@ -133,41 +163,54 @@ export function FeedbackSection() {
           </div>
           
           <div className="flex gap-2 self-end sm:self-auto">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-              className="h-9 px-3 border-gray-200 hover:bg-gray-50"
-            >
-              <RefreshCw className={`h-4 w-4 mr-1 ${isRefreshing ? 'animate-spin' : ''}`} />
-              <span className="hidden sm:inline">Refresh</span>
-            </Button>
+            {isAuthenticated && (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                  className="h-9 px-3 border-gray-200 hover:bg-gray-50"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-1 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  <span className="hidden sm:inline">Refresh</span>
+                </Button>
+                
+                <Button
+                  onClick={toggleFeedbackForm}
+                  size="sm"
+                  variant={showFeedbackForm ? "outline" : "default"}
+                  className={showFeedbackForm ? 'border-gray-200 hover:bg-gray-50' : 'bg-blue-500 hover:bg-blue-600'}
+                >
+                  {showFeedbackForm ? (
+                    <>
+                      <ChevronUp className="h-4 w-4 mr-1" />
+                      <span>Cancel</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-4 w-4 mr-1" />
+                      <span>Add Feedback</span>
+                    </>
+                  )}
+                </Button>
+              </>
+            )}
             
-            <Button
-              onClick={toggleFeedbackForm}
-              size="sm"
-              variant={showFeedbackForm ? "outline" : "default"}
-              className={showFeedbackForm ? 'border-gray-200 hover:bg-gray-50' : 'bg-blue-500 hover:bg-blue-600'}
-            >
-              {showFeedbackForm ? (
-                <>
-                  <ChevronUp className="h-4 w-4 mr-1" />
-                  <span>Cancel</span>
-                </>
-              ) : (
-                <>
-                  <Plus className="h-4 w-4 mr-1" />
-                  <span>Add Feedback</span>
-                </>
-              )}
-            </Button>
+            {!isAuthenticated && (
+              <Link href="/login">
+                <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
+                  <LogIn className="h-4 w-4 mr-1" />
+                  <span>Sign In</span>
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
       
-      {/* Inline Feedback Form - Using standard HTML elements instead of shadcn components */}
-      {showFeedbackForm && (
+      {/* Inline Feedback Form - Only show if authenticated */}
+      {isAuthenticated && showFeedbackForm && (
         <div className="border-b border-gray-100">
           <div className="m-4 sm:m-6 bg-[#FAF9F6] border border-gray-200 rounded-lg">
             <div className="pb-2 pt-4 px-6">
@@ -279,6 +322,8 @@ export function FeedbackSection() {
           <div className="py-10 flex justify-center">
             <div className="h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
           </div>
+        ) : !isAuthenticated ? (
+          <LoginMessage />
         ) : feedback.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {feedback.map((item) => (
