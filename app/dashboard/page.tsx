@@ -85,11 +85,11 @@ export default function DashboardPage() {
         setLoading(true);
         const response = await fetch('/api/user');
         const data = await response.json();
-        
+
         if (!response.ok) {
           throw new Error(data.error || 'Failed to fetch user data');
         }
-        
+
         setUserData(data);
         setError(null);
       } catch (err: any) {
@@ -112,11 +112,11 @@ export default function DashboardPage() {
         setAttendanceLoading(true);
         const response = await fetch('/api/user/attendance');
         const data = await response.json();
-        
+
         if (!response.ok) {
           throw new Error(data.error || 'Failed to fetch attendance data');
         }
-        
+
         setAttendanceData(data.attendance || []);
       } catch (err: any) {
         console.error('Error fetching attendance data:', err);
@@ -135,11 +135,11 @@ export default function DashboardPage() {
     try {
       const response = await fetch('/api/user');
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch user data');
       }
-      
+
       setUserData(data);
       setError(null);
     } catch (error: any) {
@@ -162,7 +162,7 @@ export default function DashboardPage() {
     if (!dateString) return 'N/A';
     try {
       return format(
-        new Date(dateString), 
+        new Date(dateString),
         compact ? 'dd MMM, h:mm a' : 'dd MMM yyyy, h:mm a'
       );
     } catch (e) {
@@ -173,49 +173,49 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <>
-      <div className="min-h-screen bg-[#EBE9E0] p-4 sm:p-6 lg:p-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Breadcrumb skeleton */}
-          <div className="h-6 w-32 bg-gray-200 rounded mb-6 animate-pulse" />
-          
-          {/* Quick Action Cards skeleton */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white/80 backdrop-blur p-6 rounded-2xl shadow-sm">
-                <div className="h-6 w-24 bg-gray-200 rounded mb-2 animate-pulse" />
-                <div className="h-4 w-full bg-gray-100 rounded mb-4 animate-pulse" />
-                <div className="h-9 w-full bg-gray-200 rounded animate-pulse" />
-              </div>
-            ))}
-          </div>
+        <div className="min-h-screen bg-[#EBE9E0] p-4 sm:p-6 lg:p-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Breadcrumb skeleton */}
+            <div className="h-6 w-32 bg-gray-200 rounded mb-6 animate-pulse" />
 
-          {/* Main card skeleton */}
-          <div className="p-2 sm:p-4 border-4 border-dashed border-gray-300 rounded-3xl">
-            <div className="bg-white rounded-3xl shadow-lg overflow-hidden relative p-4 sm:p-6 lg:p-8">
-              <div className="mb-6">
-                <div className="h-8 w-64 bg-gray-200 rounded mb-2 animate-pulse" />
-                <div className="h-4 w-48 bg-gray-100 rounded animate-pulse" />
-              </div>
-              
-              {/* Tabs skeleton */}
-              <div className="border-b mb-4">
-                <div className="flex gap-4 mb-[-2px]">
+            {/* Quick Action Cards skeleton */}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white/80 backdrop-blur p-6 rounded-2xl shadow-sm">
+                  <div className="h-6 w-24 bg-gray-200 rounded mb-2 animate-pulse" />
+                  <div className="h-4 w-full bg-gray-100 rounded mb-4 animate-pulse" />
+                  <div className="h-9 w-full bg-gray-200 rounded animate-pulse" />
+                </div>
+              ))}
+            </div>
+
+            {/* Main card skeleton */}
+            <div className="p-2 sm:p-4 border-4 border-dashed border-gray-300 rounded-3xl">
+              <div className="bg-white rounded-3xl shadow-lg overflow-hidden relative p-4 sm:p-6 lg:p-8">
+                <div className="mb-6">
+                  <div className="h-8 w-64 bg-gray-200 rounded mb-2 animate-pulse" />
+                  <div className="h-4 w-48 bg-gray-100 rounded animate-pulse" />
+                </div>
+
+                {/* Tabs skeleton */}
+                <div className="border-b mb-4">
+                  <div className="flex gap-4 mb-[-2px]">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="h-10 w-24 bg-gray-200 rounded animate-pulse" />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Content skeleton */}
+                <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="h-10 w-24 bg-gray-200 rounded animate-pulse" />
+                    <div key={i} className="h-16 w-full bg-gray-100 rounded animate-pulse" />
                   ))}
                 </div>
-              </div>
-              
-              {/* Content skeleton */}
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 w-full bg-gray-100 rounded animate-pulse" />
-                ))}
               </div>
             </div>
           </div>
         </div>
-      </div>
       </>
     );
   }
@@ -223,17 +223,17 @@ export default function DashboardPage() {
   if (error || !userData) {
     return (
       <>
-      <div className="min-h-screen bg-[#EBE9E0] flex items-center justify-center p-4">
-        <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg text-center">
-          <h1 className="text-2xl font-bold mb-4">Welcome to Dashboard</h1>
-          <p className="mb-6 text-gray-600">Please log in to access your dashboard</p>
-          <Link href="/login">
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-              Log in
-            </Button>
-          </Link>
+        <div className="min-h-screen bg-[#EBE9E0] flex items-center justify-center p-4">
+          <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg text-center">
+            <h1 className="text-2xl font-bold mb-4">Welcome to Dashboard</h1>
+            <p className="mb-6 text-gray-600">Please log in to access your dashboard</p>
+            <Link href="/login">
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                Log in
+              </Button>
+            </Link>
+          </div>
         </div>
-      </div>
       </>
     );
   }
@@ -263,415 +263,415 @@ export default function DashboardPage() {
 
   return (
     <>
-    <main className="min-h-screen bg-[#EBE9E0]">
-      <TooltipProvider>
-        <div className="w-full max-w-screen-xl mx-auto p-4 sm:px-6 lg:p-8">
-          <Breadcrumbs
-            items={[
-              { label: 'Home', href: '/' },
-              { label: 'Dashboard' },
-            ]}
-            className="mb-6"
-          />
+      <main className="min-h-screen bg-[#EBE9E0]">
+        <TooltipProvider>
+          <div className="w-full max-w-screen-xl mx-auto p-4 sm:px-6 lg:p-8">
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: '/' },
+                { label: 'Dashboard' },
+              ]}
+              className="mb-6"
+            />
 
-          {/* Enhanced User Profile Header with improved styling */}
-          <div className="relative mb-8 sm:mb-10 mt-2">
-            {/* Background pattern */}
-            <div className="absolute inset-0 -m-2 sm:-m-4">
-              <div className="w-full h-full border-4 border-dashed border-gray-300/70 rounded-3xl" />
-            </div>
+            {/* Enhanced User Profile Header with improved styling */}
+            <div className="relative mb-8 sm:mb-10 mt-2">
+              {/* Background pattern */}
+              <div className="absolute inset-0 -m-2 sm:-m-4">
+                <div className="w-full h-full border-4 border-dashed border-gray-300/70 rounded-3xl" />
+              </div>
 
-            {/* Card container with improved shadow */}
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-950/5 overflow-hidden">
-                {/* Decorative elements */}
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-r-full" />
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-l-full" />
-                
-                <div className="p-5 sm:p-7">
-                  <div className="flex flex-col lg:flex-row lg:items-start gap-4">
-                    {/* Profile Info */}
-                    <div className="space-y-3 flex-1">
-                      <div className="flex items-center gap-2">
-                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
-                          {profile?.full_name || 'Anonymous User'}
-                        </h1>
-                        {!profile?.full_name && (
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <AlertCircle className="h-5 w-5 text-amber-500" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Please complete your profile</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        )}
-                      </div>
-                      <div className="space-y-2">
+              {/* Card container with improved shadow */}
+              <div className="relative">
+                <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-950/5 overflow-hidden">
+                  {/* Decorative elements */}
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-r-full" />
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 sm:w-4 h-6 sm:h-8 bg-[#EBE9E0] rounded-l-full" />
+
+                  <div className="p-5 sm:p-7">
+                    <div className="flex flex-col lg:flex-row lg:items-start gap-4">
+                      {/* Profile Info */}
+                      <div className="space-y-3 flex-1">
                         <div className="flex items-center gap-2">
-                          <Mail className="h-4 w-4 text-gray-400 shrink-0" />
-                          <Tooltip>
-                            <TooltipTrigger className="max-w-[300px] truncate text-left">
-                              <span className="text-sm sm:text-base text-gray-600">
-                                {profile?.email || 'Email not provided'}
-                              </span>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{profile?.email || 'Email not provided'}</p>
-                            </TooltipContent>
-                          </Tooltip>
+                          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                            {profile?.full_name || 'Anonymous User'}
+                          </h1>
+                          {!profile?.full_name && (
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <AlertCircle className="h-5 w-5 text-amber-500" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Please complete your profile</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Phone className="h-4 w-4 text-gray-400 shrink-0" />
-                          {profile?.phone ? (
-                            <span className="text-sm sm:text-base text-gray-600">
-                              {profile.phone}
-                            </span>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Mail className="h-4 w-4 text-gray-400 shrink-0" />
+                            <Tooltip>
+                              <TooltipTrigger className="max-w-[300px] truncate text-left">
+                                <span className="text-sm sm:text-base text-gray-600">
+                                  {profile?.email || 'Email not provided'}
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{profile?.email || 'Email not provided'}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Phone className="h-4 w-4 text-gray-400 shrink-0" />
+                            {profile?.phone ? (
+                              <span className="text-sm sm:text-base text-gray-600">
+                                {profile.phone}
+                              </span>
+                            ) : (
+                              <span className="text-sm sm:text-base text-gray-400 italic">
+                                Phone number not added
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="pt-1 flex items-center gap-2 w-full pr-4">
+                          <GraduationCap className="h-4 w-4 text-blue-500 shrink-0" />
+                          {profile?.college_name ? (
+                            <Tooltip>
+                              <TooltipTrigger className="w-full truncate text-left">
+                                <p className="text-sm sm:text-base font-medium text-blue-600">
+                                  {Object.values(COLLEGE_OPTIONS).includes(profile.college_name)
+                                    ? profile.college_name
+                                    : `${profile.college_name} (Other)`}
+                                </p>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{profile.college_name}</p>
+                              </TooltipContent>
+                            </Tooltip>
                           ) : (
                             <span className="text-sm sm:text-base text-gray-400 italic">
-                              Phone number not added
+                              College not specified
                             </span>
                           )}
                         </div>
-                      </div>
-                      <div className="pt-1 flex items-center gap-2 w-full pr-4">
-                        <GraduationCap className="h-4 w-4 text-blue-500 shrink-0" />
-                        {profile?.college_name ? (
-                          <Tooltip>
-                            <TooltipTrigger className="w-full truncate text-left">
-                              <p className="text-sm sm:text-base font-medium text-blue-600">
-                                {Object.values(COLLEGE_OPTIONS).includes(profile.college_name)
-                                  ? profile.college_name
-                                  : `${profile.college_name} (Other)`}
-                              </p>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{profile.college_name}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        ) : (
-                          <span className="text-sm sm:text-base text-gray-400 italic">
-                            College not specified
-                          </span>
-                        )}
-                      </div>
 
-                      {/* Actions */}
-                      <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 pt-2">
-                        {/* Edit Profile button removed */}
+                        {/* Actions */}
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 pt-2">
+                          {/* Edit Profile button removed */}
 
-                        {/* Add Download Attendance Card button when profile is complete */}
-                        {isProfileComplete(profile) && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setShowAttendanceCard(true)}
-                            className="h-9 transition-colors duration-200 group w-full sm:w-auto bg-purple-50 hover:bg-purple-100 text-purple-600 hover:text-purple-700 border-purple-200 hover:border-purple-300"
-                          >
-                            <Download className="h-4 w-4 mr-2 shrink-0" />
-                            <span>Attendance Card</span>
-                          </Button>
-                        )}
-                        
-                        <form onSubmit={handleSignOut} className="flex-1 sm:flex-initial">
-                          <Button 
-                            type="submit" 
-                            variant="outline"
-                            size="sm"
-                            className="h-9 px-4 bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 border border-red-200 hover:border-red-300 transition-colors duration-200 w-full sm:w-auto"
-                          >
-                            <LogOut className="h-4 w-4 mr-2" />
-                            <span>Sign out</span>
-                          </Button>
-                        </form>
-                      </div>
-                    </div>
+                          {/* Add Download Attendance Card button when profile is complete */}
+                          {isProfileComplete(profile) && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setShowAttendanceCard(true)}
+                              className="h-9 transition-colors duration-200 group w-full sm:w-auto bg-purple-50 hover:bg-purple-100 text-purple-600 hover:text-purple-700 border-purple-200 hover:border-purple-300"
+                            >
+                              <Download className="h-4 w-4 mr-2 shrink-0" />
+                              <span>Attendance Card</span>
+                            </Button>
+                          )}
 
-                    {/* QR Code - Hidden on mobile, visible on desktop */}
-                    <div className="hidden lg:flex flex-col items-center justify-center border-l border-gray-200 pl-6 min-w-[180px]">
-                      {profile?.id ? (
-                        <>
-                          <div className="bg-white p-2 rounded-lg shadow-sm mb-2">
-                            <QRCodeSVG
-                              value={profile.id}
-                              size={140}
-                              level="H"
-                              bgColor="#ffffff"
-                              fgColor="#000000"
-                            />
-                          </div>
-                          <div className="text-center">
-                            <p className="text-sm font-medium text-gray-700">Attendance QR</p>
-                            <p className="text-xs text-gray-500 mt-1">Scan for event check-in</p>
-                          </div>
-                          <Button 
-                            variant="link" 
-                            size="sm" 
-                            onClick={() => setShowAttendanceCard(true)}
-                            className="text-blue-600 mt-1 h-auto p-1"
-                          >
-                            Download Card
-                          </Button>
-                        </>
-                      ) : (
-                        <div className="flex flex-col items-center justify-center h-[140px]">
-                          <QrCode className="h-10 w-10 text-gray-300 mb-2" />
-                          <p className="text-xs text-gray-400 text-center">
-                            Complete profile to<br />generate attendance QR
-                          </p>
+                          <form onSubmit={handleSignOut} className="flex-1 sm:flex-initial">
+                            <Button
+                              type="submit"
+                              variant="outline"
+                              size="sm"
+                              className="h-9 px-4 bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 border border-red-200 hover:border-red-300 transition-colors duration-200 w-full sm:w-auto"
+                            >
+                              <LogOut className="h-4 w-4 mr-2" />
+                              <span>Sign out</span>
+                            </Button>
+                          </form>
                         </div>
-                      )}
+                      </div>
+
+                      {/* QR Code - Hidden on mobile, visible on desktop */}
+                      <div className="hidden lg:flex flex-col items-center justify-center border-l border-gray-200 pl-6 min-w-[180px]">
+                        {profile?.id ? (
+                          <>
+                            <div className="bg-white p-2 rounded-lg shadow-sm mb-2">
+                              <QRCodeSVG
+                                value={profile.id}
+                                size={140}
+                                level="H"
+                                bgColor="#ffffff"
+                                fgColor="#000000"
+                              />
+                            </div>
+                            <div className="text-center">
+                              <p className="text-sm font-medium text-gray-700">Attendance QR</p>
+                              <p className="text-xs text-gray-500 mt-1">Scan for event check-in</p>
+                            </div>
+                            <Button
+                              variant="link"
+                              size="sm"
+                              onClick={() => setShowAttendanceCard(true)}
+                              className="text-blue-600 mt-1 h-auto p-1"
+                            >
+                              Download Card
+                            </Button>
+                          </>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center h-[140px]">
+                            <QrCode className="h-10 w-10 text-gray-300 mb-2" />
+                            <p className="text-xs text-gray-400 text-center">
+                              Complete profile to<br />generate attendance QR
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Mobile QR Code Card - Shown on mobile, hidden on desktop */}
-          <div className="lg:hidden mb-6">
-            <Card className="overflow-hidden">
-              <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-200 flex items-center gap-2">
-                <QrCode className="h-5 w-5 text-blue-500" />
-                <h3 className="font-medium text-blue-700">Attendance QR Code</h3>
-              </div>
-              
-              <div className="p-5 flex flex-col items-center">
-                {profile?.id ? (
-                  <>
-                    <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 mb-3">
-                      <QRCodeSVG
-                        value={profile.id}
-                        size={160}
-                        level="H"
-                        bgColor="#ffffff"
-                        fgColor="#000000"
-                      />
+            {/* Mobile QR Code Card - Shown on mobile, hidden on desktop */}
+            <div className="lg:hidden mb-6">
+              <Card className="overflow-hidden">
+                <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-200 flex items-center gap-2">
+                  <QrCode className="h-5 w-5 text-blue-500" />
+                  <h3 className="font-medium text-blue-700">Attendance QR Code</h3>
+                </div>
+
+                <div className="p-5 flex flex-col items-center">
+                  {profile?.id ? (
+                    <>
+                      <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 mb-3">
+                        <QRCodeSVG
+                          value={profile.id}
+                          size={160}
+                          level="H"
+                          bgColor="#ffffff"
+                          fgColor="#000000"
+                        />
+                      </div>
+                      <p className="text-sm text-gray-700 text-center mt-1">
+                        Present this QR code for event check-in
+                      </p>
+                      <p className="text-xs text-gray-500 text-center mt-1">
+                        Keep this code private and only share at official event check-ins
+                      </p>
+
+                      {/* Add download button for mobile */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowAttendanceCard(true)}
+                        className="mt-4 bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Attendance Card
+                      </Button>
+                    </>
+                  ) : (
+                    <div className="py-8 flex flex-col items-center">
+                      <div className="bg-gray-50 p-6 rounded-full mb-4">
+                        <QrCode className="h-12 w-12 text-gray-300" />
+                      </div>
+                      <p className="text-gray-600 text-center">
+                        Complete your profile to generate your attendance QR code
+                      </p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-4 bg-amber-50 hover:bg-amber-100 text-amber-600 hover:text-amber-700 border-amber-200"
+                        onClick={() => router.push('/dashboard/profile/edit')}
+                      >
+                        Complete Profile
+                      </Button>
                     </div>
-                    <p className="text-sm text-gray-700 text-center mt-1">
-                      Present this QR code for event check-in
-                    </p>
-                    <p className="text-xs text-gray-500 text-center mt-1">
-                      Keep this code private and only share at official event check-ins
-                    </p>
-                    
-                    {/* Add download button for mobile */}
+                  )}
+                </div>
+              </Card>
+            </div>
+
+            {/* Rest of the content */}
+            <div className="space-y-6">
+              {/* Quick Actions Grid - Remove Website Feedback card */}
+              <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <h2 className="font-semibold text-lg mb-2">Events</h2>
+                  <p className="text-sm text-gray-600 mb-4">View and manage available events.</p>
+                  <Button
+                    variant="outline"
+                    className="w-full bg-purple-50 hover:bg-purple-100 border-purple-200"
+                    onClick={() => router.push('/dashboard/events')}
+                  >
+                    View Events
+                  </Button>
+                </div>
+                <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <h2 className="font-semibold text-lg mb-2">Check Registration</h2>
+                  <p className="text-sm text-gray-600 mb-4">View or verify active registrations.</p>
+                  <Button
+                    variant="outline"
+                    className="w-full bg-blue-50 hover:bg-blue-100 border-blue-200"
+                    onClick={() => router.push('/dashboard/events/registrations')}
+                  >
+                    View Registrations
+                  </Button>
+                </div>
+                <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <h2 className="font-semibold text-lg mb-2">Accept Invites</h2>
+                  <p className="text-sm text-gray-600 mb-4">Review and accept pending invitations.</p>
+                  <Button
+                    variant="outline"
+                    className="w-full bg-green-50 hover:bg-green-100 border-green-200"
+                    onClick={() => router.push('/dashboard/events/accept')}
+                  >
+                    Manage Invites
+                  </Button>
+                </div>
+                {/* Feedback card - Fixed layout for button alignment */}
+                <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-blue-50 flex flex-col h-full">
+                  <div>
+                    <h2 className="font-semibold text-lg mb-2 flex items-center text-blue-700">
+                      <MessageSquare className="h-5 w-5 mr-2 text-blue-500" />
+                      Share Your Website Experience!
+                    </h2>
+                    <p className="text-sm text-gray-600">Help us improve the Spectrum platform by sharing your thoughts and suggestions about the website.</p>
+                  </div>
+                  <div className="mt-auto pt-4">
                     <Button
                       variant="outline"
-                      size="sm"
-                      onClick={() => setShowAttendanceCard(true)}
-                      className="mt-4 bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200"
+                      className="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 transition-all h-10"
+                      onClick={() => router.push('/dashboard/feedback')}
                     >
-                      <Download className="h-4 w-4 mr-2" />
-                      Download Attendance Card
-                    </Button>
-                  </>
-                ) : (
-                  <div className="py-8 flex flex-col items-center">
-                    <div className="bg-gray-50 p-6 rounded-full mb-4">
-                      <QrCode className="h-12 w-12 text-gray-300" />
-                    </div>
-                    <p className="text-gray-600 text-center">
-                      Complete your profile to generate your attendance QR code
-                    </p>
-                    <Button
-                      variant="outline" 
-                      size="sm"
-                      className="mt-4 bg-amber-50 hover:bg-amber-100 text-amber-600 hover:text-amber-700 border-amber-200"
-                      onClick={() => router.push('/dashboard/profile/edit')}
-                    >
-                      Complete Profile
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Give Feedback
                     </Button>
                   </div>
-                )}
+                </div>
+                {/* Certificates card - Fixed layout for button alignment */}
+                <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-cyan-50 flex flex-col h-full">
+                  <div>
+                    <h2 className="font-semibold text-lg mb-2 flex items-center text-cyan-700">
+                      <FileText className="h-5 w-5 mr-2 text-cyan-500" />
+                      Certificates
+                    </h2>
+                    <p className="text-sm text-gray-600">View and download your achievement certificates.</p>
+                  </div>
+                  <div className="mt-auto pt-4">
+                    <Button
+                      variant="outline"
+                      className="w-full bg-cyan-50 hover:bg-cyan-100 text-cyan-600 hover:text-cyan-700 border-cyan-200 hover:border-cyan-300 transition-all h-10"
+                      onClick={() => router.push('/dashboard/certificates')}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Certificates
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </Card>
-          </div>
 
-          {/* Rest of the content */}
-          <div className="space-y-6">
-            {/* Quick Actions Grid - Remove Website Feedback card */}
-            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <h2 className="font-semibold text-lg mb-2">Events</h2>
-                <p className="text-sm text-gray-600 mb-4">View and manage available events.</p>
-                <Button
-                  variant="outline"
-                  className="w-full bg-purple-50 hover:bg-purple-100 border-purple-200"
-                  onClick={() => router.push('/dashboard/events')}
-                >
-                  View Events
-                </Button>
-              </div>
-              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <h2 className="font-semibold text-lg mb-2">Check Registration</h2>
-                <p className="text-sm text-gray-600 mb-4">View or verify active registrations.</p>
-                <Button
-                  variant="outline"
-                  className="w-full bg-blue-50 hover:bg-blue-100 border-blue-200"
-                  onClick={() => router.push('/dashboard/events/registrations')}
-                >
-                  View Registrations
-                </Button>
-              </div>
-              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <h2 className="font-semibold text-lg mb-2">Accept Invites</h2>
-                <p className="text-sm text-gray-600 mb-4">Review and accept pending invitations.</p>
-                <Button
-                  variant="outline"
-                  className="w-full bg-green-50 hover:bg-green-100 border-green-200"
-                  onClick={() => router.push('/dashboard/events/accept')}
-                >
-                  Manage Invites
-                </Button>
-              </div>
-              {/* Feedback card - Fixed layout for button alignment */}
-              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-blue-50 flex flex-col h-full">
-                <div>
-                  <h2 className="font-semibold text-lg mb-2 flex items-center text-blue-700">
-                    <MessageSquare className="h-5 w-5 mr-2 text-blue-500" />
-                    Share Your Website Experience!
-                  </h2>
-                  <p className="text-sm text-gray-600">Help us improve the Spectrum platform by sharing your thoughts and suggestions about the website.</p>
-                </div>
-                <div className="mt-auto pt-4">
-                  <Button
-                    variant="outline"
-                    className="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 transition-all h-10"
-                    onClick={() => router.push('/dashboard/feedback')}
-                  >
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    Give Feedback
-                  </Button>
-                </div>
-              </div>
-              {/* Certificates card - Fixed layout for button alignment */}
-              <div className="bg-white/80 backdrop-blur p-6 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-cyan-50 flex flex-col h-full">
-                <div>
-                  <h2 className="font-semibold text-lg mb-2 flex items-center text-cyan-700">
-                    <FileText className="h-5 w-5 mr-2 text-cyan-500" />
-                    Certificates
-                  </h2>
-                  <p className="text-sm text-gray-600">View and download your achievement certificates.</p>
-                </div>
-                <div className="mt-auto pt-4">
-                  <Button
-                    variant="outline"
-                    className="w-full bg-cyan-50 hover:bg-cyan-100 text-cyan-600 hover:text-cyan-700 border-cyan-200 hover:border-cyan-300 transition-all h-10"
-                    onClick={() => router.push('/dashboard/certificates')}
-                  >
-                    <FileText className="h-4 w-4 mr-2" />
-                    View Certificates
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Remove the standalone Feedback Section since it's now in the cards grid */}
-            {/* <div className="my-6">
+              {/* Remove the standalone Feedback Section since it's now in the cards grid */}
+              {/* <div className="my-6">
               <FeedbackSection />
             </div> */}
 
-            {/* Payment Card - adjusted spacing */}
-            <div className="my-6">
-              <div className="bg-white/80 backdrop-blur p-6 sm:p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="font-semibold text-lg">Payments</h2>
-                    <p className="text-sm text-gray-600">View and manage your payments</p>
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="bg-orange-50 hover:bg-orange-100 border-orange-200"
-                    onClick={() => router.push('/dashboard/events/payment')}
-                  >
-                    Manage Payments
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Attendance display section */}
-            <div className="my-6">
-              <div className="bg-white/80 backdrop-blur p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-4">
-                  <div className="space-y-1">
-                    <h2 className="font-semibold text-lg">Event Attendance</h2>
-                    <p className="text-sm text-gray-600">Track your event attendance</p>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="bg-green-50 hover:bg-green-100 border-green-200 w-full sm:w-auto"
-                    onClick={() => setShowAttendanceCard(true)}
-                  >
-                    <QrCode className="h-4 w-4 mr-2 hidden sm:inline" />
-                    Show QR Code
-                  </Button>
-                </div>
-                
-                <div className="overflow-hidden rounded-xl">
-                  <EventAttendanceWrapper
-                    profileId={profile?.id}
-                    userName={profile?.full_name}
-                    userPhone={profile?.phone} 
-                    onShowQr={() => setShowAttendanceCard(true)} 
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Info Box - Updated message */}
-            <div className="mt-12">
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 sm:p-4 md:p-5 mt-4 sm:mt-6 mx-4 sm:mx-0">
-                <div className="space-y-2 sm:space-y-3">
-                  <p className="text-xs sm:text-sm text-yellow-800 leading-relaxed">
-                    Thank you for using our platform. To ensure the best possible experience:
-                  </p>
-                  <div className="space-y-3 sm:space-y-2 mt-2">
-                    <div className="text-xs sm:text-sm text-yellow-800">
-                      <p className="font-medium mb-1">• For Queries, payment issues, or other concerns:</p>
-                      <a href="mailto:pccoe.spectrum.25@gmail.com" 
-                        className="block pl-3 font-medium text-yellow-700 hover:text-yellow-900 break-all">
-                        pccoe.spectrum.25@gmail.com
-                      </a>
+              {/* Payment Card - adjusted spacing */}
+              <div className="my-6">
+                <div className="bg-white/80 backdrop-blur p-6 sm:p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="font-semibold text-lg">Payments</h2>
+                      <p className="text-sm text-gray-600">View and manage your payments</p>
                     </div>
-                    <div className="text-xs sm:text-sm text-yellow-800">
-                      <p className="font-medium mb-1">• For Website, or data-related bugs:</p>
-                      <a href="mailto:kartik.kulloli23@pccoepune.org" 
-                        className="block pl-3 font-medium text-yellow-700 hover:text-yellow-900 break-all">
-                        kartik.kulloli23@pccoepune.org
-                      </a>
-                    </div>
+                    <Button
+                      variant="outline"
+                      className="bg-orange-50 hover:bg-orange-100 border-orange-200"
+                      onClick={() => router.push('/dashboard/events/payment')}
+                    >
+                      Manage Payments
+                    </Button>
                   </div>
-                  <p className="text-xs sm:text-sm text-yellow-800 italic mt-3 sm:mt-2">
-                    For critical bugs or security vulnerabilities, please report them immediately with [COOKED] in the title.
-                  </p>
                 </div>
               </div>
+
+              {/* Attendance display section */}
+              <div className="my-6">
+                <div className="bg-white/80 backdrop-blur p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-4">
+                    <div className="space-y-1">
+                      <h2 className="font-semibold text-lg">Event Attendance</h2>
+                      <p className="text-sm text-gray-600">Track your event attendance</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-green-50 hover:bg-green-100 border-green-200 w-full sm:w-auto"
+                      onClick={() => setShowAttendanceCard(true)}
+                    >
+                      <QrCode className="h-4 w-4 mr-2 hidden sm:inline" />
+                      Show QR Code
+                    </Button>
+                  </div>
+
+                  <div className="overflow-hidden rounded-xl">
+                    <EventAttendanceWrapper
+                      profileId={profile?.id}
+                      userName={profile?.full_name}
+                      userPhone={profile?.phone}
+                      onShowQr={() => setShowAttendanceCard(true)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Info Box - Updated message */}
+              <div className="mt-12">
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 sm:p-4 md:p-5 mt-4 sm:mt-6 mx-4 sm:mx-0">
+                  <div className="space-y-2 sm:space-y-3">
+                    <p className="text-xs sm:text-sm text-yellow-800 leading-relaxed">
+                      Thank you for using our platform. To ensure the best possible experience:
+                    </p>
+                    <div className="space-y-3 sm:space-y-2 mt-2">
+                      <div className="text-xs sm:text-sm text-yellow-800">
+                        <p className="font-medium mb-1">• For Queries, payment issues, or other concerns:</p>
+                        <a href="mailto:pccoe.spectrum.25@gmail.com"
+                          className="block pl-3 font-medium text-yellow-700 hover:text-yellow-900 break-all">
+                          pccoe.spectrum.25@gmail.com
+                        </a>
+                      </div>
+                      <div className="text-xs sm:text-sm text-yellow-800">
+                        <p className="font-medium mb-1">• For Website, or data-related bugs:</p>
+                        <a href="mailto:kartik.kulloli23@pccoepune.org"
+                          className="block pl-3 font-medium text-yellow-700 hover:text-yellow-900 break-all">
+                          kartik.kulloli23@pccoepune.org
+                        </a>
+                      </div>
+                    </div>
+                    <p className="text-xs sm:text-sm text-yellow-800 italic mt-3 sm:mt-2">
+                      For critical bugs or security vulnerabilities, please report them immediately with [COOKED] in the title.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-          </div>
+            {/* Render global popup if profile is incomplete */}
+            {!isProfileComplete(profile) && (
+              <CompleteProfilePopup
+                profile={profile}
+                onProfileUpdate={() => {
+                  refreshUserData();
+                }}
+              />
+            )}
 
-          {/* Render global popup if profile is incomplete */}
-          {!isProfileComplete(profile) && (
-            <CompleteProfilePopup 
-              profile={profile} 
-              onProfileUpdate={() => {
-                refreshUserData();
-              }} 
+            {/* Render attendance card dialog */}
+            <AttendanceCardDialog
+              profile={profile}
+              isOpen={showAttendanceCard}
+              onClose={() => setShowAttendanceCard(false)}
             />
-          )}
-
-          {/* Render attendance card dialog */}
-          <AttendanceCardDialog
-            profile={profile}
-            isOpen={showAttendanceCard}
-            onClose={() => setShowAttendanceCard(false)}
-          />
-        </div>
-      </TooltipProvider>
-    </main>
+          </div>
+        </TooltipProvider>
+      </main>
     </>
   );
 }
