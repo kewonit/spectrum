@@ -21,8 +21,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import React from "react";
-import { AlertTriangle } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { AlertTriangle, LogIn } from "lucide-react";
+import Link from "next/link";
 
 const BRANCH_OPTIONS = {
   cs: "Computer Science",
@@ -69,6 +70,9 @@ const formSchema = z.object({
 });
 
 export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () => void }) {
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Initialize form at the top level with empty or default values
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -82,15 +86,30 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
     },
   });
 
-  // Add state to track "other" selection
-  const [isOtherBranch, setIsOtherBranch] = React.useState(!Object.keys(BRANCH_OPTIONS).includes(profile?.branch || ''));
-  const [isOtherClass, setIsOtherClass] = React.useState(!(profile?.class || '').match(/^[A-Z]$/));
+  // Move all state hooks to the top level
+  const [isOtherBranch, setIsOtherBranch] = React.useState(
+    profile ? !Object.keys(BRANCH_OPTIONS).includes(profile?.branch || '') : false
+  );
+  const [isOtherClass, setIsOtherClass] = React.useState(
+    profile ? !(profile?.class || '').match(/^[A-Z]$/) : false
+  );
   const [isOtherCollege, setIsOtherCollege] = React.useState(
-    !Object.keys(COLLEGE_OPTIONS).some(key => COLLEGE_OPTIONS[key as keyof typeof COLLEGE_OPTIONS] === profile?.college_name)
+    profile ? !Object.keys(COLLEGE_OPTIONS).some(key => 
+      COLLEGE_OPTIONS[key as keyof typeof COLLEGE_OPTIONS] === profile?.college_name
+    ) : false
   );
 
   // Add a check for existing college name
   const hasExistingCollege = Boolean(profile?.college_name);
+  
+  useEffect(() => {
+    // Set loading to false after a short delay
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const toastId = 'profileUpdate';
@@ -118,6 +137,71 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
         description: error?.message || 'Please try again later',
       });
     }
+  }
+
+  // Show login prompt if no profile
+  if (!profile && !isLoading) {
+    return (
+      <div className="p-4 sm:p-6 md:p-8 bg-white rounded-2xl shadow-sm">
+        <div className="mb-4 sm:mb-6 border-b pb-4">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Profile Information</h1>
+          <p className="text-xs sm:text-sm text-gray-500 mt-1">Manage your personal information</p>
+        </div>
+        
+        <div className="bg-[#EBE9E0]/50 rounded-xl p-4 sm:p-6 shadow-inner">
+          <div className="max-w-md mx-auto text-center space-y-4">
+            <div className="bg-white/80 backdrop-blur py-6 px-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-50 mb-3 sm:mb-4">
+                <LogIn className="h-5 w-5 sm:h-6 sm:w-6 text-blue-500" />
+              </div>
+              
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Login Required</h2>
+              <p className="text-sm text-gray-600 mb-5 sm:mb-6 px-2 sm:px-4 max-w-md mx-auto">
+                You need to be logged in to view and edit your profile information.
+              </p>
+              
+              <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center px-2 sm:px-0">
+                <Link href="/login" className="w-full">
+                  <Button className="w-full py-5 sm:py-2 text-base sm:text-sm bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-all duration-200 border border-blue-200 hover:border-blue-300 rounded-lg">
+                    Log in
+                  </Button>
+                </Link>
+                <Link href="/" className="w-full">
+                  <Button variant="outline" className="w-full py-5 sm:py-2 text-base sm:text-sm border-gray-200 rounded-lg">
+                    Return to Home
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="p-4 sm:p-6 md:p-8 bg-white rounded-2xl shadow-sm">
+        <div className="mb-4 sm:mb-6 border-b pb-4">
+          <div className="h-7 sm:h-8 w-48 sm:w-56 bg-gray-200 rounded animate-pulse" />
+          <div className="h-4 sm:h-5 w-56 sm:w-64 bg-gray-100 rounded animate-pulse mt-2" />
+        </div>
+        
+        <div className="space-y-6">
+          <div className="h-20 sm:h-24 bg-blue-50/70 rounded-lg animate-pulse" />
+          
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2">
+            {[1, 2, 3, 4, 5, 6].map((index) => (
+              <div key={index} className="space-y-2">
+                <div className="h-4 sm:h-5 w-20 sm:w-24 bg-gray-200 rounded animate-pulse" />
+                <div className="h-10 w-full bg-gray-100 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -390,7 +474,7 @@ export function ProfileForm({ profile, onUpdate }: { profile: any; onUpdate: () 
               </FormItem>
             )}
           />
-        </div> {/* End of grid */}
+        </div>
 
         {/* New confirmation checkbox block */}
         <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-6">

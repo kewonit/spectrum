@@ -53,7 +53,8 @@ const events: Event[] = [
   { id: 7, href: "/events/debate", title: "War of Words' 25", description: "Debate competition", color: "text-gray-100" },
   { id: 8, href: "/events/video-games", title: "High Ping '25", description: "Gaming tournament", color: "text-slate-100" },
   { id: 9, href: "/events/3d-modelling", title: "Model Making '25", description: "Build 3D Models from Scratch", color: "text-zinc-100" },
-  { id: 10, href: "/events/sharktank", title: "Shark Tank '25", description: "Mock Shark Tank", color: "text-neutral-100" }
+  { id: 10, href: "/events/sharktank", title: "Shark Tank '25", description: "Mock Shark Tank", color: "text-neutral-100" },
+  { id: 11, href: "/events/pricing", title: "Event Pricing", description: "Find all event pricing information", color: "text-white" }
 ];
 
 const EventCard: React.FC<EventCardProps> = ({ id, href, title, description, color, onNavigate }) => (
